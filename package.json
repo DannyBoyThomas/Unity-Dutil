@@ -1,0 +1,11 @@
+{
+    "name": "com.DannyBoyThomas.Dutil",
+    "version": "1.0.0",
+    "displayName": "Dutil",
+    "description": "Helpful utility functions",
+    "unity": "2019.1",
+    "author": {
+        "name": "DannyBoyThomas",
+        "url": "https://www.danielthedev.com"
+    }
+}
