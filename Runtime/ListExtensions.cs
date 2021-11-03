@@ -33,7 +33,7 @@ namespace Dutil
         }
 
         //Vector3
-        public static Vector3 Centre(this List<Vector3> list)
+        public static Vector3 Average(this List<Vector3> list)
         {
             Vector3 sum = Vector3.zero;
             list.ForEach(x => sum += x);
@@ -55,8 +55,25 @@ namespace Dutil
             }
             return closest;
         }
+        public static void Draw(this List<Vector3> points, bool close = false)
+        {
+            for (int i = 1; i < points.Count; i++)
+            {
+                Vector3 p0 = points[i - 1];
+                Vector3 p1 = points[i];
+                Gizmos.DrawLine(p0, p1);
+            }
+            if (close && points.Count > 2)
+            {
+                Gizmos.DrawLine(points.First(), points.Last());
+            }
+        }
+        public static void Draw(this List<Vector2> points, bool close = false)
+        {
+            points.Select(x => x.XY()).ToList().Draw(close);
+        }
 
-        public static Vector2 Centre(this List<Vector2> list)
+        public static Vector2 Average(this List<Vector2> list)
         {
             Vector2 sum = Vector3.zero;
             list.ForEach(x => sum += x);
