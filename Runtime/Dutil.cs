@@ -4,8 +4,18 @@ using UnityEngine;
 using System.Linq;
 namespace Dutil
 {
-    public class ZDutil
+    public class D
     {
+        /// <summary>
+        /// Chance(0.7) has a 70% chance to return true
+        /// </summary>
+        /// <param name="f"></param>
+        /// <returns></returns>
+        public static bool Chance(float f)
+        {
+            f = Mathf.Clamp01(f);
+            return Random.Range(0, 1f) <= f;
+        }
         public static Vector3 NearestPointOnLine(Vector3 point, Vector3 pointA, Vector3 pointB)
         {
             return new Line3D(pointA, pointB).NearestPoint(point);
@@ -48,21 +58,7 @@ namespace Dutil
             return points;
         }
 
-        public static List<Vector2> PointsOnCircle(Vector3 centre, float radius, int num)
-        {
-            List<Vector2> points = new List<Vector2>();
-            float incr = 360 / (float)num;
-            for (int i = 0; i < num; i++)
-            {
-                float angle = incr * i;
-                float xOffset = Mathf.Cos(angle);
-                float yOffset = Mathf.Sin(angle);
-                Vector2 dir = new Vector2(xOffset, yOffset).normalized;
-                Vector2 point = centre.XY() + dir * radius;
-                points.Add(point);
-            }
-            return points;
-        }
+
 
     }
 }
