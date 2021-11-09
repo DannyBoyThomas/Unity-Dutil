@@ -42,6 +42,15 @@ namespace Dutil
                 list.AddUnique(child);
             }
         }
-    }
+        public static List<Transform> Children(this Transform t)
+        {
+            List<Transform> children = new List<Transform>();
+            int count = t.childCount;
+            for(int i=0;i< count;i++)
+            {
+                children.Add(t.GetChild(i));
+            }
+            return children;
+        }
 
 }
