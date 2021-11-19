@@ -32,6 +32,8 @@ namespace Dutil
         public static Vector2 SetY(this ref Vector2 vec, float y) { vec.y = y; return vec; }
         public static Vector2 OffsetX(this Vector2 vec, float x) => new Vector2(vec.x + x, vec.y);
         public static Vector2 OffsetY(this Vector2 vec, float y) => new Vector2(vec.x, vec.y + y);
+        public static Vector2 GetRight(this Vector2 vec) => new Vector2(vec.y, -vec.x);
+        public static Vector2 GetLeft(this Vector2 vec) => vec.GetRight() * -1;
 
 
     }

@@ -79,13 +79,6 @@ namespace Dutil
 
 
 
-
-
-
-
-
-
-
         //Vector3
         public static Vector3 Average(this List<Vector3> list)
         {
