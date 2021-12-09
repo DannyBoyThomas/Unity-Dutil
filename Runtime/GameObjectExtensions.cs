@@ -46,7 +46,7 @@ namespace Dutil
         {
             List<Transform> children = new List<Transform>();
             int count = t.childCount;
-            for(int i=0;i< count;i++)
+            for (int i = 0; i < count; i++)
             {
                 children.Add(t.GetChild(i));
             }

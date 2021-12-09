@@ -74,6 +74,16 @@ namespace Dutil
 
             return shuffled;
         }
+        public static void Clean<T>(this List<T> list)
+        {
+            for (int i = list.Count - 1; i >= 0; i--)
+            {
+                if (list[i] == null) { list.RemoveAt(i); }
+            }
+
+        }
+
+
 
 
 

@@ -36,5 +36,13 @@ namespace Dutil
         {
             return color.Split(2)[1];
         }
+        public static Color Lighten(this Color color, float amount = 0.2f)
+        {
+            return Color.Lerp(color, Color.white, amount);
+        }
+        public static Color Darken(this Color color, float amount = 0.2f)
+        {
+            return Color.Lerp(color, Color.black, amount);
+        }
     }
 }
