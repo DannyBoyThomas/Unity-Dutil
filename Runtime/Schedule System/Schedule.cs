@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-public namespace Dutil{
+namespace Dutil{
 public class Schedule : MonoBehaviour
 {
     public static Schedule Instance;
