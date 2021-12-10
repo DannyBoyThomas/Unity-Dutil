@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
+namespace Dutil{
 public class ScheduledTask
 {
     float delay;
@@ -68,5 +69,5 @@ public class ScheduledTask
 
 
 
-
+}
 }
