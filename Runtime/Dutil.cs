@@ -6,6 +6,10 @@ namespace Dutil
 {
     public class D
     {
+
+
+
+
         /// <summary>
         /// Chance(0.7) has a 70% chance to return true
         /// </summary>
@@ -57,8 +61,98 @@ namespace Dutil
             }
             return points;
         }
+        public static Color RandomColour()
+        {
+            return new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f));
+        }
 
 
 
+        //Static Referencer
+        static Dictionary<string, List<Object>> trackedObjects = new Dictionary<string, List<Object>>();
+
+        public static void Track(string key, params Object[] objs)
+        {
+            List<Object> args = objs.ToList();
+            args.Clean();
+            string cleanKey = key.Replace(" ", "").ToLower();
+            for (int i = 0; i < args.Count; i++)
+            {
+                Object obj = args[i];
+
+                List<Object> list = new List<Object>();
+                trackedObjects.TryGetValue(cleanKey, out list);
+                if (list == null)
+                {
+                    list = new List<Object>();
+                }
+
+                list.AddUnique(obj);
+                if (list.Count > 0)
+                {
+                    trackedObjects[cleanKey] = list;
+                }
+                else
+                {
+                    trackedObjects.Remove(cleanKey);
+                }
+
+            }
+        }
+        public static List<Object> Track(string key)
+        {
+            string cleanKey = key.Replace(" ", "").ToLower();
+            List<Object> list = new List<Object>();
+            trackedObjects.TryGetValue(cleanKey, out list);
+            if (list == null) { list = new List<Object>(); }
+            return list;
+        }
+        public static Object TrackFirst(string key)
+        {
+            string cleanKey = key.Replace(" ", "").ToLower();
+            List<Object> list = new List<Object>();
+            trackedObjects.TryGetValue(cleanKey, out list);
+            if (list != null && list.Count > 0)
+            {
+                return list.First();
+            }
+
+            return null;
+        }
+        public static void Untrack(string key)
+        {
+            List<Object> list = new List<Object>();
+            string cleanKey = key.Replace(" ", "").ToLower();
+            if (trackedObjects.ContainsKey(cleanKey))
+            {
+                trackedObjects.Remove(cleanKey);
+            }
+        }
+        public static void Untrack(string key, params Object[] objs)
+        {
+            List<Object> list = new List<Object>();
+            string cleanKey = key.Replace(" ", "").ToLower();
+            if (trackedObjects.ContainsKey(cleanKey))
+            {
+                trackedObjects.TryGetValue(cleanKey, out list);
+                objs.ToList().ForEach(x => list.Remove(x));
+                if (list.Count > 0)
+                {
+                    trackedObjects[cleanKey] = list;
+                }
+                else
+                {
+                    Untrack(key);
+                }
+            }
+        }
+        public static void ForgetAll()
+        {
+            trackedObjects.Clear();
+        }
+        public static List<string> TrackedKeys()
+        {
+            return trackedObjects.Keys.ToList();
+        }
     }
 }

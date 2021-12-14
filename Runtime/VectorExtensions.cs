@@ -23,9 +23,9 @@ namespace Dutil
 
 
         //Vector 2
-        public static Vector3 XY(this Vector2 vec, float z = 0) => new Vector3(vec.x, vec.y);
+        public static Vector3 XY(this Vector2 vec, float z = 0) => new Vector3(vec.x, vec.y, z);
         public static Vector3 XZ(this Vector2 vec, float y = 0) => new Vector3(vec.x, y, vec.y);
-        public static Vector3 YZ(this Vector2 vec, float x = 0) => new Vector3(x, vec.y, vec.y);
+        public static Vector3 YZ(this Vector2 vec, float x = 0) => new Vector3(x, vec.x, vec.y);
         public static Vector2 WithX(this Vector2 vec, float x) => new Vector2(x, vec.y);
         public static Vector2 WithY(this Vector2 vec, float y) => new Vector2(vec.x, y);
         public static Vector2 SetX(this ref Vector2 vec, float x) { vec.x = x; return vec; }

@@ -10,7 +10,7 @@ namespace Dutil
         public static List<T> Fill<T>(this List<T> list, int count, T item) => Enumerable.Repeat(item, count).ToList();
         public static void Print<T>(this List<T> list)
         {
-            if (list.Count <= 0) { Debug.Log("Empty"); return; }
+            if (list == null || list.Count <= 0) { Debug.Log("Empty"); return; }
             list.ForEach(x => Debug.Log(x));
         }
         public static T Any<T>(this List<T> list)
@@ -81,6 +81,22 @@ namespace Dutil
                 if (list[i] == null) { list.RemoveAt(i); }
             }
 
+        }
+        public static List<T> Copy<T>(this List<T> list)
+        {
+            T[] array = new T[list.Count];
+            list.CopyTo(array);
+            return array.ToList();
+        }
+        public static T Pop<T>(this List<T> list)
+        {
+            if (list.Count > 0)
+            {
+                T element = list[0];
+                list.RemoveAt(0);
+                return element;
+            }
+            return default(T);
         }
 
 
@@ -159,7 +175,7 @@ namespace Dutil
             }
             return points;
         }
-        public static void Draw(this List<Vector3> points, bool close = false)
+        public static void DrawWithGizmos(this List<Vector3> points, bool close = false)
         {
             Color colA = Color.cyan;
             Color colB = Color.green;
@@ -175,9 +191,9 @@ namespace Dutil
                 Gizmos.DrawLine(points.First(), points.Last());
             }
         }
-        public static void Draw(this List<Vector2> points, bool close = false)
+        public static void DrawWithGizmos(this List<Vector2> points, bool close = false)
         {
-            points.Select(x => x.XY()).ToList().Draw(close);
+            points.Select(x => x.XY()).ToList().DrawWithGizmos(close);
         }
 
         public static Vector2 Average(this List<Vector2> list)
@@ -201,6 +217,25 @@ namespace Dutil
                 }
             }
             return closest;
+        }
+
+        public static DLine Renderer(this List<Vector3> points)
+        {
+            GameObject lineParent = D.TrackFirst("d_line_renderers") as GameObject;
+            if (lineParent == null)
+            {
+                lineParent = new GameObject("D Lines");
+                D.Track("d_line_renderers", lineParent);
+            }
+            GameObject g = new GameObject("D Line");
+            g.transform.SetParent(lineParent.transform);
+            DLine dline = g.AddComponent<DLine>();
+            dline.Setup(points);
+            return dline;
+        }
+        public static DLine Renderer(this List<Vector2> points)
+        {
+            return Renderer(points.Select(x => x.XY()).ToList());
         }
     }
 }
