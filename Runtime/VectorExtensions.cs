@@ -34,6 +34,7 @@ namespace Dutil
         public static Vector2 OffsetY(this Vector2 vec, float y) => new Vector2(vec.x, vec.y + y);
         public static Vector2 GetRight(this Vector2 vec) => new Vector2(vec.y, -vec.x);
         public static Vector2 GetLeft(this Vector2 vec) => vec.GetRight() * -1;
+        public static float RandomFromRange(this Vector2 vec) => Random.Range(vec.x, vec.y);
 
 
     }

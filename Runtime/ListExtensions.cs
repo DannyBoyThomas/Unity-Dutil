@@ -98,6 +98,14 @@ namespace Dutil
             }
             return default(T);
         }
+        public static T FirstD<T>(this List<T> list)
+        {
+            if (list.Count > 0)
+            {
+                return list[0];
+            }
+            return default(T);
+        }
 
 
 
@@ -110,7 +118,7 @@ namespace Dutil
         {
             Vector3 sum = Vector3.zero;
             list.ForEach(x => sum += x);
-            sum /= list.Count;
+            sum /= (float)list.Count;
             return sum;
         }
         public static Vector3? ClosestPoint(this List<Vector3> list, Vector3 point)
@@ -191,6 +199,59 @@ namespace Dutil
                 Gizmos.DrawLine(points.First(), points.Last());
             }
         }
+        public static DLine Renderer(this List<Vector3> points)
+        {
+            GameObject lineParent = D.TrackFirst("d_line_renderers") as GameObject;
+            if (lineParent == null)
+            {
+                lineParent = new GameObject("D Lines");
+                D.Track("d_line_renderers", lineParent);
+            }
+            GameObject g = new GameObject("D Line");
+            g.transform.SetParent(lineParent.transform);
+            DLine dline = g.AddComponent<DLine>();
+            dline.Setup(points);
+            return dline;
+        }
+        public static List<List<Vector3>> Cluster(this List<Vector3> list, int num, int iterations = 24)
+        {
+            List<Vector3> centres = list.AnyUnique(num);
+            Dictionary<Vector3, List<Vector3>> dict = new Dictionary<Vector3, List<Vector3>>();
+            //centres.ForEach(x => dict.Add(x, new List<Vector3>()));
+
+            iterations = Mathf.Clamp(iterations, 1, 300);
+
+            for (int n = 0; n < iterations; n++)
+            {
+                dict.Clear();
+                centres.ForEach(x => dict.Add(x, new List<Vector3>()));
+                for (int i = 0; i < list.Count; i++)
+                {
+                    Vector3 point = list[i];
+                    Vector3? closestCentre = centres.ClosestPoint(point);
+                    if (closestCentre != null)
+                    {
+                        dict[closestCentre.Value].Add(point);
+                    }
+                }
+                for (int j = 0; j < centres.Count; j++)
+                {
+                    Vector3 centre = centres[j];
+                    List<Vector3> points = dict[centre];
+                    dict.Remove(centre);
+                    Vector3 newCentre = points.Average();
+                    dict.Add(newCentre, points);
+                    centres[j] = newCentre;
+                }
+            }
+            List<List<Vector3>> finalList = new List<List<Vector3>>();
+            dict.Keys.ToList().ForEach(x => finalList.Add(dict[x]));
+            return finalList;
+        }
+
+
+        //Vector2
+
         public static void DrawWithGizmos(this List<Vector2> points, bool close = false)
         {
             points.Select(x => x.XY()).ToList().DrawWithGizmos(close);
@@ -200,7 +261,7 @@ namespace Dutil
         {
             Vector2 sum = Vector3.zero;
             list.ForEach(x => sum += x);
-            sum /= list.Count;
+            sum /= (float)list.Count;
             return sum;
         }
         public static Vector2? ClosestPoint(this List<Vector2> list, Vector2 point)
@@ -219,23 +280,11 @@ namespace Dutil
             return closest;
         }
 
-        public static DLine Renderer(this List<Vector3> points)
-        {
-            GameObject lineParent = D.TrackFirst("d_line_renderers") as GameObject;
-            if (lineParent == null)
-            {
-                lineParent = new GameObject("D Lines");
-                D.Track("d_line_renderers", lineParent);
-            }
-            GameObject g = new GameObject("D Line");
-            g.transform.SetParent(lineParent.transform);
-            DLine dline = g.AddComponent<DLine>();
-            dline.Setup(points);
-            return dline;
-        }
+
         public static DLine Renderer(this List<Vector2> points)
         {
             return Renderer(points.Select(x => x.XY()).ToList());
         }
+
     }
 }

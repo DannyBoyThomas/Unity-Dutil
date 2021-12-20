@@ -52,5 +52,9 @@ namespace Dutil
             }
             return children;
         }
+        public static bool IsInLayer(this GameObject g, LayerMask layer)
+        {
+            return ((layer.value & (1 << g.layer)) > 0);
+        }
     }
 }
