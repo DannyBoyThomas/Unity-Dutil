@@ -7,9 +7,6 @@ namespace Dutil
     public class D
     {
 
-
-
-
         /// <summary>
         /// Chance(0.7) has a 70% chance to return true
         /// </summary>
@@ -66,8 +63,18 @@ namespace Dutil
             return new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f));
         }
 
-
-
+        public static List<Vector3> PointsOnCircle(Vector3 centre, Vector3 forward, Vector3 normal, int segments, bool close = false)
+        {
+            List<Vector3> points = new List<Vector3>();
+            float incr = 360 / (float)segments;
+            int segmentNum = close ? segments + 1 : segments;
+            for (int i = 0; i < segmentNum; i++)
+            {
+                Vector3 point = Quaternion.Euler(normal * i * incr) * forward;
+                points.Add(centre + point);
+            }
+            return points;
+        }
         //Static Referencer
         static Dictionary<string, List<Object>> trackedObjects = new Dictionary<string, List<Object>>();
 

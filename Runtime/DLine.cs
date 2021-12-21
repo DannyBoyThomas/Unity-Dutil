@@ -65,7 +65,7 @@ public class DLine : MonoBehaviour
     void Animate()
     {
         Progress += Time.deltaTime;
-        int progressCount = (int)Mathf.Lerp(0, points.Count - 1, progress);
+        int progressCount = Mathf.RoundToInt(Mathf.Lerp(0, points.Count, progress));
         List<Vector3> relativePoints = points.GetRange(0, progressCount);
         lineRenderer.positionCount = progressCount;
         lineRenderer.SetPositions(relativePoints.ToArray());
