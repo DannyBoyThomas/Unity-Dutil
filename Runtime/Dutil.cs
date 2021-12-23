@@ -75,6 +75,16 @@ namespace Dutil
             }
             return points;
         }
+        //Physics
+        public static bool LineOfSight(Vector3 pointA, Vector3 pointB)
+        {
+            Vector3 dir = (pointB - pointA);
+            if (Physics.Raycast(pointA, dir.normalized, dir.magnitude))
+            {
+                return false;
+            }
+            return true;
+        }
         //Static Referencer
         static Dictionary<string, List<Object>> trackedObjects = new Dictionary<string, List<Object>>();
 

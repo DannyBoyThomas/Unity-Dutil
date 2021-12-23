@@ -44,5 +44,15 @@ namespace Dutil
         {
             return Color.Lerp(color, Color.black, amount);
         }
+
+        public static List<Color> Shades(this Color col)
+        {
+            List<Color> shades = new List<Color>();
+            if (Colours.Shades.TryGetValue(col, out shades))
+            {
+                return shades;
+            }
+            return new List<Color>() { col };
+        }
     }
 }

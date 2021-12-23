@@ -56,5 +56,6 @@ namespace Dutil
         {
             return ((layer.value & (1 << g.layer)) > 0);
         }
+
     }
 }
