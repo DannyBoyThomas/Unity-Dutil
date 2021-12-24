@@ -45,11 +45,15 @@ namespace Dutil
             return Color.Lerp(color, Color.black, amount);
         }
 
-        public static List<Color> Shades(this Color col)
+        public static List<Color> Shades(this Color col, bool includeBase = false)
         {
-            List<Color> shades = new List<Color>();
-            if (Colours.Shades.TryGetValue(col, out shades))
+            if (Colours.Shades.ContainsKey(col))
             {
+                List<Color> shades = Colours.Shades[col].Copy();
+                if (includeBase)
+                {
+                    shades.Insert(5, col);
+                }
                 return shades;
             }
             return new List<Color>() { col };
