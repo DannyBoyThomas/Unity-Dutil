@@ -58,5 +58,28 @@ namespace Dutil
             }
             return new List<Color>() { col };
         }
+        /// <summary>
+        /// 0-8, 9 if including base
+        /// </summary>
+        /// <param name="col"></param>
+        /// <param name="index"></param>
+        /// <param name="includeBase"></param>
+        /// <returns></returns>/
+        public static Color Shade(this Color col, int index, bool includeBase = false)
+        {
+            if (Colours.Shades.ContainsKey(col))
+            {
+                List<Color> shades = Colours.Shades[col].Copy();
+                if (includeBase)
+                {
+                    shades.Insert(5, col);
+                }
+                if (index < shades.Count)
+                {
+                    return shades[index];
+                }
+            }
+            return col;
+        }
     }
 }
