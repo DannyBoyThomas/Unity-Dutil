@@ -297,6 +297,12 @@ namespace Dutil
         }
         public static Vector3 PointAtTime(this List<Vector3> points, float t)
         {
+            Vector3 point, dir;
+            (point, dir) = PointAndDirectionAtTime(points, t);
+            return point;
+        }
+        public static (Vector3, Vector3) PointAndDirectionAtTime(this List<Vector3> points, float t)
+        {
             t = Mathf.Clamp01(t);
 
             float totalDistance = points.Distance();
@@ -314,11 +320,12 @@ namespace Dutil
                     //.7 - .8 ..want .73
                     float tAcrossLength = Mathf.InverseLerp(firstNodeT, endNodeT, t);
                     Vector3 point = Vector3.Lerp(points[i - 1], points[i], tAcrossLength);
-                    return point;
+                    Vector3 dir = (points[i] - points[i - 1]).normalized;
+                    return (point, dir);
                 }
                 traversed += length;
             }
-            return Vector3.zero;
+            return (Vector3.zero, Vector3.zero);
         }
 
     }
