@@ -285,6 +285,41 @@ namespace Dutil
         {
             return Renderer(points.Select(x => x.XY()).ToList());
         }
+        public static float Distance(this List<Vector3> points)
+        {
+            float sum = 0;
+            for (int i = 1; i < points.Count; i++)
+            {
+                float distance = Vector3.Distance(points[i - 1], points[i]);
+                sum += distance;
+            }
+            return sum;
+        }
+        public static Vector3 PointAtTime(this List<Vector3> points, float t)
+        {
+            t = Mathf.Clamp01(t);
+
+            float totalDistance = points.Distance();
+            float distanceAtTime = totalDistance * t;
+
+            float traversed = 0;
+            for (int i = 1; i < points.Count; i++)
+            {
+                float length = Vector3.Distance(points[i - 1], points[i]);
+                if (traversed + length >= distanceAtTime)// its on this length
+                {
+                    //traversed + x = distanceAtTime
+                    float firstNodeT = traversed / totalDistance;
+                    float endNodeT = (traversed + length) / totalDistance;
+                    //.7 - .8 ..want .73
+                    float tAcrossLength = Mathf.InverseLerp(firstNodeT, endNodeT, t);
+                    Vector3 point = Vector3.Lerp(points[i - 1], points[i], tAcrossLength);
+                    return point;
+                }
+                traversed += length;
+            }
+            return Vector3.zero;
+        }
 
     }
 }
