@@ -59,5 +59,9 @@ public static class Colours
         }
         return Color.white;
     }
+    public static Color Random()
+    {
+        return new Color(UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f));
+    }
 
 }

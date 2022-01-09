@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System;
 namespace Dutil
 {
     public static class ListExtensions
@@ -15,7 +16,7 @@ namespace Dutil
         }
         public static T Any<T>(this List<T> list)
         {
-            int index = Random.Range(0, list.Count);
+            int index = UnityEngine.Random.Range(0, list.Count);
             return list[index];
         }
         public static List<T> Any<T>(this List<T> list, int num)
@@ -327,6 +328,40 @@ namespace Dutil
             }
             return (Vector3.zero, Vector3.zero);
         }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        //Enums
+        public static T Next<T>(this T thisEnum) where T : Enum
+        {
+            Type t = thisEnum.GetType();
+            int currentIndex = (int)Convert.ChangeType(thisEnum, typeof(int));
+            int length = Enum.GetValues(t).Length;
+            int nextIndex = (int)Mathf.Repeat(currentIndex + 1, length);
+            return (T)Convert.ChangeType(Enum.GetValues(t).GetValue(nextIndex), t);
+        }
+        public static T Previous<T>(this T thisEnum) where T : Enum
+        {
+            Type t = thisEnum.GetType();
+            int currentIndex = (int)Convert.ChangeType(thisEnum, typeof(int));
+            int length = Enum.GetValues(t).Length;
+            int prevIndex = (int)Mathf.Repeat(currentIndex - 1, length);
+            return (T)Convert.ChangeType(Enum.GetValues(t).GetValue(prevIndex), t);
+        }
+
 
     }
 }

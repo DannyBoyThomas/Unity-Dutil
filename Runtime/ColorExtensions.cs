@@ -6,10 +6,18 @@ namespace Dutil
     public static class ColorExtensions
     {
 
+
         public static Color Pastel(this Color color)
         {
             float newSaturation = 0.45f;
             float newValue = .75f;
+            Vector3 hsv = color.HSV();
+            return Color.HSVToRGB(hsv.x, newSaturation, newValue);
+        }
+        public static Color Calm(this Color color)
+        {
+            float newSaturation = 0.6f;
+            float newValue = .6f;
             Vector3 hsv = color.HSV();
             return Color.HSVToRGB(hsv.x, newSaturation, newValue);
         }
