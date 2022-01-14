@@ -169,5 +169,22 @@ namespace Dutil
         {
             return Colours.Hex(s);
         }
+        public static Color WithAlpha(this Color col, float a)
+        {
+            return new Color(col.r, col.g, col.b, a.Clamp());
+        }
+        public static Color WithRed(this Color col, float r)
+        {
+            return new Color(r.Clamp(), col.g, col.b, col.a);
+        }
+        public static Color WithGreen(this Color col, float g)
+        {
+            return new Color(col.r, g.Clamp(), col.b, col.a);
+        }
+        public static Color WithBlue(this Color col, float b)
+        {
+            return new Color(col.r, col.g, b.Clamp(), col.a);
+        }
+
     }
 }
