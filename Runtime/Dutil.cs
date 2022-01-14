@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
+using System.Text.RegularExpressions;
 namespace Dutil
 {
     public class D
@@ -170,6 +171,15 @@ namespace Dutil
         public static List<string> TrackedKeys()
         {
             return trackedObjects.Keys.ToList();
+        }
+        public static string FormatNumber(double number, int maxDecimals = 4)
+        {
+            return FormatNumber((float)number, maxDecimals);
+        }
+        public static string FormatNumber(float number, int maxDecimals = 4)
+        {
+            return Regex.Replace(string.Format("{0:n" + maxDecimals + "}", number),
+                                 @"[" + System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator + "]?0+$", "");
         }
     }
 }
