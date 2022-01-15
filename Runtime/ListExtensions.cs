@@ -107,6 +107,20 @@ namespace Dutil
             }
             return default(T);
         }
+        public static List<List<T>> Split<T>(this List<T> list, int count)
+        {
+            List<List<T>> groups = new List<List<T>>();
+            List<T> from = list.Copy();
+
+            while (from.Count > 0)
+            {
+                int toTake = Math.Min(count, from.Count);
+                List<T> newGroup = from.GetRange(0, toTake);
+                groups.Add(newGroup);
+                newGroup.ForEach(x => from.Remove(x));
+            }
+            return groups;
+        }
 
 
 
