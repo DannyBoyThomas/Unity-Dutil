@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.Linq;
 using System.Text.RegularExpressions;
+using UnityEngine.Events;
 namespace Dutil
 {
     public class D
@@ -181,5 +182,35 @@ namespace Dutil
             return Regex.Replace(string.Format("{0:n" + maxDecimals + "}", number),
                                  @"[" + System.Globalization.NumberFormatInfo.CurrentInfo.NumberDecimalSeparator + "]?0+$", "");
         }
+        /// <summary>
+        /// Does what it says on the tin
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="list"> A list of every item it could be</param>
+        /// <param name="first">Where the flood fill should start</param>
+        /// <param name="GetNeighbours">(list,currentItem)=>{return this currentItems neighbours}</param>
+        /// <returns>A list of all connected items</returns>
+        public static List<T> FloodFill<T>(List<T> list, T first, System.Func<List<T>, T, List<T>> GetNeighbours)
+        {
+            List<T> flooded = new List<T>();
+            flooded.Add(first);
+            for (int i = 0; i < flooded.Count; i++)
+            {
+                T current = flooded[i];
+                List<T> neighbours = GetNeighbours(list, current);
+                for (int j = 0; j < neighbours.Count; j++)
+                {
+                    T neigh = neighbours[j];
+                    if (list.Contains(neigh))
+                    {
+                        flooded.AddUnique(neigh);
+                    }
+                }
+            }
+            return flooded;
+        }
+
+
     }
 }
+

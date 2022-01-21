@@ -346,8 +346,34 @@ namespace Dutil
 
 
 
-
-
+        //Arrays
+        public static (bool, Vector2Int) Contains<T>(this T[,] array, T checkItem)
+        {
+            for (int i = 0; i < array.GetLength(0); i++)
+            {
+                for (int j = 0; j < array.GetLength(1); j++)
+                {
+                    T item = array[i, j];
+                    if (item.GetHashCode() == checkItem.GetHashCode()) { return (true, new Vector2Int(i, j)); }
+                }
+            }
+            return (false, Vector2Int.one * -1);
+        }
+        public static (bool, Vector3Int) Contains<T>(this T[,,] array, T checkItem)
+        {
+            for (int i = 0; i < array.GetLength(0); i++)
+            {
+                for (int j = 0; j < array.GetLength(1); j++)
+                {
+                    for (int k = 0; k < array.GetLength(2); k++)
+                    {
+                        T item = array[i, j, k];
+                        if (item.GetHashCode() == checkItem.GetHashCode()) { return (true, new Vector3Int(i, j, k)); }
+                    }
+                }
+            }
+            return (false, Vector3Int.one * -1);
+        }
 
 
 
