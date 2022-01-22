@@ -4,118 +4,120 @@ using UnityEngine;
 using UnityEditor;
 using System;
 using System.Linq;
-using Dutil;
-public class QuickReplaceEditor : EditorWindow
+namespace Dutil
 {
-    public GameObject newPrefab;
-    public List<GameObject> toReplace = new List<GameObject>();
-    public List<GameObject> converted = new List<GameObject>();
-
-    [MenuItem("Dutil/Quick Replace %&r")]
-    static void Init()
+    public class QuickReplaceEditor : EditorWindow
     {
-        // Get existing open window or if none, make a new one:
-        QuickReplaceEditor window = (QuickReplaceEditor)EditorWindow.GetWindow(typeof(QuickReplaceEditor), false, "Quick Replace");
-        window.Show();
-    }
-    void OnGUI()
-    {
-        Color oldBG = GUI.backgroundColor;
-        EditorGUILayout.BeginHorizontal();
-        GUI.backgroundColor = Colours.Orange.Shade(2);
-        if (Selection.gameObjects.Length > 0)
-        {
-            if (GUILayout.Button("Pull Selected", new GUILayoutOption[] { GUILayout.Height(24) }))
-            {
-                toReplace.Clear();
-                toReplace = Selection.gameObjects.ToList();
-            }
-        }
+        public GameObject newPrefab;
+        public List<GameObject> toReplace = new List<GameObject>();
+        public List<GameObject> converted = new List<GameObject>();
 
-
-        if (GUILayout.Button("Clear", new GUILayoutOption[] { GUILayout.Height(24) }))
+        [MenuItem("Dutil/Quick Replace %&r")]
+        static void Init()
         {
-            toReplace.Clear();
+            // Get existing open window or if none, make a new one:
+            QuickReplaceEditor window = (QuickReplaceEditor)EditorWindow.GetWindow(typeof(QuickReplaceEditor), false, "Quick Replace");
+            window.Show();
         }
-        GUI.backgroundColor = Colours.Red.Shade(2);
-        if (GUILayout.Button("Reset", new GUILayoutOption[] { GUILayout.Height(24) }))
+        void OnGUI()
         {
-            toReplace.Clear();
-            converted.Clear();
-            newPrefab = null;
-        }
-        EditorGUILayout.EndHorizontal();
-        bool performed = false;
-        GUI.backgroundColor = Colours.Blue.Shade(2);
-        if (GUILayout.Button("Replace", new GUILayoutOption[] { GUILayout.Height(32) }))
-        {
-            if (newPrefab == null)
+            Color oldBG = GUI.backgroundColor;
+            EditorGUILayout.BeginHorizontal();
+            GUI.backgroundColor = Colours.Orange.Shade(2);
+            if (Selection.gameObjects.Length > 0)
             {
-                Debug.LogError("Need to set a new prefab to replace with");
-            }
-            else
-            {
-                toReplace.Clean();
-                converted.Clear();
-                Undo.SetCurrentGroupName("replaceables");
-                for (int i = 0; i < toReplace.Count; i++)
+                if (GUILayout.Button("Pull Selected", new GUILayoutOption[] { GUILayout.Height(24) }))
                 {
-                    GameObject old = toReplace[i];
-                    GameObject spawned = GameObject.Instantiate(newPrefab, old.transform.position, old.transform.rotation);
-                    spawned.transform.localScale = old.transform.localScale;
-                    spawned.name = old.name;
-                    converted.Add(spawned);
-                    Undo.RegisterCreatedObjectUndo(spawned, "Replaced using Dutil");
+                    toReplace.Clear();
+                    toReplace = Selection.gameObjects.ToList();
                 }
-
-                toReplace.ForEach(x => Undo.DestroyObjectImmediate(x));
-                toReplace.Clear();
-                performed = true;
             }
+
+
+            if (GUILayout.Button("Clear", new GUILayoutOption[] { GUILayout.Height(24) }))
+            {
+                toReplace.Clear();
+            }
+            GUI.backgroundColor = Colours.Red.Shade(2);
+            if (GUILayout.Button("Reset", new GUILayoutOption[] { GUILayout.Height(24) }))
+            {
+                toReplace.Clear();
+                converted.Clear();
+                newPrefab = null;
+            }
+            EditorGUILayout.EndHorizontal();
+            bool performed = false;
+            GUI.backgroundColor = Colours.Blue.Shade(2);
+            if (GUILayout.Button("Replace", new GUILayoutOption[] { GUILayout.Height(32) }))
+            {
+                if (newPrefab == null)
+                {
+                    Debug.LogError("Need to set a new prefab to replace with");
+                }
+                else
+                {
+                    toReplace.Clean();
+                    converted.Clear();
+                    Undo.SetCurrentGroupName("replaceables");
+                    for (int i = 0; i < toReplace.Count; i++)
+                    {
+                        GameObject old = toReplace[i];
+                        GameObject spawned = GameObject.Instantiate(newPrefab, old.transform.position, old.transform.rotation);
+                        spawned.transform.localScale = old.transform.localScale;
+                        spawned.name = old.name;
+                        converted.Add(spawned);
+                        Undo.RegisterCreatedObjectUndo(spawned, "Replaced using Dutil");
+                    }
+
+                    toReplace.ForEach(x => Undo.DestroyObjectImmediate(x));
+                    toReplace.Clear();
+                    performed = true;
+                }
+            }
+            GUILayout.Label("");
+            ScriptableObject scriptableObj = this;
+            SerializedObject serialObj = new SerializedObject(scriptableObj);
+
+            SerializedProperty list = serialObj.FindProperty("toReplace");
+
+            SerializedProperty convertedList = serialObj.FindProperty("converted");
+
+            SerializedProperty newItem = serialObj.FindProperty("newPrefab");
+
+            GUI.backgroundColor = Colours.Blue.Shade(1);
+            EditorGUILayout.PropertyField(newItem, true);
+
+            GUI.backgroundColor = Colours.Orange.Shade(2);
+            EditorGUILayout.PropertyField(list, !performed);
+
+            GUI.backgroundColor = oldBG;
+
+            GUILayout.BeginHorizontal();
+            GUILayout.FlexibleSpace();
+            if (GUILayout.Button("^^^", new GUILayoutOption[] { GUILayout.Height(24), GUILayout.Width(60) }))
+            {
+                toReplace = converted.Copy();
+                converted.Clear();
+            }
+            GUILayout.EndHorizontal();
+            GUI.backgroundColor = Colours.Blue.Shade(2);
+            EditorGUILayout.PropertyField(convertedList, true);
+            serialObj.ApplyModifiedProperties();
+            GUI.backgroundColor = oldBG;
+
+
+
+
+
         }
-        GUILayout.Label("");
-        ScriptableObject scriptableObj = this;
-        SerializedObject serialObj = new SerializedObject(scriptableObj);
 
-        SerializedProperty list = serialObj.FindProperty("toReplace");
-
-        SerializedProperty convertedList = serialObj.FindProperty("converted");
-
-        SerializedProperty newItem = serialObj.FindProperty("newPrefab");
-
-        GUI.backgroundColor = Colours.Blue.Shade(1);
-        EditorGUILayout.PropertyField(newItem, true);
-
-        GUI.backgroundColor = Colours.Orange.Shade(2);
-        EditorGUILayout.PropertyField(list, !performed);
-
-        GUI.backgroundColor = oldBG;
-
-        GUILayout.BeginHorizontal();
-        GUILayout.FlexibleSpace();
-        if (GUILayout.Button("^^^", new GUILayoutOption[] { GUILayout.Height(24), GUILayout.Width(60) }))
+        public static void Show(SerializedProperty list)
         {
-            toReplace = converted.Copy();
-            converted.Clear();
-        }
-        GUILayout.EndHorizontal();
-        GUI.backgroundColor = Colours.Blue.Shade(2);
-        EditorGUILayout.PropertyField(convertedList, true);
-        serialObj.ApplyModifiedProperties();
-        GUI.backgroundColor = oldBG;
-
-
-
-
-
-    }
-
-    public static void Show(SerializedProperty list)
-    {
-        EditorGUILayout.PropertyField(list);
-        for (int i = 0; i < list.arraySize; i++)
-        {
-            EditorGUILayout.PropertyField(list.GetArrayElementAtIndex(i));
+            EditorGUILayout.PropertyField(list);
+            for (int i = 0; i < list.arraySize; i++)
+            {
+                EditorGUILayout.PropertyField(list.GetArrayElementAtIndex(i));
+            }
         }
     }
 }
