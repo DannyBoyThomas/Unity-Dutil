@@ -19,7 +19,13 @@ namespace Dutil
         public static Vector3 OffsetX(this Vector3 vec, float x) => new Vector3(vec.x + x, vec.y, vec.z);
         public static Vector3 OffsetY(this Vector3 vec, float y) => new Vector3(vec.x, vec.y + y, vec.z);
         public static Vector3 OffsetZ(this Vector3 vec, float z) => new Vector3(vec.x, vec.y, vec.z + z);
-
+        public static Vector3 Confine(this Vector3 vec, Vector3 BL, Vector3 TR)
+        {
+            float x = Mathf.Min(Mathf.Max(vec.x, BL.x), TR.x);
+            float y = Mathf.Min(Mathf.Max(vec.y, BL.y), TR.y);
+            float z = Mathf.Min(Mathf.Max(vec.z, BL.z), TR.z);
+            return new Vector3(x, y, z);
+        }
 
 
         //Vector 2
@@ -35,6 +41,12 @@ namespace Dutil
         public static Vector2 GetRight(this Vector2 vec) => new Vector2(vec.y, -vec.x);
         public static Vector2 GetLeft(this Vector2 vec) => vec.GetRight() * -1;
         public static float RandomFromRange(this Vector2 vec) => Random.Range(vec.x, vec.y);
+        public static Vector2 Confine(this Vector2 vec, Vector2 BL, Vector2 TR)
+        {
+            float x = Mathf.Min(Mathf.Max(vec.x, BL.x), TR.x);
+            float y = Mathf.Min(Mathf.Max(vec.y, BL.y), TR.y);
+            return new Vector2(x, y);
+        }
 
 
     }
