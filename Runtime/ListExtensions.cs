@@ -346,6 +346,12 @@ namespace Dutil
 
 
 
+
+
+
+
+
+
         //Arrays
         public static (bool, Vector2Int) Contains<T>(this T[,] array, T checkItem)
         {
@@ -373,6 +379,39 @@ namespace Dutil
                 }
             }
             return (false, Vector3Int.one * -1);
+        }
+        public static void Fill<T>(this T[] array, T value)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                array[i] = value;
+            }
+        }
+        public static void Fill<T>(this T[,] array, T value)
+        {
+            for (int i = 0; i < array.GetLength(0); i++)
+            {
+                for (int j = 0; j < array.GetLength(1); j++)
+                {
+                    array[i, j] = value;
+                }
+            }
+        }
+
+        public static List<Array2DItem<T>> ToList<T>(this T[,] array)
+        {
+            List<Array2DItem<T>> list = new List<Array2DItem<T>>();
+            for (int i = 0; i < array.GetLength(0); i++)
+            {
+                for (int j = 0; j < array.GetLength(1); j++)
+                {
+                    T v = array[i, j];
+                    if (v == null) { continue; }
+                    Array2DItem<T> item = new Array2DItem<T>() { value = v, index = new Vector2Int(i, j) };
+                    list.Add(item);
+                }
+            }
+            return list;
         }
 
 
