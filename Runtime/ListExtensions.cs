@@ -169,6 +169,13 @@ namespace Dutil
             }
             return closest;
         }
+        public static Vector3 Move(this List<Vector3> points, float moveDistance, int clampOrExtrapolate = 0)
+        {
+            Vector3 pos;
+            int index;
+            (pos, index) = MoveWithIndex(points, moveDistance, clampOrExtrapolate);
+            return pos;
+        }
         /// <summary>
         /// 
         /// </summary>
@@ -176,7 +183,7 @@ namespace Dutil
         /// <param name="moveDistance"></param>
         /// <param name="clampOrExtrapolate">o = Clamp, 1 = Extrapolate</param>
         /// <returns></returns>
-        public static Vector3 Move(this List<Vector3> points, float moveDistance, int clampOrExtrapolate = 0)
+        public static (Vector3, int) MoveWithIndex(this List<Vector3> points, float moveDistance, int clampOrExtrapolate = 0)
         {
             if (clampOrExtrapolate == 0)
             {
@@ -198,16 +205,17 @@ namespace Dutil
                 {
                     Vector3 direction = (currentPoint - lastPoint).normalized;
                     Vector3 newPoint = lastPoint + direction * remainingMoveDistance;
-                    return newPoint;
+                    return (newPoint, i - 1);
                 }
             }
+            //ran out of points
             if (clampOrExtrapolate == 1)
             {
                 Vector3 direction = (points.Last() - points.Get(-1)).normalized;
                 Vector3 newPoint = points.Last() + direction * remainingMoveDistance;
-                return newPoint;
+                return (newPoint, points.Count - 1);
             }
-            return points.Last();
+            return (points.Last(), points.Count - 1);
 
         }
 
