@@ -151,6 +151,66 @@ namespace Dutil
             }
             return closest;
         }
+        public static Vector3 GetClosestPointOnPath(this List<Vector3> points, Vector3 point)
+        {
+            Vector3 closest = Vector3.zero;
+            float minDist = float.MaxValue;
+            for (int i = 0; i < points.Count - 1; i++)
+            {
+                Vector3 p1 = points[i];
+                Vector3 p2 = points[i + 1];
+                Vector3 closestPoint = D.GetClosestPointOnLine(p1, p2, point);
+                float dist = Vector3.Distance(point, closestPoint);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    closest = closestPoint;
+                }
+            }
+            return closest;
+        }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="points"></param>
+        /// <param name="moveDistance"></param>
+        /// <param name="clampOrExtrapolate">o = Clamp, 1 = Extrapolate</param>
+        /// <returns></returns>
+        public static Vector3 Move(this List<Vector3> points, float moveDistance, int clampOrExtrapolate = 0)
+        {
+            if (clampOrExtrapolate == 0)
+            {
+                moveDistance = Mathf.Max(moveDistance, 0);
+            }
+            float remainingMoveDistance = moveDistance;
+            //move through all the points starting at the first one
+            Vector3 lastPoint = points[0];
+            for (int i = 1; i < points.Count; i++)
+            {
+                Vector3 currentPoint = points[i];
+                float distance = Vector3.Distance(lastPoint, currentPoint);
+                if (distance <= remainingMoveDistance)//can move across this line completely
+                {
+                    remainingMoveDistance -= distance;
+                    lastPoint = currentPoint;
+                }
+                else// somewhere on this line
+                {
+                    Vector3 direction = (currentPoint - lastPoint).normalized;
+                    Vector3 newPoint = lastPoint + direction * remainingMoveDistance;
+                    return newPoint;
+                }
+            }
+            if (clampOrExtrapolate == 1)
+            {
+                Vector3 direction = (points.Last() - points.Get(-1)).normalized;
+                Vector3 newPoint = points.Last() + direction * remainingMoveDistance;
+                return newPoint;
+            }
+            return points.Last();
+
+        }
+
         public static List<Vector3> Smooth(this List<Vector3> path, int iterations = 4, bool close = false)
         {
             iterations = Mathf.Clamp(iterations, 0, 6);

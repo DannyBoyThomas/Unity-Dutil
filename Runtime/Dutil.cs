@@ -19,9 +19,24 @@ namespace Dutil
             f = Mathf.Clamp01(f);
             return Random.Range(0, 1f) <= f;
         }
+        [System.Obsolete("Use GetClosestPointOnLine() instead")]
         public static Vector3 NearestPointOnLine(Vector3 point, Vector3 pointA, Vector3 pointB)
         {
             return new Line3D(pointA, pointB).NearestPoint(point);
+        }
+        public static Vector3 GetClosestPointOnLine(Vector3 p1, Vector3 p2, Vector3 point)
+        {
+            Vector3 v = p2 - p1;
+            Vector3 w = point - p1;
+            float c1 = Vector3.Dot(w, v);
+            if (c1 <= 0)
+                return p1;
+            float c2 = Vector3.Dot(v, v);
+            if (c2 <= c1)
+                return p2;
+            float b = c1 / c2;
+            Vector3 pb = p1 + b * v;
+            return pb;
         }
         public static string Hash(int length = 8)
         {
