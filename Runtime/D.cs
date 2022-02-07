@@ -58,7 +58,7 @@ namespace Dutil
             for (int i = 0; i < divisions; i++)
             {
                 float t = i * incr;
-                Vector3 pointAtT = p0 + (Mathf.Pow(1 - t, 2) * (p0 - p1)) + (Mathf.Pow(t, 2) * (p2 - p1));
+                Vector3 pointAtT = (Mathf.Pow(1 - t, 2) * p0) + (2 * t * (1 - t) * p1) + (Mathf.Pow(t, 2) * p2);
                 points.Add(pointAtT);
             }
             return points;
