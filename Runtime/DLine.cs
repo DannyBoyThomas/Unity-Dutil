@@ -24,7 +24,7 @@ public class DLine : MonoBehaviour
     }
     public LineRenderer CreateRenderer()
     {
-        if (lineRenderer != null) { lineRenderer; }
+        if (lineRenderer != null) { return lineRenderer; }
 
         GameObject g = new GameObject("Renderer");
         lineRenderer = g.AddComponent<LineRenderer>();
