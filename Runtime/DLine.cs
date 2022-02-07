@@ -22,7 +22,7 @@ public class DLine : MonoBehaviour
         if (!animate) { return; }
         Animate();
     }
-    LineRenderer CreateRenderer()
+    public LineRenderer CreateRenderer()
     {
         if (lineRenderer != null) { lineRenderer; }
 
