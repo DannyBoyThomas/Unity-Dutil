@@ -26,6 +26,7 @@ namespace Dutil
             float z = Mathf.Min(Mathf.Max(vec.z, BL.z), TR.z);
             return new Vector3(x, y, z);
         }
+        public static Vector3Int Round(this Vector3 vec) => new Vector3Int(Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.y), Mathf.RoundToInt(vec.z));
 
 
         //Vector 2
@@ -47,7 +48,6 @@ namespace Dutil
             float y = Mathf.Min(Mathf.Max(vec.y, BL.y), TR.y);
             return new Vector2(x, y);
         }
-
-
+        public static Vector2Int Round(this Vector2 vec) => new Vector2Int(Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.y));
     }
 }
