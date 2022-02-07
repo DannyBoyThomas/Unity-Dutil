@@ -468,7 +468,9 @@ namespace Dutil
 
         public static List<Array2DItem<T>> ToList<T>(this T[,] array)
         {
+
             List<Array2DItem<T>> list = new List<Array2DItem<T>>();
+            if (array == null) { return list; }
             for (int i = 0; i < array.GetLength(0); i++)
             {
                 for (int j = 0; j < array.GetLength(1); j++)
