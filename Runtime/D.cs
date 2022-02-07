@@ -55,7 +55,7 @@ namespace Dutil
         {
             List<Vector3> points = new List<Vector3>();
             float incr = 1 / (float)divisions;
-            for (int i = 0; i < divisions; i++)
+            for (int i = 0; i <= divisions; i++)
             {
                 float t = i * incr;
                 Vector3 pointAtT = (Mathf.Pow(1 - t, 2) * p0) + (2 * t * (1 - t) * p1) + (Mathf.Pow(t, 2) * p2);
