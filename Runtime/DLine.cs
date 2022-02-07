@@ -24,6 +24,8 @@ public class DLine : MonoBehaviour
     }
     LineRenderer CreateRenderer()
     {
+        if (lineRenderer != null) { lineRenderer; }
+
         GameObject g = new GameObject("Renderer");
         lineRenderer = g.AddComponent<LineRenderer>();
         g.transform.SetParent(transform);
