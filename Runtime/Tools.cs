@@ -47,4 +47,9 @@ public class Tools
             addRequest = null;
         }
     }
+    [InitializeOnLoadMethod]
+    static void Huzzah()
+    {
+        Debug.Log("Huzzah!");
+    }
 }
