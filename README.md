@@ -80,7 +80,7 @@ vec3.SetY(7);
 List<Vector3> points = new List(){...};
 DLine line = points.Renderer();
 line.ShowAnimated();
-lien.HideInstantly();
+line.HideInstantly();
 ```
 ## Plus more
 ```
