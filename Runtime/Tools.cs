@@ -4,9 +4,12 @@ using UnityEngine;
 using UnityEditor;
 using System.Linq;
 using Dutil;
-using UnityEditor.PackageManager;
+using UnityEditor.PackageManager.Requests;
+using System.Threading.Tasks;
+
 public class Tools
 {
+    static bool isDutilUpdating = false;
     [MenuItem("Dutil/Group %&g")]
     public static void Group()
     {
@@ -21,7 +24,26 @@ public class Tools
     [MenuItem("Dutil/Update %&u")]
     public static void UpdateDutil()
     {
-        UnityEditor.PackageManager.Client.Add("https://github.com/DannyBoyThomas/Unity-Dutil.git");
+        if (isDutilUpdating)
+        {
+            Debug.Log("Dutil is already updating.");
+            return;
+        }
+        isDutilUpdating = true;
+        Debug.Log("Updating Dutil...");
+        Task.Run(async () =>
+       {
+           AddRequest req = UnityEditor.PackageManager.Client.Add("https://github.com/DannyBoyThomas/Unity-Dutil.git");
+           while (!req.IsCompleted)
+           {
+               await Task.Delay(300);
+               Debug.Log(".");
+           }
+           string res = req.Status == UnityEditor.PackageManager.StatusCode.Success ? " updated successfully." : " failed to update.";
+           Debug.Log("Dutil" + res);
+           isDutilUpdating = false;
+       });
+
 
     }
 }
