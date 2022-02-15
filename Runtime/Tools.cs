@@ -31,9 +31,10 @@ public class Tools
         }
         isDutilUpdating = true;
         Debug.Log("Updating Dutil...");
+        AddRequest req = UnityEditor.PackageManager.Client.Add("https://github.com/DannyBoyThomas/Unity-Dutil.git");
         await Task.Run(async () =>
        {
-           AddRequest req = UnityEditor.PackageManager.Client.Add("https://github.com/DannyBoyThomas/Unity-Dutil.git");
+
            Debug.Log("Requested");
            while (!req.IsCompleted)
            {
