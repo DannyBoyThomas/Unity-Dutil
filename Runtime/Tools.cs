@@ -39,7 +39,10 @@ public class Tools
         if (addRequest.IsCompleted)
         {
             if (addRequest.Status == UnityEditor.PackageManager.StatusCode.Success)
+            {
                 Debug.Log("Dutil updated succesfully");
+                Debug.Log("You may need to restart your code editor for changes to take effect.");
+            }
             else if (addRequest.Status >= UnityEditor.PackageManager.StatusCode.Failure)
                 Debug.Log(addRequest.Error.message);
 
@@ -47,9 +50,5 @@ public class Tools
             addRequest = null;
         }
     }
-    [InitializeOnLoadMethod]
-    static void Huzzah()
-    {
-        Debug.Log("Huzzah!");
-    }
+
 }

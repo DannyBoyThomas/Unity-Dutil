@@ -49,5 +49,17 @@ namespace Dutil
             return new Vector2(x, y);
         }
         public static Vector2Int Round(this Vector2 vec) => new Vector2Int(Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.y));
+
+
+        //Vector2Int
+        public static Vector2 ToVector2(this Vector2Int vec) => new Vector2(vec.x, vec.y);
+        public static Vector3 ToVector3(this Vector2Int vec) => new Vector3(vec.x, vec.y, 0);
+        public static Vector3Int XY(this Vector2Int vec, int z = 0) => new Vector3Int(vec.x, vec.y, z);
+
+        //Vector3Int
+        public static Vector2Int XY(this Vector3Int vec) => new Vector2Int(vec.x, vec.y);
+        public static Vector2Int XZ(this Vector3Int vec) => new Vector2Int(vec.x, vec.z);
+        public static Vector2Int YZ(this Vector3Int vec) => new Vector2Int(vec.y, vec.z);
+        public static Vector3 ToVector3(this Vector3Int vec) => new Vector3(vec.x, vec.y, vec.z);
     }
 }

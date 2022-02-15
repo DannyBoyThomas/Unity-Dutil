@@ -67,19 +67,22 @@ namespace Dutil
         {
             Draw(Vector3.zero);
         }
-        public void Draw(Vector3 offset)
+        public void Draw(Vector3 offset, float tileSize = 1)
         {
             Gizmos.color = Color.white;
             for (int x = 0; x < size.x; x++)
             {
+                float xPos = x * tileSize + offset.x;
                 for (int y = 0; y < size.y; y++)
                 {
+                    float yPos = y * tileSize + offset.y;
                     GridTile tile = Get(x, y);
                     bool walkable = tile.walkable;
                     Gizmos.color = walkable ? Color.white : Color.black;
-                    Gizmos.DrawCube(new Vector3(x, y, 0) + offset, Vector3.one * .8f);
+                    Gizmos.DrawCube(new Vector3(xPos, yPos, 0), Vector3.one * .8f * tileSize);
                 }
             }
+
         }
     }
 }
