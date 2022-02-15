@@ -34,11 +34,14 @@ public class Tools
         Task.Run(async () =>
        {
            AddRequest req = UnityEditor.PackageManager.Client.Add("https://github.com/DannyBoyThomas/Unity-Dutil.git");
+           Debug.Log("Requested");
            while (!req.IsCompleted)
            {
+               Debug.Log("Waiting");
                await Task.Delay(300);
                Debug.Log(".");
            }
+           Debug.Log("Escaped");
            string res = req.Status == UnityEditor.PackageManager.StatusCode.Success ? " updated successfully." : " failed to update.";
            Debug.Log("Dutil" + res);
            isDutilUpdating = false;
