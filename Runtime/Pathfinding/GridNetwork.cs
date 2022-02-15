@@ -8,7 +8,18 @@ namespace Dutil
 
         public GridTile[,] tiles;
         Vector2Int size;
-
+        public GridNetwork(Vector2Int size)
+        {
+            this.size = size;
+            tiles = new GridTile[size.x, size.y];
+            for (int x = 0; x < size.x; x++)
+            {
+                for (int y = 0; y < size.y; y++)
+                {
+                    tiles[x, y] = new GridTile(new Vector2Int(x, y));
+                }
+            }
+        }
         public GridNetwork(Vector2Int size, System.Func<Vector2Int, bool> isWalkable)
         {
             this.size = size;
@@ -54,6 +65,10 @@ namespace Dutil
         }
         public void Draw()
         {
+            Draw(Vector3.zero);
+        }
+        public void Draw(Vector3 offset)
+        {
             Gizmos.color = Color.white;
             for (int x = 0; x < size.x; x++)
             {
@@ -62,7 +77,7 @@ namespace Dutil
                     GridTile tile = Get(x, y);
                     bool walkable = tile.walkable;
                     Gizmos.color = walkable ? Color.white : Color.black;
-                    Gizmos.DrawCube(new Vector3(x, y, 0), Vector3.one * .8f);
+                    Gizmos.DrawCube(new Vector3(x, y, 0) + offset, Vector3.one * .8f);
                 }
             }
         }
