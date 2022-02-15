@@ -22,7 +22,7 @@ public class Tools
 
     }
     [MenuItem("Dutil/Update %&u")]
-    public static void UpdateDutil()
+    public static async void UpdateDutil()
     {
         if (isDutilUpdating)
         {
@@ -31,7 +31,7 @@ public class Tools
         }
         isDutilUpdating = true;
         Debug.Log("Updating Dutil...");
-        Task.Run(async () =>
+        await Task.Run(async () =>
        {
            AddRequest req = UnityEditor.PackageManager.Client.Add("https://github.com/DannyBoyThomas/Unity-Dutil.git");
            Debug.Log("Requested");
