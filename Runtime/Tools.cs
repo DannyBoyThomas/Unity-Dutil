@@ -9,7 +9,8 @@ using System.Threading.Tasks;
 
 public class Tools
 {
-    static bool isDutilUpdating = false;
+
+    static AddRequest addRequest;
     [MenuItem("Dutil/Group %&g")]
     public static void Group()
     {
@@ -22,32 +23,28 @@ public class Tools
 
     }
     [MenuItem("Dutil/Update %&u")]
-    public static async void UpdateDutil()
+    public static void UpdateDutil()
     {
-        if (isDutilUpdating)
+        if (addRequest != null)
         {
             Debug.Log("Dutil is already updating.");
             return;
         }
-        isDutilUpdating = true;
         Debug.Log("Updating Dutil...");
-        AddRequest req = UnityEditor.PackageManager.Client.Add("https://github.com/DannyBoyThomas/Unity-Dutil.git");
-        await Task.Run(async () =>
-       {
+        addRequest = UnityEditor.PackageManager.Client.Add("https://github.com/DannyBoyThomas/Unity-Dutil.git");
+        EditorApplication.update += UpdateProgress;
+    }
+    static void UpdateProgress()
+    {
+        if (addRequest.IsCompleted)
+        {
+            if (addRequest.Status == UnityEditor.PackageManager.StatusCode.Success)
+                Debug.Log("Dutil updated succesfully");
+            else if (addRequest.Status >= UnityEditor.PackageManager.StatusCode.Failure)
+                Debug.Log(addRequest.Error.message);
 
-           Debug.Log("Requested");
-           while (!req.IsCompleted)
-           {
-               Debug.Log("Waiting");
-               await Task.Delay(300);
-               Debug.Log(".");
-           }
-           Debug.Log("Escaped");
-           string res = req.Status == UnityEditor.PackageManager.StatusCode.Success ? " updated successfully." : " failed to update.";
-           Debug.Log("Dutil" + res);
-           isDutilUpdating = false;
-       });
-
-
+            EditorApplication.update -= UpdateProgress;
+            addRequest = null;
+        }
     }
 }
