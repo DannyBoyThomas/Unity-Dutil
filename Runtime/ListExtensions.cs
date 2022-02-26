@@ -362,6 +362,26 @@ namespace Dutil
             }
             return closest;
         }
+        public static Vector2 GetClosestPointOnPath(this List<Vector2> points, Vector2 point)
+        {
+            Vector2 closest = Vector2.zero;
+            float minDist = float.MaxValue;
+            for (int i = 0; i < points.Count - 1; i++)
+            {
+                Vector2 p1 = points[i];
+                Vector2 p2 = points[i + 1];
+                Vector2 closestPoint = D.GetClosestPointOnLine(p1, p2, point);
+                float dist = Vector2.Distance(point, closestPoint);
+                if (dist < minDist)
+                {
+                    minDist = dist;
+                    closest = closestPoint;
+                }
+            }
+            return closest;
+        }
+
+
 
 
         public static DLine Renderer(this List<Vector2> points)

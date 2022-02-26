@@ -84,5 +84,13 @@ namespace Dutil
             }
 
         }
+        public List<GridTile> FindPath(Vector2Int startCoord, Vector2Int endCoord)
+        {
+            return PathFinder.FindPath(this, startCoord, endCoord);
+        }
+        public List<GridTile> FindPath(GridTile startTile, GridTile endTile)
+        {
+            return PathFinder.FindPath(this, startTile, endTile);
+        }
     }
 }
