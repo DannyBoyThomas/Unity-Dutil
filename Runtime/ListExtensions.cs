@@ -531,6 +531,17 @@ namespace Dutil
             return (T)Convert.ChangeType(Enum.GetValues(t).GetValue(prevIndex), t);
         }
 
+        public static bool HasAnyMatchingFlags<T>(this T thisEnum, T flags) where T : Enum
+        {
+            foreach (T item in Enum.GetValues(thisEnum.GetType()))
+            {
+                if (thisEnum.HasFlag(item) && flags.HasFlag(item))
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
 
     }
 }
