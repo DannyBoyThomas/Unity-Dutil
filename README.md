@@ -62,6 +62,41 @@ Schedule.Add(3,(event)=>{
 }, 10);
 ```
 
+## Develop
+
+Automate Continuous tasks
+
+```
+Develop.Begin(3,(task,value)=>{
+  //returns values 0 to 1 over 3 seconds
+});
+
+Develop.Begin(2, Color.red, Color.blue, (task,value)=>{
+  transform.GetComponent<Renderer>().material.color = value;
+  // Object colour transitions from red to blue over 2 seconds
+});
+```
+
+To add easing;
+
+```
+Develop.Begin(2, Vector3.zero, Vector3.right*7, (task,value)=>{
+  transform.position = value;
+  // Move to the right with easing
+},true);
+```
+
+Accepted variable types; float, int, Vector2, Vector3, Quaternion, Color
+
+GameObjects and Transforms can use these functions directly;
+
+```
+gameObject.DevelopPosition(Vector3.one*7, 3, true);
+gameObject.DevelopScale(Vector3.one*2, 3, true);
+transform.DevelopRotation(new Vector3(0,0,270), 3, true);
+
+```
+
 ## Pathfinding
 
 #### **GridNetwork**

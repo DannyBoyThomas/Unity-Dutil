@@ -9,7 +9,6 @@ using UnityEditor.PackageManager.Requests;
 
 public class Tools
 {
-
     static AddRequest addRequest;
     [MenuItem("Dutil/Group %&g")]
     public static void Group()
