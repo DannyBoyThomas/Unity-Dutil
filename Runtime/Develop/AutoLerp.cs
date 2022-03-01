@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Events;
-
+using Dutil;
 public class AutoLerp : MonoBehaviour
 {
     public static AutoLerp Instance;
@@ -30,7 +30,7 @@ public class AutoLerp : MonoBehaviour
     public static void CreateInstance()
     {
         if (Instance != null) { return; }
-        GameObject obj = GameObject.FindGameObjectWithTag("Util");
+        GameObject obj = (GameObject)D.TrackFirst("dutil_autolerp");//GameObject.FindGameObjectWithTag("Util");
         if (obj != null)
         {
             AutoLerp comp = obj.GetComponent<AutoLerp>();
@@ -40,8 +40,8 @@ public class AutoLerp : MonoBehaviour
                 return;
             }
         }
-        GameObject newObj = new GameObject("Develop System");
-        newObj.tag = "Util";
+        GameObject newObj = new GameObject("AutoLerper");
+        D.Track("dutil_autolerp", newObj);
         Instance = newObj.AddComponent<AutoLerp>();
     }
     public static AutoLerpTask Begin(AutoLerpTask task)
