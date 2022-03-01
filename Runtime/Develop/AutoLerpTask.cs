@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.Events;
 using Dutil;
 using System;
-public class DevelopTask
+public class AutoLerpTask
 {
     float Progress { get { return (passedTime / targetDuration).Clamp(); } }
 
@@ -12,59 +12,59 @@ public class DevelopTask
     float passedTime = 0;
     float targetDuration = 1;
     /*  UnityAction<DevelopTask, float> callback; */
-    UnityAction<DevelopTask, float> callbackFloat;
-    UnityAction<DevelopTask, int> callbackInt;
-    UnityAction<DevelopTask, Vector2> callbackVector2;
-    UnityAction<DevelopTask, Vector3> callbackVector3;
-    UnityAction<DevelopTask, Quaternion> callbackQuaternion;
-    UnityAction<DevelopTask, Color> callbackColor;
-    UnityAction<DevelopTask> onCompleteCallback;
+    UnityAction<AutoLerpTask, float> callbackFloat;
+    UnityAction<AutoLerpTask, int> callbackInt;
+    UnityAction<AutoLerpTask, Vector2> callbackVector2;
+    UnityAction<AutoLerpTask, Vector3> callbackVector3;
+    UnityAction<AutoLerpTask, Quaternion> callbackQuaternion;
+    UnityAction<AutoLerpTask, Color> callbackColor;
+    UnityAction<AutoLerpTask> onCompleteCallback;
     byte[] from, to;
     bool useEasing = false;
     DevelopTypes developType = DevelopTypes.None;
 
-    public DevelopTask(float _duration, UnityAction<DevelopTask, float> _callback, bool _ease = false)
+    public AutoLerpTask(float _duration, UnityAction<AutoLerpTask, float> _callback, bool _ease = false)
     {
         targetDuration = _duration;
         callbackFloat = _callback;
         useEasing = _ease;
     }
-    public DevelopTask(float _duration, float start, float end, UnityAction<DevelopTask, float> _callback, bool _ease = false)
+    public AutoLerpTask(float _duration, float start, float end, UnityAction<AutoLerpTask, float> _callback, bool _ease = false)
     {
         targetDuration = _duration;
         callbackFloat = _callback;
         useEasing = _ease;
         SetFloat(start, end);
     }
-    public DevelopTask(float _duration, int start, int end, UnityAction<DevelopTask, int> _callback, bool _ease = false)
+    public AutoLerpTask(float _duration, int start, int end, UnityAction<AutoLerpTask, int> _callback, bool _ease = false)
     {
         targetDuration = _duration;
         callbackInt = _callback;
         useEasing = _ease;
         SetInt(start, end);
     }
-    public DevelopTask(float _duration, Vector2 start, Vector2 end, UnityAction<DevelopTask, Vector2> _callback, bool _ease = false)
+    public AutoLerpTask(float _duration, Vector2 start, Vector2 end, UnityAction<AutoLerpTask, Vector2> _callback, bool _ease = false)
     {
         targetDuration = _duration;
         callbackVector2 = _callback;
         useEasing = _ease;
         SetVector2(start, end);
     }
-    public DevelopTask(float _duration, Vector3 start, Vector3 end, UnityAction<DevelopTask, Vector3> _callback, bool _ease = false)
+    public AutoLerpTask(float _duration, Vector3 start, Vector3 end, UnityAction<AutoLerpTask, Vector3> _callback, bool _ease = false)
     {
         targetDuration = _duration;
         callbackVector3 = _callback;
         useEasing = _ease;
         SetVector3(start, end);
     }
-    public DevelopTask(float _duration, Quaternion start, Quaternion end, UnityAction<DevelopTask, Quaternion> _callback, bool _ease = false)
+    public AutoLerpTask(float _duration, Quaternion start, Quaternion end, UnityAction<AutoLerpTask, Quaternion> _callback, bool _ease = false)
     {
         targetDuration = _duration;
         callbackQuaternion = _callback;
         useEasing = _ease;
         SetQuaternion(start, end);
     }
-    public DevelopTask(float _duration, Color start, Color end, UnityAction<DevelopTask, Color> _callback, bool _ease = false)
+    public AutoLerpTask(float _duration, Color start, Color end, UnityAction<AutoLerpTask, Color> _callback, bool _ease = false)
     {
         targetDuration = _duration;
         callbackColor = _callback;
@@ -85,7 +85,7 @@ public class DevelopTask
         }
         return Progress == 1;
     }
-    public DevelopTask Cancel()
+    public AutoLerpTask Cancel()
     {
         shouldRemove = true;
         return this;
@@ -122,7 +122,7 @@ public class DevelopTask
         }
     }
 
-    public DevelopTask OnComplete(UnityAction<DevelopTask> callback)
+    public AutoLerpTask OnComplete(UnityAction<AutoLerpTask> callback)
     {
         onCompleteCallback = callback;
         return this;
