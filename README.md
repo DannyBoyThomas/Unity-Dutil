@@ -34,6 +34,38 @@ points.Cluster(3); // Separate points into 3 groups based on distance. Uses K-me
 
 ```
 
+## Tracking
+
+Use to store static references to your game objects/components.
+Tracking ensures you dont slow your game down using functions such as; FindObjectsOfType()
+To track;
+
+```
+GameObject spawnManagerObj = new GameObject("Spawn Manager");
+D.Track("spawn_manager",spawnManagerObj);
+
+```
+
+To find;
+
+```
+GameObject spawnManager = D.TrackFirst("spawn_manager");
+```
+
+Many objects can be tracked under the same ID;
+
+```
+D.Track("spawned_objects",obj1,obj2,obj3...);
+List<GameObject> spawnedObjects = D.Track("spawned_objects");
+```
+
+Remove tracked objects;
+
+```
+D.Untrack("spawned_objects"); //untrack all
+D.Untrack("spawned_objects",obj3) // only untrack obj3
+```
+
 ## Flood Fill
 
 Easily implement a flood fill on your own data types
