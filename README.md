@@ -37,7 +37,8 @@ points.Cluster(3); // Separate points into 3 groups based on distance. Uses K-me
 ## Tracking
 
 Use to store static references to your game objects/components.
-Tracking ensures you dont slow your game down using functions such as; FindObjectsOfType()
+Tracking ensures you dont slow your game down using functions such as; FindObjectsOfType().
+
 To track;
 
 ```
@@ -130,6 +131,21 @@ transform.AutoLerpRotation(new Vector3(0,0,270), 3, true);
 
 ```
 
+## Marking
+
+A new tag system
+Allows objects to hold multiple tags (marks)
+
+```
+gameObject.Mark("Sticky");
+gameObject.UnMark("Slippery");
+if( gameObject.HasMark("Bouncy"))
+{
+    //bounce
+    gameObject.ClearMarks();
+}
+```
+
 ## Pathfinding
 
 #### **GridNetwork**
@@ -159,6 +175,8 @@ vec3.GetRight();
 vec3.WithX(4);
 vec2.OffsetY(-4);
 vec3.SetY(7);
+4.X() + 3.Y() // Vector3(4,3,0)
+5.XYZ() // Vector3(5,5,5)
 ```
 
 ## Animated Line Renderer
@@ -174,6 +192,8 @@ line.HideInstantly();
 
 ```
 gameObject.GetOrAddComponent<>();
+gameObject.Kill(); // Animation then destroyed
+gameObject.KillChildren();
 enum.Next();
 enum.Previous();
 D.Chance(.5f);

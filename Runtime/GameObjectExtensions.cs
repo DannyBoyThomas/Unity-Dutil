@@ -52,9 +52,22 @@ namespace Dutil
             }
             return children;
         }
+        public static void KillChildren(this Transform t)
+        {
+            int count = t.childCount;
+            for (int i = 0; i < count; i++)
+            {
+                Transform child = t.GetChild(i);
+                GameObject.Destroy(child.gameObject);
+            }
+        }
         public static bool IsInLayer(this GameObject g, LayerMask layer)
         {
             return ((layer.value & (1 << g.layer)) > 0);
+        }
+        public static Vector3 Pos(this GameObject g)
+        {
+            return g.transform.position;
         }
 
         //DEVELOP
@@ -79,6 +92,16 @@ namespace Dutil
         //Transforms
         public static AutoLerpTask AutoLerpPosition(this Transform t, Vector3 position, float duration, bool ease = false)
         {
+            if (t.HasMark("d_lerping_position"))
+            {
+                Debug.LogWarning("Already lerping position");
+                return null;
+            }
+            t.Mark("d_lerping_position");
+            Schedule.Add(duration, (e) =>
+            {
+                t.Unmark("d_lerping_position");
+            });
             return AutoLerp.Begin(duration, t.position, position, (task, value) =>
               {
                   t.position = value;
@@ -86,6 +109,16 @@ namespace Dutil
         }
         public static AutoLerpTask AutoLerpRotation(this Transform t, Quaternion rotation, float duration, bool ease = false)
         {
+            if (t.HasMark("d_lerping_rotation"))
+            {
+                Debug.LogWarning("Already lerping rotation");
+                return null;
+            }
+            t.Mark("d_lerping_rotation");
+            Schedule.Add(duration, (e) =>
+            {
+                t.Unmark("d_lerping_rotation");
+            });
             return AutoLerp.Begin(duration, t.rotation, rotation, (task, value) =>
             {
                 t.rotation = value;
@@ -93,6 +126,17 @@ namespace Dutil
         }
         public static AutoLerpTask AutoLerpRotation(this Transform t, Vector3 rotation, float duration, bool ease = false)
         {
+            if (t.HasMark("d_lerping_rotation"))
+            {
+                Debug.LogWarning("Already lerping rotation");
+                return null;
+            }
+            t.Mark("d_lerping_rotation");
+            Schedule.Add(duration, (e) =>
+            {
+                t.Unmark("d_lerping_rotation");
+            });
+
             return AutoLerp.Begin(duration, t.eulerAngles, rotation, (task, value) =>
             {
                 t.eulerAngles = value;
@@ -100,13 +144,78 @@ namespace Dutil
         }
         public static AutoLerpTask AutoLerpScale(this Transform t, Vector3 scale, float duration, bool ease = false)
         {
+            if (t.HasMark("d_lerping_scale"))
+            {
+                Debug.LogWarning("Already lerping scale");
+                return null;
+            }
+            t.Mark("d_lerping_scale");
+            Schedule.Add(duration, (e) =>
+            {
+                t.Unmark("d_lerping_scale");
+            });
             return AutoLerp.Begin(duration, t.localScale, scale, (task, value) =>
             {
                 t.localScale = value;
             }, ease);
         }
 
+        //MARKS
+        public static void Mark(this Object g, string mark)
+        {
+            Marking.AddMark(g, mark);
+        }
+        public static void Unmark(this Object g, string mark)
+        {
+            Marking.RemoveMark(g, mark);
+        }
+        public static bool HasMark(this Object g, string mark)
+        {
+            return Marking.HasMark(g, mark);
+        }
+        public static void ClearMarks(this Object g)
+        {
+            Marking.ClearMarks(g);
+        }
 
+
+        //DEATH
+        public static void Kill(this GameObject g, DeathType deathType = DeathType.ScaleDown)
+        {
+            if (g.HasMark("d_killing"))
+            {
+                Debug.LogWarning("GameObject is already being killed");
+                return;
+            }
+            g.Mark("d_killing");
+            switch (deathType)
+            {
+                case DeathType.ScaleDown:
+                    g.AutoLerpScale(Vector3.zero, 1).OnComplete((x) =>
+                    {
+                        GameObject.Destroy(g);
+                    });
+                    break;
+                case DeathType.ScaleDownX:
+                    g.AutoLerpScale(Vector3.one.WithX(0), 1).OnComplete((x) =>
+                   {
+                       GameObject.Destroy(g);
+                   });
+                    break;
+                case DeathType.ScaleDownY:
+                    g.AutoLerpScale(Vector3.one.WithY(0), 1).OnComplete((x) =>
+                    {
+                        GameObject.Destroy(g);
+                    });
+                    break;
+                case DeathType.ScaleDownZ:
+                    g.AutoLerpScale(Vector3.one.WithZ(0), 1).OnComplete((x) =>
+                    {
+                        GameObject.Destroy(g);
+                    });
+                    break;
+            }
+        }
 
 
 

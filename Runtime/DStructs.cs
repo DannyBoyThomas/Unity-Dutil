@@ -4,6 +4,7 @@ using UnityEngine;
 
 namespace Dutil
 {
+    public enum DeathType { ScaleDown, ScaleDownX, ScaleDownY, ScaleDownZ };
     public class DStructs
     {
 
