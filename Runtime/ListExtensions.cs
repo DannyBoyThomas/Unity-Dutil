@@ -542,6 +542,10 @@ namespace Dutil
             }
             return false;
         }
+        public static T Any<T>(this T thisEnum) where T : Enum
+        {
+            return (T)Enum.GetValues(thisEnum.GetType()).GetValue(UnityEngine.Random.Range(0, Enum.GetValues(thisEnum.GetType()).Length));
+        }
 
     }
 }

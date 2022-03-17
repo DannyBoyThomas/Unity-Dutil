@@ -97,7 +97,8 @@ Schedule.Add(3,(event)=>{
 
 ## AutoLerp
 
-Automate Continuous tasks
+Automate Continuous tasks.
+
 Set it and forget it.
 
 ```
@@ -134,6 +135,7 @@ transform.AutoLerpRotation(new Vector3(0,0,270), 3, true);
 ## Marking
 
 A new tag system
+
 Allows objects to hold multiple tags (marks)
 
 ```

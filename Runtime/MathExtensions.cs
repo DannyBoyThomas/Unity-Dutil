@@ -10,6 +10,7 @@ namespace Dutil
         public static float Square(this float f) => f * f;
         public static float SquareRoot(this float f) => Mathf.Sqrt(f);
         public static float To(this float f, float p) => Mathf.Pow(f, p);
+        public static bool Between(this float f, float min, float max) => f >= min && f <= max;
 
         public static Vector3 X(this float f) => new Vector3(f, 0, 0);
         public static Vector3 Y(this float f) => new Vector3(0, f, 0);

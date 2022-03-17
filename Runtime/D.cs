@@ -224,7 +224,16 @@ namespace Dutil
             }
             return flooded;
         }
+        public static float EquallySpace(float totalLength, int index, int count)
+        {
+            float singleSpacing = totalLength / (count + 1f);
+            float relativeSpacing = (index + 1) * singleSpacing;
+            return (relativeSpacing - (totalLength / 2f));
+        }
     }
+
+
+
 
 
 
