@@ -228,7 +228,8 @@ namespace Dutil
         {
             float singleSpacing = totalLength / (count + 1f);
             float relativeSpacing = (index + 1) * singleSpacing;
-            return (relativeSpacing - (totalLength / 2f));
+            float val = (relativeSpacing - (totalLength / 2f));
+            return val;
         }
     }
 
