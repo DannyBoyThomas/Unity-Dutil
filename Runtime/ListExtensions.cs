@@ -58,7 +58,7 @@ namespace Dutil
         public static T Get<T>(this List<T> list, int index)
         {
             int max = list.Count;
-            int newIndex = index > 0 ? index : max + index - 1;
+            int newIndex = index > 0 ? index : max + index;
             return list[newIndex];
         }
         public static List<T> Shuffle<T>(this List<T> list)
