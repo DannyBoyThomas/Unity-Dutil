@@ -190,6 +190,29 @@ line.ShowAnimated();
 line.HideInstantly();
 ```
 
+## Cooldown Variable
+
+```
+Cooldown blasterAbility = new Cooldown(3); // Cooldown takes 3 seconds
+if(blaserAbility.Use())
+{
+  // Do blaster stuff
+}
+
+CooldownStack acidArrows = new CooldownStack(numArrows, maxArrows, cooldownTime);
+
+
+```
+
+## Toast
+
+Have a message pop-up at the bottom of the screen momentarily.
+
+```
+Toast.Show("Hello World");
+Toast.Show("Toasts stack and will show after the previous Toast");
+```
+
 ## Plus more
 
 ```
