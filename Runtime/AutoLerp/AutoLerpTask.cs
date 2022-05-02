@@ -11,6 +11,7 @@ public class AutoLerpTask
     bool shouldRemove = false;
     float passedTime = 0;
     float targetDuration = 1;
+    bool useUnscaledDeltaTime = false;
     /*  UnityAction<DevelopTask, float> callback; */
     UnityAction<AutoLerpTask, float> callbackFloat;
     UnityAction<AutoLerpTask, int> callbackInt;
@@ -74,7 +75,7 @@ public class AutoLerpTask
     public virtual bool Tick()
     {
         if (shouldRemove) { return true; }
-        passedTime += Time.deltaTime;
+        passedTime += useUnscaledDeltaTime ? Time.unscaledDeltaTime : Time.deltaTime;
 
         CallCallback();
 
@@ -132,6 +133,11 @@ public class AutoLerpTask
     public AutoLerpTask OnComplete(UnityAction<AutoLerpTask> callback)
     {
         onCompleteCallback = callback;
+        return this;
+    }
+    public AutoLerpTask UseUnscaledDeltaTime(bool use = true)
+    {
+        useUnscaledDeltaTime = use;
         return this;
     }
 
