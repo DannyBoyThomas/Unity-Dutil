@@ -50,52 +50,52 @@ public class AutoLerp : MonoBehaviour
         Instance.tasks.Add(task);
         return task;
     }
-    public static AutoLerpTask Begin(float duration, UnityAction<AutoLerpTask, float> callback, bool ease = false)
+    public static AutoLerpTask Begin(float duration, UnityAction<AutoLerpTask, float> callback, bool ease = false, bool useUnscaled = false)
     {
         CreateInstance();
-        AutoLerpTask task = new AutoLerpTask(duration, callback, ease);
+        AutoLerpTask task = new AutoLerpTask(duration, callback, ease).UseUnscaledDeltaTime(useUnscaled);
         Instance.tasks.Add(task);
         return task;
     }
-    public static AutoLerpTask Begin(float duration, float start, float end, UnityAction<AutoLerpTask, float> callback, bool ease = false)
+    public static AutoLerpTask Begin(float duration, float start, float end, UnityAction<AutoLerpTask, float> callback, bool ease = false, bool useUnscaled = false)
     {
         CreateInstance();
-        AutoLerpTask task = new AutoLerpTask(duration, start, end, callback, ease);
+        AutoLerpTask task = new AutoLerpTask(duration, start, end, callback, ease).UseUnscaledDeltaTime(useUnscaled);
         Instance.tasks.Add(task);
         return task;
     }
-    public static AutoLerpTask Begin(float duration, int start, int end, UnityAction<AutoLerpTask, int> callback, bool ease = false)
+    public static AutoLerpTask Begin(float duration, int start, int end, UnityAction<AutoLerpTask, int> callback, bool ease = false, bool useUnscaled = false)
     {
         CreateInstance();
-        AutoLerpTask task = new AutoLerpTask(duration, start, end, callback, ease);
+        AutoLerpTask task = new AutoLerpTask(duration, start, end, callback, ease).UseUnscaledDeltaTime(useUnscaled);
         Instance.tasks.Add(task);
         return task;
     }
-    public static AutoLerpTask Begin(float duration, Vector2 start, Vector2 end, UnityAction<AutoLerpTask, Vector2> callback, bool ease = false)
+    public static AutoLerpTask Begin(float duration, Vector2 start, Vector2 end, UnityAction<AutoLerpTask, Vector2> callback, bool ease = false, bool useUnscaled = false)
     {
         CreateInstance();
-        AutoLerpTask task = new AutoLerpTask(duration, start, end, callback, ease);
+        AutoLerpTask task = new AutoLerpTask(duration, start, end, callback, ease).UseUnscaledDeltaTime(useUnscaled);
         Instance.tasks.Add(task);
         return task;
     }
-    public static AutoLerpTask Begin(float duration, Vector3 start, Vector3 end, UnityAction<AutoLerpTask, Vector3> callback, bool ease = false)
+    public static AutoLerpTask Begin(float duration, Vector3 start, Vector3 end, UnityAction<AutoLerpTask, Vector3> callback, bool ease = false, bool useUnscaled = false)
     {
         CreateInstance();
-        AutoLerpTask task = new AutoLerpTask(duration, start, end, callback, ease);
+        AutoLerpTask task = new AutoLerpTask(duration, start, end, callback, ease).UseUnscaledDeltaTime(useUnscaled);
         Instance.tasks.Add(task);
         return task;
     }
-    public static AutoLerpTask Begin(float duration, Quaternion start, Quaternion end, UnityAction<AutoLerpTask, Quaternion> callback, bool ease = false)
+    public static AutoLerpTask Begin(float duration, Quaternion start, Quaternion end, UnityAction<AutoLerpTask, Quaternion> callback, bool ease = false, bool useUnscaled = false)
     {
         CreateInstance();
-        AutoLerpTask task = new AutoLerpTask(duration, start, end, callback, ease);
+        AutoLerpTask task = new AutoLerpTask(duration, start, end, callback, ease).UseUnscaledDeltaTime(useUnscaled);
         Instance.tasks.Add(task);
         return task;
     }
-    public static AutoLerpTask Begin(float duration, Color start, Color end, UnityAction<AutoLerpTask, Color> callback, bool ease = false)
+    public static AutoLerpTask Begin(float duration, Color start, Color end, UnityAction<AutoLerpTask, Color> callback, bool ease = false, bool useUnscaled = false)
     {
         CreateInstance();
-        AutoLerpTask task = new AutoLerpTask(duration, start, end, callback, ease);
+        AutoLerpTask task = new AutoLerpTask(duration, start, end, callback, ease).UseUnscaledDeltaTime(useUnscaled);
         Instance.tasks.Add(task);
         return task;
     }

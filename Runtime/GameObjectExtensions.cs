@@ -72,25 +72,25 @@ namespace Dutil
 
         //DEVELOP
         //gameobject
-        public static AutoLerpTask AutoLerpPosition(this GameObject g, Vector3 position, float duration, bool ease = false)
+        public static AutoLerpTask AutoLerpPosition(this GameObject g, Vector3 position, float duration, bool ease = false, bool useUnscaled = false)
         {
-            return AutoLerpPosition(g.transform, position, duration, ease);
+            return AutoLerpPosition(g.transform, position, duration, ease, useUnscaled);
         }
-        public static AutoLerpTask AutoLerpRotation(this GameObject g, Quaternion rotation, float duration, bool ease = false)
+        public static AutoLerpTask AutoLerpRotation(this GameObject g, Quaternion rotation, float duration, bool ease = false, bool useUnscaled = false)
         {
-            return AutoLerpRotation(g.transform, rotation, duration, ease);
+            return AutoLerpRotation(g.transform, rotation, duration, ease, useUnscaled);
         }
-        public static AutoLerpTask AutoLerpRotation(this GameObject g, Vector3 rotation, float duration, bool ease = false)
+        public static AutoLerpTask AutoLerpRotation(this GameObject g, Vector3 rotation, float duration, bool ease = false, bool useUnscaled = false)
         {
-            return AutoLerpRotation(g.transform, rotation, duration, ease);
+            return AutoLerpRotation(g.transform, rotation, duration, ease, useUnscaled);
         }
-        public static AutoLerpTask AutoLerpScale(this GameObject g, Vector3 scale, float duration, bool ease = false)
+        public static AutoLerpTask AutoLerpScale(this GameObject g, Vector3 scale, float duration, bool ease = false, bool useUnscaled = false)
         {
-            return AutoLerpScale(g.transform, scale, duration, ease);
+            return AutoLerpScale(g.transform, scale, duration, ease, useUnscaled);
         }
 
         //Transforms
-        public static AutoLerpTask AutoLerpPosition(this Transform t, Vector3 position, float duration, bool ease = false)
+        public static AutoLerpTask AutoLerpPosition(this Transform t, Vector3 position, float duration, bool ease = false, bool useUnscaled = false)
         {
             if (t.HasMark("d_lerping_position"))
             {
@@ -106,9 +106,9 @@ namespace Dutil
               {
                   if (t == null) { task.Cancel(); return; }
                   t.position = value;
-              }, ease);
+              }, ease, useUnscaled);
         }
-        public static AutoLerpTask AutoLerpRotation(this Transform t, Quaternion rotation, float duration, bool ease = false)
+        public static AutoLerpTask AutoLerpRotation(this Transform t, Quaternion rotation, float duration, bool ease = false, bool useUnscaled = false)
         {
             if (t.HasMark("d_lerping_rotation"))
             {
@@ -124,9 +124,9 @@ namespace Dutil
             {
                 if (t == null) { task.Cancel(); return; }
                 t.rotation = value;
-            }, ease);
+            }, ease, useUnscaled);
         }
-        public static AutoLerpTask AutoLerpRotation(this Transform t, Vector3 rotation, float duration, bool ease = false)
+        public static AutoLerpTask AutoLerpRotation(this Transform t, Vector3 rotation, float duration, bool ease = false, bool useUnscaled = false)
         {
             if (t.HasMark("d_lerping_rotation"))
             {
@@ -143,9 +143,9 @@ namespace Dutil
             {
                 if (t == null) { task.Cancel(); return; }
                 t.eulerAngles = value;
-            }, ease);
+            }, ease, useUnscaled);
         }
-        public static AutoLerpTask AutoLerpScale(this Transform t, Vector3 scale, float duration, bool ease = false)
+        public static AutoLerpTask AutoLerpScale(this Transform t, Vector3 scale, float duration, bool ease = false, bool useUnscaled = false)
         {
             if (t.HasMark("d_lerping_scale"))
             {
@@ -161,7 +161,7 @@ namespace Dutil
             {
                 if (t == null) { task.Cancel(); return; }
                 t.localScale = value;
-            }, ease);
+            }, ease, useUnscaled);
         }
 
         //MARKS
