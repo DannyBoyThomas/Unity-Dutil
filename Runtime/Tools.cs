@@ -9,6 +9,17 @@ using UnityEditor.PackageManager.Requests;
 
 public class Tools
 {
+    public static bool AutoInsertDutil
+    {
+        get
+        {
+            return EditorPrefs.GetBool("d_auto_insert", false);
+        }
+        set
+        {
+            EditorPrefs.SetBool("d_auto_insert", value);
+        }
+    }
     static AddRequest addRequest;
     [MenuItem("Dutil/Group %&g")]
     public static void Group()
@@ -22,6 +33,14 @@ public class Tools
         Undo.SetTransformParent(g.transform, originalParent, "Setting original parent");
         Selection.objects = new Object[] { g };
 
+    }
+    [MenuItem("Dutil/Auto Insert")]
+    public static void ToggleInsertDutil()
+    {
+
+        AutoInsertDutil = !AutoInsertDutil;
+        Menu.SetChecked("Dutil/Auto Insert", AutoInsertDutil);
+        EditorPrefs.SetBool("d_auto_insert", AutoInsertDutil);
     }
     [MenuItem("Dutil/Logging")]
     public static void ToggleLogging()

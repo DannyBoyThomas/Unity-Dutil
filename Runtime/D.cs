@@ -4,18 +4,23 @@ using UnityEngine;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine.Events;
+using UnityEditor;
 namespace Dutil
 {
     public class D
     {
-
+        public static bool AllowLogging
+        {
+            get { return EditorPrefs.GetBool("d_auto_insert", true); }
+            set { EditorPrefs.GetBool("d_auto_insert", value); }
+        }
         /// <summary>
         /// Chance(0.7) has a 70% chance to return true
         /// </summary>
         /// <param name="f"></param>
         /// <returns></returns>
         /// 
-        public static bool AllowLogging = true;
+
         public static bool Chance(float f)
         {
             f = Mathf.Clamp01(f);
