@@ -14,6 +14,8 @@ namespace Dutil
         /// </summary>
         /// <param name="f"></param>
         /// <returns></returns>
+        /// 
+        public static bool AllowLogging = true;
         public static bool Chance(float f)
         {
             f = Mathf.Clamp01(f);
@@ -230,6 +232,11 @@ namespace Dutil
             float relativeSpacing = (index + 1) * singleSpacing;
             float val = (relativeSpacing - (totalLength / 2f));
             return val;
+        }
+        public static void Log(object message)
+        {
+            if (!AllowLogging) { return; }
+            Debug.Log(message);
         }
     }
 

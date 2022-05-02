@@ -23,6 +23,12 @@ public class Tools
         Selection.objects = new Object[] { g };
 
     }
+    [MenuItem("Dutil/Logging")]
+    public static void ToggleLogging()
+    {
+        D.AllowLogging = !D.AllowLogging;
+        Menu.SetChecked("Dutil/Logging", D.AllowLogging);
+    }
     [MenuItem("Dutil/Update %&u")]
     public static void UpdateDutil()
     {

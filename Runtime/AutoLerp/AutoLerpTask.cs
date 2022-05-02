@@ -106,19 +106,26 @@ public class AutoLerpTask
         switch (developType)
         {
             case DevelopTypes.Float:
-                callbackFloat.Invoke(this, GetValueFloat()); return;
+                if (callbackFloat == null) { Cancel(); return; }
+                callbackFloat?.Invoke(this, GetValueFloat()); return;
             case DevelopTypes.Integer:
-                callbackInt.Invoke(this, GetValueInt()); return;
+                if (callbackInt == null) { Cancel(); return; }
+                callbackInt?.Invoke(this, GetValueInt()); return;
             case DevelopTypes.Vector2:
-                callbackVector2.Invoke(this, GetValueVector2()); return;
+                if (callbackVector2 == null) { Cancel(); return; }
+                callbackVector2?.Invoke(this, GetValueVector2()); return;
             case DevelopTypes.Vector3:
-                callbackVector3.Invoke(this, GetValueVector3()); return;
+                if (callbackVector3 == null) { Cancel(); return; }
+                callbackVector3?.Invoke(this, GetValueVector3()); return;
             case DevelopTypes.Quaternion:
-                callbackQuaternion.Invoke(this, GetValueQuaternion()); return;
+                if (callbackQuaternion == null) { Cancel(); return; }
+                callbackQuaternion?.Invoke(this, GetValueQuaternion()); return;
             case DevelopTypes.Color:
-                callbackColor.Invoke(this, GetValueColor()); return;
+                if (callbackColor == null) { Cancel(); return; }
+                callbackColor?.Invoke(this, GetValueColor()); return;
             default:
-                callbackFloat.Invoke(this, useEasing ? EasedProgress : Progress); return;
+                if (callbackFloat == null) { Cancel(); return; }
+                callbackFloat?.Invoke(this, useEasing ? EasedProgress : Progress); return;
         }
     }
 
