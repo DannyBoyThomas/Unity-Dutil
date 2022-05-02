@@ -104,6 +104,7 @@ namespace Dutil
             });
             return AutoLerp.Begin(duration, t.position, position, (task, value) =>
               {
+                  if (t == null) { task.Cancel(); return; }
                   t.position = value;
               }, ease);
         }
@@ -121,6 +122,7 @@ namespace Dutil
             });
             return AutoLerp.Begin(duration, t.rotation, rotation, (task, value) =>
             {
+                if (t == null) { task.Cancel(); return; }
                 t.rotation = value;
             }, ease);
         }
@@ -139,6 +141,7 @@ namespace Dutil
 
             return AutoLerp.Begin(duration, t.eulerAngles, rotation, (task, value) =>
             {
+                if (t == null) { task.Cancel(); return; }
                 t.eulerAngles = value;
             }, ease);
         }
@@ -156,6 +159,7 @@ namespace Dutil
             });
             return AutoLerp.Begin(duration, t.localScale, scale, (task, value) =>
             {
+                if (t == null) { task.Cancel(); return; }
                 t.localScale = value;
             }, ease);
         }
