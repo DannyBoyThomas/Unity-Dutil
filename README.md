@@ -213,6 +213,10 @@ Toast.Show("Hello World");
 Toast.Show("Toasts stack and will show after the previous Toast");
 ```
 
+## Components
+
+GradientBackground - Add to camera...Done.
+
 ## Plus more
 
 ```

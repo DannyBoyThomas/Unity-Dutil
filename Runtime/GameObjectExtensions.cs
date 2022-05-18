@@ -14,6 +14,28 @@ namespace Dutil
             }
             return comp;
         }
+        /// <summary>
+        /// It destroys the object, regardless of whether the application is running or not.
+        /// </summary>
+        /// <param name="Object">The object you want to destroy.</param>
+        public static void EasyDestroy(this Object g)
+        {
+            if (g == null) { return; }
+            if (Application.IsPlaying(g))
+            {
+                GameObject.Destroy(g);
+            }
+            else
+            {
+                GameObject.DestroyImmediate(g);
+            }
+        }
+        /// <summary>
+        /// Returns all children...and their children...and their children...
+        /// </summary>
+        /// <param name="GameObject">The gameobject you want to get the children of.</param>
+        /// <param name="includeSelf">If true, the GameObject passed in will be included in the
+        /// list.</param>
         public static List<Transform> GetChildrenNested(GameObject g, bool includeSelf = false)
         {
             int index = 0;
@@ -42,6 +64,10 @@ namespace Dutil
                 list.AddUnique(child);
             }
         }
+        /// <summary>
+        /// It returns a list of all the children of a transform.
+        /// </summary>
+        /// <param name="Transform"></param>
         public static List<Transform> Children(this Transform t)
         {
             List<Transform> children = new List<Transform>();

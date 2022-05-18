@@ -5,6 +5,7 @@ using UnityEditor;
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+
 public class AutoInsert : UnityEditor.AssetModificationProcessor
 {
     public static void OnWillCreateAsset(string path)
@@ -26,5 +27,7 @@ public class AutoInsert : UnityEditor.AssetModificationProcessor
         var finalCode = string.Join("\n", code.ToArray());
         File.WriteAllText(assetPath, finalCode);
         AssetDatabase.Refresh();
+
+       
     }
 }

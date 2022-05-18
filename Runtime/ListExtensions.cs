@@ -14,11 +14,20 @@ namespace Dutil
             if (list == null || list.Count <= 0) { Debug.Log("Empty"); return; }
             list.ForEach(x => Debug.Log(x));
         }
+        /// <summary>
+        /// It returns a random element from the list.
+        /// </summary>
+        /// <param name="list">The list to get a random item from.</param>
         public static T Any<T>(this List<T> list)
         {
             int index = UnityEngine.Random.Range(0, list.Count);
             return list[index];
         }
+        /// <summary>
+        /// It returns a list of any number of elements from the list.
+        /// </summary>
+        /// <param name="list">The list you want to get random items from.</param>
+        /// <param name="num">The number of items to return.</param>
         public static List<T> Any<T>(this List<T> list, int num)
         {
             List<T> anyList = new List<T>();
@@ -28,12 +37,22 @@ namespace Dutil
             }
             return anyList;
         }
+        /// <summary>
+        /// It returns a list of unique elements from the list.
+        /// </summary>
+        /// <param name="list">The list you want to get the random elements from.</param>
+        /// <param name="num">The number of unique items to return.</param>
         public static List<T> AnyUnique<T>(this List<T> list, int num)
         {
             num = Mathf.Clamp(num, 0, list.Count);
             List<T> anyList = list.Shuffle();
             return anyList.Take(num).ToList();
         }
+        /// <summary>
+        /// "Adds an item to a list if it doesn't already exist in the list."
+        /// </summary>
+        /// <param name="list">The list to add the item to.</param>
+        /// <param name="T">The type of the list.</param>
         public static void AddUnique<T>(this List<T> list, T item)
         {
             if (!list.Contains(item))
@@ -48,6 +67,11 @@ namespace Dutil
                 list.Add(args[i]);
             }
         }
+        /// <summary>
+        /// Adds all the elements in the array to the list, but only if they don't already exist in the
+        /// list
+        /// </summary>
+        /// <param name="list">The list to add the items to.</param>
         public static void AddUniqueAll<T>(this List<T> list, params T[] args)
         {
             for (int i = 0; i < args.Count(); i++)
@@ -55,6 +79,12 @@ namespace Dutil
                 list.AddUnique(args[i]);
             }
         }
+        /// <summary>
+        /// Get an element from a list by index.
+        /// Can pass in negative numbers to get elements from the end of the list. Eg: -1 is the last
+        /// </summary>
+        /// <param name="list">The list to get the item from.</param>
+        /// <param name="index">The index of the item to get.</param>
         public static T Get<T>(this List<T> list, int index)
         {
             int max = list.Count;
@@ -75,6 +105,10 @@ namespace Dutil
 
             return shuffled;
         }
+        /// <summary>
+        /// This function removes all null values from a list.
+        /// </summary>
+        /// <param name="list">The list to clean.</param>
         public static void Clean<T>(this List<T> list)
         {
             for (int i = list.Count - 1; i >= 0; i--)
@@ -107,6 +141,12 @@ namespace Dutil
             }
             return default(T);
         }
+        /// <summary>
+        /// It takes a list and splits it into a list of lists, each of which contains a maximum of
+        /// `count` items
+        /// </summary>
+        /// <param name="list">The list to split.</param>
+        /// <param name="count">The number of items in each sublist.</param>
         public static List<List<T>> Split<T>(this List<T> list, int count)
         {
             List<List<T>> groups = new List<List<T>>();
@@ -136,6 +176,11 @@ namespace Dutil
             sum /= (float)list.Count;
             return sum;
         }
+        /// <summary>
+        /// It returns the closest point in the list to the given point.
+        /// </summary>
+        /// <param name="list">The list of Vector3s you want to find the closest point to.</param>
+        /// <param name="Vector3">The point you want to find the closest point to.</param>
         public static Vector3? ClosestPoint(this List<Vector3> list, Vector3 point)
         {
             Vector3? closest = null;
@@ -151,6 +196,11 @@ namespace Dutil
             }
             return closest;
         }
+        /// <summary>
+        /// It returns the closest point on a path to a given point.
+        /// </summary>
+        /// <param name="points">The list of points that make up the path.</param>
+        /// <param name="Vector3">The point you want to find the closest point on the path to.</param>
         public static Vector3 GetClosestPointOnPath(this List<Vector3> points, Vector3 point)
         {
             Vector3 closest = Vector3.zero;
@@ -177,7 +227,7 @@ namespace Dutil
             return pos;
         }
         /// <summary>
-        /// 
+        /// Traverses a long a path and returns the position and the last index passed.
         /// </summary>
         /// <param name="points"></param>
         /// <param name="moveDistance"></param>
@@ -219,6 +269,12 @@ namespace Dutil
 
         }
 
+        /// <summary>
+        /// Smooths out a path by averaging the points together.
+        /// </summary>
+        /// <param name="path">The path to smooth.</param>
+        /// <param name="iterations">How many times to smooth the path.</param>
+        /// <param name="close">If true, the path will be closed.</param>
         public static List<Vector3> Smooth(this List<Vector3> path, int iterations = 4, bool close = false)
         {
             iterations = Mathf.Clamp(iterations, 0, 6);
@@ -296,6 +352,13 @@ namespace Dutil
             dline.Setup(points);
             return dline;
         }
+        /// <summary>
+        /// Breaks up a list of points and creates "obvious" groups based on the location of the points.
+        /// </summary>
+        /// <param name="list">The list of points to cluster</param>
+        /// <param name="num">The number of clusters you want to create.</param>
+        /// <param name="iterations">The number of times the algorithm will run. The more iterations,
+        /// the more accurate the results.</param>
         public static List<List<Vector3>> Cluster(this List<Vector3> list, int num, int iterations = 24)
         {
             List<Vector3> centres = list.AnyUnique(num);
@@ -362,6 +425,11 @@ namespace Dutil
             }
             return closest;
         }
+        /// <summary>
+        /// It returns the closest point on a path to a given point.
+        /// </summary>
+        /// <param name="points">The list of points that make up the path.</param>
+        /// <param name="Vector2">The point you want to find the closest point on the path to.</param>
         public static Vector2 GetClosestPointOnPath(this List<Vector2> points, Vector2 point)
         {
             Vector2 closest = Vector2.zero;
@@ -388,6 +456,10 @@ namespace Dutil
         {
             return Renderer(points.Select(x => x.XY()).ToList());
         }
+        /// <summary>
+        /// It calculates the distance between all points.
+        /// </summary>
+        /// <param name="points">The list of points to calculate the distance between.</param>
         public static float Distance(this List<Vector3> points)
         {
             float sum = 0;
@@ -398,12 +470,23 @@ namespace Dutil
             }
             return sum;
         }
+        /// <summary>
+        /// It returns a Vector3 at a given time. Uses relative distancing.
+        /// </summary>
+        /// <param name="points">The list of points that make up the spline.</param>
+        /// <param name="t">The time value, between 0 and 1, that you want to get the point at.</param>
         public static Vector3 PointAtTime(this List<Vector3> points, float t)
         {
             Vector3 point, dir;
             (point, dir) = PointAndDirectionAtTime(points, t);
             return point;
         }
+        /// <summary>
+        /// It returns a point and a direction at a given time.
+        /// </summary>
+        /// <param name="points">The list of points that make up the spline.</param>
+        /// <param name="t">The time value, between 0 and 1, that you want to get the point and
+        /// direction at.</param>
         public static (Vector3, Vector3) PointAndDirectionAtTime(this List<Vector3> points, float t)
         {
             t = Mathf.Clamp01(t);
