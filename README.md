@@ -179,6 +179,9 @@ vec2.OffsetY(-4);
 vec3.SetY(7);
 4.X() + 3.Y() // Vector3(4,3,0)
 5.XYZ() // Vector3(5,5,5)
+vec2 = D.VectorFromAngle(45)
+vec2.Rotate(30)
+vec2.Angle() // = 75
 ```
 
 ## Animated Line Renderer
@@ -211,6 +214,12 @@ Have a message pop-up at the bottom of the screen momentarily.
 ```
 Toast.Show("Hello World");
 Toast.Show("Toasts stack and will show after the previous Toast");
+```
+
+## Camera Extensions
+
+```
+cam.GetViewAtDistance(20)
 ```
 
 ## Components

@@ -243,6 +243,28 @@ namespace Dutil
             if (!AllowLogging) { return; }
             Debug.Log(message);
         }
+
+        /// <summary>
+        /// Returns a skewed value between 0 and 1, based on bias.
+        /// See https://youtu.be/lctXaT9pxA0?t=446
+        /// </summary>
+        /// <param name="x">The value to bias.</param>
+        /// <param name="bias">The bias value.</param>
+        public static float Bias(float x, float bias)
+        {
+            float k = Mathf.Pow(1 - bias, 3);
+            return (x * k) / (x * k - x + 1);
+        }
+        /// <summary>
+        /// Returns a normalised Vector2, pointing in the direction of the Vector2.Up rotated around the Z-axis.
+        /// </summary>
+        /// <param name="angle">The angle in radians.</param>
+        public static Vector2 VectorFromAngle(float angle)
+        {
+            return new Vector2(Mathf.Cos((-angle + 90) * Mathf.Deg2Rad), Mathf.Sin((-angle + 90) * Mathf.Deg2Rad)).normalized;
+        }
+
+
     }
 
 

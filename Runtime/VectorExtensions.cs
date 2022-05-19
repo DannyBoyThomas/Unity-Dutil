@@ -49,6 +49,17 @@ namespace Dutil
             return new Vector2(x, y);
         }
         public static Vector2Int Round(this Vector2 vec) => new Vector2Int(Mathf.RoundToInt(vec.x), Mathf.RoundToInt(vec.y));
+        /// <summary>
+        /// It returns the angle of a vector in degrees
+        /// </summary>
+        /// <param name="Vector2">The vector you want to get the angle of.</param>
+        public static float Angle(this Vector2 vec) => (360 + Mathf.Atan2(vec.y, vec.x) * Mathf.Rad2Deg) % 360;
+        /// <summary>
+        /// It rotates a vector by a given angle around the Z-axis
+        /// </summary>
+        /// <param name="Vector2">The vector you want to rotate.</param>
+        /// <param name="angle">The angle to rotate the vector by.</param>
+        public static Vector2 Rotate(this Vector2 vec, float angle) => Quaternion.Euler(0, 0, -angle) * vec;
 
 
         //Vector2Int
