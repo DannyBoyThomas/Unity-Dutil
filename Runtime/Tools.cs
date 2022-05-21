@@ -1,10 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
+using UnityEditor.PackageManager.Requests;
+#endif
+//using UnityEditor;
 using System.Linq;
 using Dutil;
-using UnityEditor.PackageManager.Requests;
+
 
 
 public class Tools

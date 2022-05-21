@@ -1,10 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEditor;
+
 using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 public class AutoInsert : UnityEditor.AssetModificationProcessor
 {
@@ -28,6 +31,6 @@ public class AutoInsert : UnityEditor.AssetModificationProcessor
         File.WriteAllText(assetPath, finalCode);
         AssetDatabase.Refresh();
 
-       
+
     }
 }
