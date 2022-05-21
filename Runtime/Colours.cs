@@ -1,8 +1,10 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+#if UNITY_EDITOR
 using UnityEditor;
 [InitializeOnLoad]
+#endif
 public static class Colours
 {
     public static Color Red { get { return new Color(.95f, .26f, .21f); } }

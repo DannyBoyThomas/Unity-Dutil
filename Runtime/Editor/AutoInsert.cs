@@ -7,7 +7,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 #if UNITY_EDITOR
 using UnityEditor;
-#endif
+
+
 
 public class AutoInsert : UnityEditor.AssetModificationProcessor
 {
@@ -34,3 +35,4 @@ public class AutoInsert : UnityEditor.AssetModificationProcessor
 
     }
 }
+#endif
