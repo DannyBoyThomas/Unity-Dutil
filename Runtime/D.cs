@@ -4,15 +4,29 @@ using UnityEngine;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine.Events;
+#if UNITY_EDITOR
 using UnityEditor;
+#endif
 namespace Dutil
 {
     public class D
     {
         public static bool AllowLogging
         {
-            get { return EditorPrefs.GetBool("d_auto_insert", true); }
-            set { EditorPrefs.GetBool("d_auto_insert", value); }
+            get
+            {
+#if UNITY_EDITOR
+                return EditorPrefs.GetBool("d_auto_insert", true);
+#else
+                return false;
+#endif
+            }
+            set
+            {
+#if UNITY_EDITOR
+                EditorPrefs.GetBool("d_auto_insert", value);
+#endif
+            }
         }
         /// <summary>
         /// Chance(0.7) has a 70% chance to return true
