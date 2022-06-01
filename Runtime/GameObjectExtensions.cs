@@ -210,7 +210,7 @@ namespace Dutil
 
 
         //DEATH
-        public static void Kill(this GameObject g, DeathType deathType = DeathType.ScaleDown)
+        public static void Kill(this GameObject g, float speed = 1, DeathType deathType = DeathType.ScaleDown)
         {
             if (g.HasMark("d_killing"))
             {
@@ -221,25 +221,25 @@ namespace Dutil
             switch (deathType)
             {
                 case DeathType.ScaleDown:
-                    g.AutoLerpScale(Vector3.zero, 1).OnComplete((x) =>
+                    g.AutoLerpScale(Vector3.zero, speed).OnComplete((x) =>
                     {
                         GameObject.Destroy(g);
                     });
                     break;
                 case DeathType.ScaleDownX:
-                    g.AutoLerpScale(Vector3.one.WithX(0), 1).OnComplete((x) =>
+                    g.AutoLerpScale(Vector3.one.WithX(0), speed).OnComplete((x) =>
                    {
                        GameObject.Destroy(g);
                    });
                     break;
                 case DeathType.ScaleDownY:
-                    g.AutoLerpScale(Vector3.one.WithY(0), 1).OnComplete((x) =>
+                    g.AutoLerpScale(Vector3.one.WithY(0), speed).OnComplete((x) =>
                     {
                         GameObject.Destroy(g);
                     });
                     break;
                 case DeathType.ScaleDownZ:
-                    g.AutoLerpScale(Vector3.one.WithZ(0), 1).OnComplete((x) =>
+                    g.AutoLerpScale(Vector3.one.WithZ(0), speed).OnComplete((x) =>
                     {
                         GameObject.Destroy(g);
                     });
