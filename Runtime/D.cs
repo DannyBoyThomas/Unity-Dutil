@@ -174,6 +174,16 @@ namespace Dutil
 
             return null;
         }
+        public static T TrackFirst<T>(string key)
+        {
+            Object obj = TrackFirst(key);
+            if (obj != null && obj is T)
+            {
+                return (T)System.Convert.ChangeType(TrackFirst(key), typeof(T));
+            }
+            return default(T);
+
+        }
         public static void Untrack(string key)
         {
             List<Object> list = new List<Object>();
