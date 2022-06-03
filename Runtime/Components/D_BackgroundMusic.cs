@@ -30,7 +30,7 @@ namespace Dutil
                 masterVolume = value;
                 if (Instance != null)
                 {
-                    Instance.source.volume = MasterVolume * (Instance.currentlyPlaying?.volume ?? 1);
+                    SetLocalVolume(Instance.currentlyPlaying?.volume ?? 1);
                 }
             }
         }
@@ -49,7 +49,7 @@ namespace Dutil
         {
             source = GetComponent<AudioSource>();
             source.playOnAwake = false;
-            source.volume = MasterVolume * currentlyPlaying?.volume ?? 1;
+            SetLocalVolume(currentlyPlaying?.volume ?? 1);
         }
         void Start()
         {
@@ -86,7 +86,7 @@ namespace Dutil
         {
             int i = index % Instance.music.Count;
             Instance.source.clip = Instance.music[i].clip;
-            Instance.source.volume = Instance.music[i].volume;
+            SetLocalVolume(Instance.music[i].volume);
             Instance.source.Play();
             Instance.currentlyPlaying = Instance.music[i];
             Instance.trackTimeRemaining = Instance.music[i].clip.length;
@@ -95,16 +95,16 @@ namespace Dutil
         }
         public static void PauseTrack()
         {
-            AutoLerp.Begin(.4f, Instance.source.volume, 0, (t, v) => Instance.source.volume = v).OnComplete((t) => Instance.source.Pause());
+            AutoLerp.Begin(.4f, Instance.source.volume, 0, (t, v) => SetLocalVolume(v)).OnComplete((t) => Instance.source.Pause());
         }
         public static void UnPauseTrack()
         {
             Instance.source.UnPause();
-            AutoLerp.Begin(.4f, 0, Instance.currentlyPlaying?.volume ?? 1, (t, v) => Instance.source.volume = v);
+            AutoLerp.Begin(.4f, 0, Instance.currentlyPlaying?.volume ?? 1, (t, v) => SetLocalVolume(v));
         }
         public static void StopTrack()
         {
-            AutoLerp.Begin(.4f, Instance.source.volume, 0, (t, v) => Instance.source.volume = v).OnComplete((t) => Instance.source.Stop());
+            AutoLerp.Begin(.4f, Instance.source.volume, 0, (t, v) => SetLocalVolume(v)).OnComplete((t) => Instance.source.Stop());
         }
         public static float TrackProgress()
         {
@@ -117,6 +117,11 @@ namespace Dutil
             D_BackgroundMusicData data = Instance.music[index];
             //Application.OpenURL(data.urlLink);
             return data.ToString();
+        }
+        static void SetLocalVolume(float v)
+        {
+            if (Instance != null)
+                Instance.source.volume = MasterVolume * v;
         }
 
 
