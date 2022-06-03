@@ -11,6 +11,7 @@ namespace Dutil
         void Start()
         {
             CreateInstance();
+            DontDestroyOnLoad(gameObject);
         }
 
         // Update is called once per frame

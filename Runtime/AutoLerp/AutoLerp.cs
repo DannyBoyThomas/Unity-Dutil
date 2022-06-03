@@ -10,6 +10,7 @@ public class AutoLerp : MonoBehaviour
     void Start()
     {
         CreateInstance();
+        DontDestroyOnLoad(gameObject);
     }
 
     // Update is called once per frame

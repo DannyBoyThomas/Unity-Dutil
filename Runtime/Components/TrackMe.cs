@@ -2,15 +2,19 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Dutil;
-
-public class TrackMe : MonoBehaviour
+namespace Dutil
 {
-    public string id = "";
-    // Start is called before the first frame update
-    void Start()
+
+
+    public class TrackMe : MonoBehaviour
     {
-        D.Track(id, gameObject);
+        public string id = "";
+        // Start is called before the first frame update
+        void Start()
+        {
+            D.Track(id, gameObject);
+        }
+
+
     }
-
-
 }
