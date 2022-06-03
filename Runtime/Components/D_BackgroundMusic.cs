@@ -21,6 +21,19 @@ namespace Dutil
 
         float trackTimeRemaining = -1;
         public static D_BackgroundMusic Instance { get; private set; }
+        static float masterVolume = .5f;
+        public static float MasterVolume
+        {
+            get { return masterVolume; }
+            set
+            {
+                masterVolume = value;
+                if (Instance != null)
+                {
+                    Instance.source.volume = MasterVolume * Instance.currentlyPlaying?.volume ?? 1;
+                }
+            }
+        }
         void Reset()
         {
             music.Add(new D_BackgroundMusicData());
@@ -30,7 +43,7 @@ namespace Dutil
         {
             source = GetComponent<AudioSource>();
             source.playOnAwake = false;
-            source.volume = currentlyPlaying?.volume ?? 1;
+            source.volume = MasterVolume * currentlyPlaying?.volume ?? 1;
         }
         void Start()
         {
