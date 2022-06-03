@@ -30,7 +30,7 @@ namespace Dutil
                 masterVolume = value;
                 if (Instance != null)
                 {
-                    Instance.source.volume = MasterVolume * Instance.currentlyPlaying?.volume ?? 1;
+                    Instance.source.volume = MasterVolume * (Instance.currentlyPlaying?.volume ?? 1);
                 }
             }
         }
@@ -39,6 +39,12 @@ namespace Dutil
             music.Add(new D_BackgroundMusicData());
         }
         // Start is called before the first frame update
+        void Awake()
+        {
+            Instance = this;
+            source = GetComponent<AudioSource>();
+
+        }
         void OnValidate()
         {
             source = GetComponent<AudioSource>();
