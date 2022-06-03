@@ -21,7 +21,7 @@ namespace Dutil
 
         float trackTimeRemaining = -1;
         public static D_BackgroundMusic Instance { get; private set; }
-        static float masterVolume = .5f;
+        static float masterVolume = 0;
         public static float MasterVolume
         {
             get { return masterVolume; }
