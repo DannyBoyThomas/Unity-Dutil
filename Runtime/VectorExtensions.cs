@@ -53,7 +53,7 @@ namespace Dutil
         /// It returns the angle of a vector in degrees
         /// </summary>
         /// <param name="Vector2">The vector you want to get the angle of.</param>
-        public static float Angle(this Vector2 vec) => (360 + Mathf.Atan2(vec.y, vec.x) * Mathf.Rad2Deg) % 360;
+        public static float Angle(this Vector2 vec) => (360 - Vector2.SignedAngle(Vector2.up, vec)) % 360;
         /// <summary>
         /// It rotates a vector by a given angle around the Z-axis
         /// </summary>
@@ -66,6 +66,11 @@ namespace Dutil
         public static Vector2 ToVector2(this Vector2Int vec) => new Vector2(vec.x, vec.y);
         public static Vector3 ToVector3(this Vector2Int vec) => new Vector3(vec.x, vec.y, 0);
         public static Vector3Int XY(this Vector2Int vec, int z = 0) => new Vector3Int(vec.x, vec.y, z);
+        /// <summary>
+        /// It returns the angle of a vector in degrees
+        /// </summary>
+        /// <param name="Vector2">The vector you want to get the angle of.</param>
+        public static float Angle(this Vector2Int vec) => (360 - Vector2.SignedAngle(Vector2.up, vec)) % 360;
 
         //Vector3Int
         public static Vector2Int XY(this Vector3Int vec) => new Vector2Int(vec.x, vec.y);
