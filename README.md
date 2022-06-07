@@ -216,6 +216,15 @@ Toast.Show("Hello World");
 Toast.Show("Toasts stack and will show after the previous Toast");
 ```
 
+## Gradual
+
+A more sophisticated lerp that can take multiple values.
+
+```
+Gradual.Lerp(.5f, Color.blue, Color.green, Color.yellow); // = Green
+Gradual.Lerp(.25f, Vector2.Up, Vector2.Right, Vector2.Left, Vector2.Down) // = Right
+```
+
 ## Camera Extensions
 
 ```
@@ -225,6 +234,8 @@ cam.GetViewAtDistance(20)
 ## Components
 
 GradientBackground - Add to camera...Done.
+TrackMe - Easy way to find objects in a scene without searching all objects.
+D_BackgroundMusic - Easy sound manager
 
 ## Plus more
 

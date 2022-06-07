@@ -13,7 +13,6 @@ namespace Dutil
         public static bool Between(this float f, float min, float max) => f >= min && f <= max;
         public static float Map(this float f, float oldMin, float oldMax, float newMin, float newMax) => (f - oldMin) / (oldMax - oldMin) * (newMax - newMin) + newMin;
         public static float Map(this int f, float oldMin, float oldMax, float newMin, float newMax) => (f - oldMin) / (oldMax - oldMin) * (newMax - newMin) + newMin;
-
         public static Vector3 X(this float f) => new Vector3(f, 0, 0);
         public static Vector3 Y(this float f) => new Vector3(0, f, 0);
         public static Vector3 Z(this float f) => new Vector3(0, 0, f);
