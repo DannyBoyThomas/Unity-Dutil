@@ -588,8 +588,11 @@ namespace Dutil
         }
 
 
-
-
+        public static float GradualLerp(this List<float> list, float t) => Gradual.Lerp(t, list.ToArray());
+        public static float GradualLerp(this List<int> list, float t) => Gradual.Lerp(t, list.ToArray());
+        public static Vector2 GradualLerp(this List<Vector2> list, float t) => Gradual.Lerp(t, list.ToArray());
+        public static Vector3 GradualLerp(this List<Vector3> list, float t) => Gradual.Lerp(t, list.ToArray());
+        public static Color GradualLerp(this List<Color> list, float t) => Gradual.Lerp(t, list.ToArray());
 
 
 

@@ -2,9 +2,14 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Dutil;
-
+using System.Linq;
 public class Gradual
 {
+
+    public static float Lerp(float t, params int[] values)
+    {
+        return Lerp(t, values.Select(v => (float)v).ToArray());
+    }
 
     public static float Lerp(float t, params float[] values)
     {
