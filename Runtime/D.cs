@@ -141,7 +141,7 @@ namespace Dutil
                 {
                     list = new List<Object>();
                 }
-
+                list.Clean();
                 list.AddUnique(obj);
                 if (list.Count > 0)
                 {
@@ -167,9 +167,10 @@ namespace Dutil
             string cleanKey = key.Replace(" ", "").ToLower();
             List<Object> list = new List<Object>();
             trackedObjects.TryGetValue(cleanKey, out list);
+
             if (list != null && list.Count > 0)
             {
-                return list.First();
+                return list.FirstOrDefault(x => x != null);
             }
 
             return null;
