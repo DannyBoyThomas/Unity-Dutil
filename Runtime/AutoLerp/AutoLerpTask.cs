@@ -76,8 +76,15 @@ public class AutoLerpTask
     {
         if (shouldRemove) { return true; }
         passedTime += useUnscaledDeltaTime ? Time.unscaledDeltaTime : Time.deltaTime;
+        try
+        {
+            CallCallback();
+        }
+        catch (Exception e)
+        {
 
-        CallCallback();
+            return true;
+        }
 
         if (Progress == 1)
         {
@@ -104,10 +111,12 @@ public class AutoLerpTask
     }
     void CallCallback()
     {
+
         switch (developType)
         {
             case DevelopTypes.Float:
                 if (callbackFloat == null) { Cancel(); return; }
+
                 callbackFloat?.Invoke(this, GetValueFloat()); return;
             case DevelopTypes.Integer:
                 if (callbackInt == null) { Cancel(); return; }

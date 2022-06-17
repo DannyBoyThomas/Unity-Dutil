@@ -633,5 +633,29 @@ namespace Dutil
             return (T)Enum.GetValues(thisEnum.GetType()).GetValue(UnityEngine.Random.Range(0, Enum.GetValues(thisEnum.GetType()).Length));
         }
 
+        public static Vector2 ToVector(this Direction2D dir)
+        {
+            switch (dir)
+            {
+                case Direction2D.Up: return Vector2.up;
+                case Direction2D.Down: return Vector2.down;
+                case Direction2D.Left: return Vector2.left;
+                case Direction2D.Right: return Vector2.right;
+                default: return Vector2.zero;
+            }
+        }
+        public static Vector2 ToVector(this Direction3D dir)
+        {
+            switch (dir)
+            {
+                case Direction3D.Up: return Vector3.up;
+                case Direction3D.Down: return Vector3.down;
+                case Direction3D.Left: return Vector3.left;
+                case Direction3D.Right: return Vector3.right;
+                case Direction3D.Forward: return Vector3.forward;
+                case Direction3D.Backward: return Vector3.back;
+                default: return Vector3.zero;
+            }
+        }
     }
 }

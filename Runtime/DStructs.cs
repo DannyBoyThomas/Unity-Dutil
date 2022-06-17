@@ -5,6 +5,8 @@ using UnityEngine;
 namespace Dutil
 {
     public enum DeathType { ScaleDown, ScaleDownX, ScaleDownY, ScaleDownZ };
+    public enum Direction2D { Up, Right, Down, Left };
+    public enum Direction3D { Up, Right, Down, Left, Forward, Backward };
     public class DStructs
     {
 

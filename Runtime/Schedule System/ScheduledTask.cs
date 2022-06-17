@@ -31,7 +31,15 @@ namespace Dutil
             if (passedTime >= delay)
             {
                 if (callback == null) { return true; }
-                callback.Invoke(this);
+                try
+                {
+                    callback.Invoke(this);
+                }
+                catch (System.Exception e)
+                {
+                    return true;
+                }
+
                 callCount++;
                 if (numberOfTimesToRepeat > 0 || numberOfTimesToRepeat == -1)// If it should repeat
                 {

@@ -62,12 +62,26 @@ namespace Dutil
             {
                 return textObj;
             }
-            GameObject myGO = new GameObject();
-            myGO.name = "Dutil Canvas";
-            Canvas myCanvas = myGO.AddComponent<Canvas>();
-            myCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
-            myGO.AddComponent<CanvasScaler>();
-            myGO.AddComponent<GraphicRaycaster>();
+            GameObject myGO;
+
+
+            GameObject existingCanvas = D.TrackFirst<GameObject>("Dutil Canvas");
+            if (existingCanvas == null)
+            {
+                myGO = new GameObject();
+                myGO.name = "Dutil Canvas";
+                Canvas myCanvas = myGO.AddComponent<Canvas>();
+                myCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                CanvasScaler scaler = myGO.AddComponent<CanvasScaler>();
+                scaler.referenceResolution = new Vector2(1920, 1080);
+                scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+                myGO.AddComponent<GraphicRaycaster>();
+                D.Track("Dutil Canvas", myGO);
+            }
+            else
+            {
+                myGO = existingCanvas;
+            }
 
 
             GameObject myText = new GameObject();
