@@ -37,6 +37,7 @@ namespace Dutil
                 }
                 catch (System.Exception e)
                 {
+                    Debug.LogWarning(e.Message);
                     return true;
                 }
 

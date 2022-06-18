@@ -82,7 +82,7 @@ public class AutoLerpTask
         }
         catch (Exception e)
         {
-
+            Debug.LogWarning(e.Message);
             return true;
         }
 
@@ -111,7 +111,6 @@ public class AutoLerpTask
     }
     void CallCallback()
     {
-
         switch (developType)
         {
             case DevelopTypes.Float:
