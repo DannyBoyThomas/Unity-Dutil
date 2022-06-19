@@ -10,7 +10,13 @@ namespace Dutil
     {
         [Multiline]
         public string text = "I'm a ToolTip";
+        [Header("Camera")]
+        public bool getCameraById = false;
+        [ConditionalHideProperty("getCameraById")]
         public Camera cam;
+        Camera camFromID;
+        [ConditionalShowProperty("getCameraById")]
+        public string camTrackingId = "";
         public Color color = Color.white;
         public Color backgroundColor = new Color(0.03f, 0.07f, .21f, 0.7f);
         [Header("Dimensions")]
@@ -41,7 +47,7 @@ namespace Dutil
 
         void Reset()
         {
-            cam = Camera.main;
+            cam = Cam();
             font = Resources.GetBuiltinResource<Font>("Arial.ttf");
         }
         void Start()
@@ -119,6 +125,22 @@ namespace Dutil
             }
 
             wasPreviewing = preview;
+        }
+        Camera Cam()
+        {
+
+            if (getCameraById)
+            {
+                if (camFromID == null)
+                {
+                    camFromID = D.TrackFirst<GameObject>(camTrackingId).GetComponent<Camera>();
+                }
+                return camFromID;
+            }
+            else
+            {
+                return cam;
+            }
         }
         Text GetText()
         {
@@ -210,7 +232,7 @@ namespace Dutil
             Vector2 pos = col.bounds.ClosestPoint(col.transform.position + (offsetDirection.ToVector().XY() * 10));
             pos += offsetDirection.ToVector() * offsetAmount;
             //worldpoint to screen point
-            Vector2 screenPos = cam.WorldToScreenPoint(pos);
+            Vector2 screenPos = Cam()?.WorldToScreenPoint(pos) ?? Vector2.one * -10;
             return screenPos;
         }
         void OnDrawGizmos()

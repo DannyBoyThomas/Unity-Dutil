@@ -40,13 +40,13 @@ namespace Dutil
 
         public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
         {
-            if (ShouldShow(property))
+            if (!ShouldShow(property))
                 EditorGUI.PropertyField(position, property, label, true);
         }
 
         public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
         {
-            if (ShouldShow(property))
+            if (!ShouldShow(property))
             {
                 // Provision the normal vertical spacing for this control.
                 return EditorGUI.GetPropertyHeight(property, label, true);
