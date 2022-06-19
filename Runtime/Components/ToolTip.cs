@@ -5,7 +5,6 @@ using UnityEngine.UI;
 using UnityEditor;
 namespace Dutil
 {
-    //working?
     [RequireComponent(typeof(Collider2D))]
     public class ToolTip : MonoBehaviour
     {

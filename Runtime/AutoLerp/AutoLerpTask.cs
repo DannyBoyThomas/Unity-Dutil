@@ -82,7 +82,7 @@ public class AutoLerpTask
         }
         catch (Exception e)
         {
-            Debug.LogWarning(e.Message);
+            Debug.LogWarning("[Dutil] AutoLerp: ".Color(Colours.Orange).B() + "Task removed from AutoLerp.\n" + e.Message);
             return true;
         }
 
