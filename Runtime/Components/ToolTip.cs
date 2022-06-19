@@ -168,8 +168,8 @@ namespace Dutil
                 Canvas myCanvas = myGO.AddComponent<Canvas>();
                 myCanvas.renderMode = RenderMode.ScreenSpaceOverlay;
                 CanvasScaler scaler = myGO.AddComponent<CanvasScaler>();
-                scaler.referenceResolution = new Vector2(1920, 1080);
-                scaler.uiScaleMode = CanvasScaler.ScaleMode.ScaleWithScreenSize;
+                //scaler.referenceResolution = new Vector2(1920, 1080);
+                scaler.uiScaleMode = CanvasScaler.ScaleMode.ConstantPixelSize;
                 myGO.AddComponent<GraphicRaycaster>();
                 D.Track("Dutil Canvas", myGO);
             }
@@ -235,11 +235,8 @@ namespace Dutil
             pos += offsetDirection.ToVector() * offsetAmount;
             //worldpoint to screen point
             Vector2 screenPos = Cam()?.WorldToScreenPoint(pos) ?? Vector2.one * -10;
-
-            float newX = screenPos.x.Map(0, 1920, 0, Screen.width);
-            float newY = screenPos.y.Map(0, 1080, 0, Screen.height);
-            return new Vector2(newX, newY);
-            //return screenPos;
+            Debug.Log(screenPos);
+            return screenPos;
         }
         void OnDrawGizmos()
         {
