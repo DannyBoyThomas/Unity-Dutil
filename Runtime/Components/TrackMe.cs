@@ -10,11 +10,9 @@ namespace Dutil
     {
         public string id = "";
         // Start is called before the first frame update
-        void Start()
+        void Awake()
         {
             D.Track(id, gameObject);
         }
-
-
     }
 }

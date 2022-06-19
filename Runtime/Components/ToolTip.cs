@@ -32,6 +32,7 @@ namespace Dutil
         public float hoverDelay = .5f;
         public bool fade = true;
         public Font font;
+        public int fontSize = 14;
         [Header("Other")]
         public bool forceKeepOnScreen = true;
         public bool preview = false;
@@ -86,6 +87,7 @@ namespace Dutil
                 GetToolTip().GetComponent<RectTransform>().anchoredPosition = ConvertWorldPositionToCanvasPosition();
                 GetText().text = text;
                 GetText().font = font;
+                GetText().fontSize = fontSize;
                 GetText().color = color.WithAlpha(color.a * currentOpacity);
                 Image img = GetToolTip().GetComponent<Image>();
                 img.material.SetColor("_Color", backgroundColor.WithAlpha(backgroundColor.a * currentOpacity));
@@ -199,7 +201,7 @@ namespace Dutil
             le.preferredWidth = maxWidth;
             le.flexibleHeight = 20;
 
-            text.fontSize = 20;
+            text.fontSize = fontSize;
 
             // Text position
             RectTransform rectTransform = text.GetComponent<RectTransform>();
