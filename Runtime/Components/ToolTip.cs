@@ -235,7 +235,11 @@ namespace Dutil
             pos += offsetDirection.ToVector() * offsetAmount;
             //worldpoint to screen point
             Vector2 screenPos = Cam()?.WorldToScreenPoint(pos) ?? Vector2.one * -10;
-            return screenPos;
+
+            float newX = screenPos.x.Map(0, 1920, 0, Screen.width);
+            float newY = screenPos.y.Map(0, 1080, 0, Screen.height);
+            return new Vector2(newX, newY);
+            //return screenPos;
         }
         void OnDrawGizmos()
         {
