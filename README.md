@@ -234,8 +234,12 @@ cam.GetViewAtDistance(20)
 ## Components
 
 GradientBackground - Add to camera...Done.
+
 TrackMe - Easy way to find objects in a scene without searching all objects.
+
 D_BackgroundMusic - Easy sound manager
+
+ToolTip - Hover for info
 
 ## Plus more
 
