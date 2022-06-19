@@ -44,6 +44,7 @@ namespace Dutil
         float timeHovered = 0;
         bool showing = false;
         float currentOpacity = 0;
+        bool clicked = false;
         // Start is called before the first frame update
 
         void Reset()
@@ -73,7 +74,7 @@ namespace Dutil
             {
                 currentOpacity = targetOpacity;
             }
-            if (text.Trim().Length == 0)
+            if (text.Trim().Length == 0 || clicked)
             {
                 hovered = false;
                 showing = false;
@@ -228,6 +229,14 @@ namespace Dutil
             hovered = true;
 
         }
+        public void OnMouseDown()
+        {
+            clicked = true;
+        }
+        void OnMouseUp()
+        {
+            clicked = false;
+        }
         Vector2 ConvertWorldPositionToCanvasPosition()
         {
             Collider2D col = GetComponent<Collider2D>();
@@ -235,7 +244,6 @@ namespace Dutil
             pos += offsetDirection.ToVector() * offsetAmount;
             //worldpoint to screen point
             Vector2 screenPos = Cam()?.WorldToScreenPoint(pos) ?? Vector2.one * -10;
-            Debug.Log(screenPos);
             return screenPos;
         }
         void OnDrawGizmos()
@@ -312,7 +320,8 @@ namespace Dutil
             float height = GetText().rectTransform.rect.height;
             int count = GetText().text.Length;
 
-            float multi = count < 10 ? 15 : 8.5f;
+            float secondMulti = fontSize / 20f;
+            float multi = secondMulti * (count < 10 ? 15 : 8.5f);
             float prefWidth = Mathf.Min(count * multi, maxWidth);
             GetText().GetComponent<LayoutElement>().preferredWidth = prefWidth;
             GetToolTip().GetComponent<RectTransform>().sizeDelta = GetText().rectTransform.rect.size + Vector2.one * 20;
