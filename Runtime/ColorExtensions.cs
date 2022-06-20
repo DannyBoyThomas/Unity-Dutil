@@ -187,8 +187,8 @@ namespace Dutil
         }
         public static string ToHex(this Color c)
         {
-            int r = (int)(c.r * 255), g = (int)(c.g * 255), b = (int)(c.b * 255);
-            string colorString = "#" + r.ToString("X2") + g.ToString("X2") + b.ToString("X2");
+            int r = (int)(c.r * 255), g = (int)(c.g * 255), b = (int)(c.b * 255), a = (int)(c.a * 255);
+            string colorString = "#" + r.ToString("X2") + g.ToString("X2") + b.ToString("X2") + a.ToString("X2");
             return colorString;
         }
 
