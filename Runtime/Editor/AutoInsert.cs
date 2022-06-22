@@ -14,7 +14,7 @@ public class AutoInsert : UnityEditor.AssetModificationProcessor
 {
     public static void OnWillCreateAsset(string path)
     {
-        if (!Tools.AutoInsertDutil) { return; }
+        if (!DutilTools.AutoInsertDutil) { return; }
         string assetPath = Regex.Replace(path, @".meta$", string.Empty);
         if (!assetPath.EndsWith(".cs")) return;
 
