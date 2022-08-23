@@ -87,7 +87,7 @@ public class DutilTools
     {
         //check if git hash is same as last time
         string lastGitHash = EditorPrefs.GetString("d_last_git_hash", "");
-        return UnityEditor.PackageManager.Client.Search("DannyBoyThomas.Unity-Dutil").Result.ToList().Any(x => x.git.hash == lastGitHash);
+        return !UnityEditor.PackageManager.Client.Search("DannyBoyThomas.Unity-Dutil").Result.ToList().Any(x => x.git.hash == lastGitHash);
     }
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     void CheckForUpdate()
