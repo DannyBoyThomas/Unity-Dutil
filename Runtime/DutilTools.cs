@@ -86,6 +86,7 @@ public class DutilTools
     }
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    [MenuItem("Dutil/Check For Update")]
     void CheckForUpdate()
     {
         if (searchRequest != null)
@@ -93,7 +94,7 @@ public class DutilTools
             Debug.Log("Dutil is already checking for update.");
             return;
         }
-        searchRequest = UnityEditor.PackageManager.Client.Search("DannyBoyThomas.Unity-Dutil");
+        searchRequest = UnityEditor.PackageManager.Client.Search("com.dannyboythomas.dutil");
         EditorApplication.update += SearchProgress;
 
     }
