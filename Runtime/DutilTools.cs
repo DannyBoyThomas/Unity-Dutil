@@ -94,7 +94,7 @@ public class DutilTools
             Debug.Log("Dutil is already checking for update.");
             return;
         }
-        searchRequest = UnityEditor.PackageManager.Client.Search("com.dannyboythomas.dutil");
+        searchRequest = UnityEditor.PackageManager.Client.Search("dannyboythomas.dutil");
         EditorApplication.update += SearchProgress;
 
     }
