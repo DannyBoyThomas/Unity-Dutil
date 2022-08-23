@@ -80,6 +80,25 @@ public class DutilTools
             addRequest = null;
         }
     }
+    [MenuItem("Dutil/Beautify %&B")]
+    public static void Beautify()
+    {
+        if (Selection.activeGameObject == null)
+        {
+            Debug.Log("No gameobject selected");
+            return;
+        }
+        Undo.RecordObjects(Selection.gameObjects.ToList().ToArray(), "Beautify");
+        foreach (var item in Selection.gameObjects)
+        {
+            Material mat = item.GetComponent<Renderer>().sharedMaterial;
+            Color col = mat.color;
+            mat.shader = Shader.Find("Dutil/Half Lambert");
+            mat.color = col;
+            mat.SetFloat("_WrapAmount", .55f);
+        }
+
+    }
 
 }
 #endif

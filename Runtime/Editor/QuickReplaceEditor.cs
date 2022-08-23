@@ -10,7 +10,7 @@ namespace Dutil
 {
     public class QuickReplaceEditor : EditorWindow
     {
-        public GameObject newPrefab;
+        public List<GameObject> newPrefabs = new List<GameObject>();
         public List<GameObject> toReplace = new List<GameObject>();
         public List<GameObject> converted = new List<GameObject>();
 
@@ -45,14 +45,14 @@ namespace Dutil
             {
                 toReplace.Clear();
                 converted.Clear();
-                newPrefab = null;
+                newPrefabs.Clear();
             }
             EditorGUILayout.EndHorizontal();
             bool performed = false;
             GUI.backgroundColor = Colours.Blue.Shade(2);
             if (GUILayout.Button("Replace", new GUILayoutOption[] { GUILayout.Height(32) }))
             {
-                if (newPrefab == null)
+                if (newPrefabs.Count <= 0)
                 {
                     Debug.LogError("Need to set a new prefab to replace with");
                 }
@@ -64,11 +64,15 @@ namespace Dutil
                     for (int i = 0; i < toReplace.Count; i++)
                     {
                         GameObject old = toReplace[i];
-                        GameObject spawned = GameObject.Instantiate(newPrefab, old.transform.position, old.transform.rotation);
-                        spawned.transform.localScale = old.transform.localScale;
-                        spawned.name = old.name;
-                        converted.Add(spawned);
-                        Undo.RegisterCreatedObjectUndo(spawned, "Replaced using Dutil");
+                        GameObject toPlace = newPrefabs.Any();
+                        if (toPlace != null)
+                        {
+                            GameObject spawned = GameObject.Instantiate(toPlace, old.transform.position, old.transform.rotation);
+                            spawned.transform.localScale = old.transform.localScale;
+                            spawned.name = old.name;
+                            converted.Add(spawned);
+                            Undo.RegisterCreatedObjectUndo(spawned, "Replaced using Dutil");
+                        }
                     }
 
                     toReplace.ForEach(x => Undo.DestroyObjectImmediate(x));
@@ -84,10 +88,12 @@ namespace Dutil
 
             SerializedProperty convertedList = serialObj.FindProperty("converted");
 
-            SerializedProperty newItem = serialObj.FindProperty("newPrefab");
+            SerializedProperty prefabList = serialObj.FindProperty("newPrefabs");
+
+            //SerializedProperty newItem = serialObj.FindProperty("newPrefab");
 
             GUI.backgroundColor = Colours.Blue.Shade(1);
-            EditorGUILayout.PropertyField(newItem, true);
+            EditorGUILayout.PropertyField(prefabList, true);
 
             GUI.backgroundColor = Colours.Orange.Shade(2);
             EditorGUILayout.PropertyField(list, !performed);
