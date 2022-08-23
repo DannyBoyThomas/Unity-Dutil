@@ -105,6 +105,7 @@ public class DutilTools
             {
                 if (IsNewGitVersion())
                 {
+
                     Debug.Log("Dutil is out of date. Update available.");
                 }
                 else
