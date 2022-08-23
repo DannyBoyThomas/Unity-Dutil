@@ -62,6 +62,7 @@ public class DutilTools
         }
         Debug.Log("Updating Dutil...");
         addRequest = UnityEditor.PackageManager.Client.Add("https://github.com/DannyBoyThomas/Unity-Dutil.git");
+
         EditorApplication.update += UpdateProgress;
     }
     static void UpdateProgress()
@@ -70,8 +71,10 @@ public class DutilTools
         {
             if (addRequest.Status == UnityEditor.PackageManager.StatusCode.Success)
             {
-                Debug.Log("Dutil updated succesfully");
+                Debug.Log("Dutil updated successfully");
                 Debug.Log("You may need to restart your code editor for changes to take effect.");
+                EditorPrefs.SetString("d_last_git_hash", addRequest.Result.git.hash);
+                Debug.Log("Setting hash to" + addRequest.Result.git.hash);
             }
             else if (addRequest.Status >= UnityEditor.PackageManager.StatusCode.Failure)
                 Debug.Log(addRequest.Error.message);
@@ -80,6 +83,22 @@ public class DutilTools
             addRequest = null;
         }
     }
+    static bool IsNewGitVersion()
+    {
+        //check if git hash is same as last time
+        string lastGitHash = EditorPrefs.GetString("d_last_git_hash", "");
+        return UnityEditor.PackageManager.Client.Search("DannyBoyThomas.Unity-Dutil").Result.ToList().Any(x => x.git.hash == lastGitHash);
+    }
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    void CheckForUpdate()
+    {
+        Debug.Log("Checking for update...");
+        if (IsNewGitVersion())
+        {
+            Debug.Log("Dutil has an update waiting. Ctrl + Alt + U to update.");
+        }
+    }
+
     [MenuItem("Dutil/Beautify %&B")]
     public static void Beautify()
     {
