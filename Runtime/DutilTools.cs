@@ -25,6 +25,7 @@ public class DutilTools
         }
     }
     static AddRequest addRequest;
+    static SearchRequest searchRequest;
     [MenuItem("Dutil/Group %&g")]
     public static void Group()
     {
@@ -83,20 +84,46 @@ public class DutilTools
             addRequest = null;
         }
     }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    void CheckForUpdate()
+    {
+        if (searchRequest != null)
+        {
+            Debug.Log("Dutil is already checking for update.");
+            return;
+        }
+        searchRequest = UnityEditor.PackageManager.Client.Search("DannyBoyThomas.Unity-Dutil");
+        EditorApplication.update += SearchProgress;
+
+    }
+    static void SearchProgress()
+    {
+        if (searchRequest.IsCompleted)
+        {
+            if (searchRequest.Status == UnityEditor.PackageManager.StatusCode.Success)
+            {
+                if (IsNewGitVersion())
+                {
+                    Debug.Log("Dutil is out of date. Update available.");
+                }
+                else
+                {
+                    Debug.Log("Dutil is up to date.");
+                }
+            }
+            else if (searchRequest.Status >= UnityEditor.PackageManager.StatusCode.Failure)
+                Debug.Log(searchRequest.Error.message);
+
+            EditorApplication.update -= SearchProgress;
+            searchRequest = null;
+        }
+    }
     static bool IsNewGitVersion()
     {
         //check if git hash is same as last time
         string lastGitHash = EditorPrefs.GetString("d_last_git_hash", "");
-        return !UnityEditor.PackageManager.Client.Search("DannyBoyThomas.Unity-Dutil").Result.ToList().Any(x => x.git.hash == lastGitHash);
-    }
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    void CheckForUpdate()
-    {
-        Debug.Log("Checking for update...");
-        if (IsNewGitVersion())
-        {
-            Debug.Log("Dutil has an update waiting. Ctrl + Alt + U to update.");
-        }
+        return !searchRequest.Result.ToList().Any(x => x.git.hash == lastGitHash);
     }
 
     [MenuItem("Dutil/Beautify %&B")]
