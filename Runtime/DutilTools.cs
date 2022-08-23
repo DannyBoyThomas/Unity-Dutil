@@ -94,8 +94,7 @@ public class DutilTools
             Debug.Log("Dutil is already checking for update.");
             return;
         }
-        UnityEditor.PackageManager.Client.List().Result.ToList().ForEach(x => Debug.Log(x));
-        searchRequest = UnityEditor.PackageManager.Client.Search("com.dannyboythomas.dutil");
+        searchRequest = UnityEditor.PackageManager.Client.SearchAll(true);//"com.dannyboythomas.dutil"
         EditorApplication.update += SearchProgress;
 
     }
@@ -105,6 +104,7 @@ public class DutilTools
         {
             if (searchRequest.Status == UnityEditor.PackageManager.StatusCode.Success)
             {
+                searchRequest.Result?.ToList().ForEach(x => Debug.Log(x));
                 if (IsNewGitVersion())
                 {
 
