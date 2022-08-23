@@ -87,7 +87,7 @@ public class DutilTools
 
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     [MenuItem("Dutil/Check For Update")]
-    void CheckForUpdate()
+    static void CheckForUpdate()
     {
         if (searchRequest != null)
         {
