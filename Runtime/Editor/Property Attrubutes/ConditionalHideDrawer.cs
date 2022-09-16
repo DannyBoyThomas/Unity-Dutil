@@ -2,7 +2,9 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Dutil;
+#if UNITY_EDITOR
 using UnityEditor;
+
 namespace Dutil
 {
     [CustomPropertyDrawer(typeof(ConditionalHideProperty))]
@@ -59,3 +61,4 @@ namespace Dutil
         }
     }
 }
+#endif

@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Dutil;
+#if UNITY_EDITOR
 using UnityEditor;
 namespace Dutil
 {
@@ -60,3 +61,4 @@ namespace Dutil
         }
     }
 }
+#endif
