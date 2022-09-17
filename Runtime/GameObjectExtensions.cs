@@ -95,6 +95,46 @@ namespace Dutil
         {
             return g.transform.position;
         }
+        //Transform Quick Change
+        public static void SetPosition(this Transform t, Vector3 pos)
+        {
+            t.position = pos;
+        }
+        public static Vector3 Move(this Transform t, Vector3 delta)
+        {
+            t.position += delta;
+            return t.position;
+        }
+        public static Vector3 MoveLocal(this Transform t, Vector3 delta)
+        {
+            t.localPosition += delta;
+            return t.position;
+        }
+        public static void MovePosX(this Transform t, float x)
+        {
+            t.position = new Vector3(t.position.x + x, t.position.y, t.position.z);
+        }
+        public static void MovePosY(this Transform t, float y)
+        {
+            t.position = new Vector3(t.position.x, t.position.y + y, t.position.z);
+        }
+        public static void MovePosZ(this Transform t, float z)
+        {
+            t.position = new Vector3(t.position.x, t.position.y, t.position.z + z);
+        }
+
+        public static void SetPosX(this Transform t, float x)
+        {
+            t.position = new Vector3(x, t.position.y, t.position.z);
+        }
+        public static void SetPosY(this Transform t, float y)
+        {
+            t.position = new Vector3(t.position.x, y, t.position.z);
+        }
+        public static void SetPosZ(this Transform t, float z)
+        {
+            t.position = new Vector3(t.position.x, t.position.y, z);
+        }
 
         //DEVELOP
         //gameobject
