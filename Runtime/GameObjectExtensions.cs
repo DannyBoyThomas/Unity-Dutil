@@ -135,6 +135,12 @@ namespace Dutil
         {
             t.position = new Vector3(t.position.x, t.position.y, z);
         }
+        public static void ResetLocally(this Transform t)
+        {
+            t.localPosition = Vector3.zero;
+            t.localRotation = Quaternion.identity;
+            t.localScale = Vector3.one;
+        }
 
         //DEVELOP
         //gameobject
