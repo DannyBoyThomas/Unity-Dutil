@@ -254,5 +254,6 @@ D.RandomColour();
 D.PointsOnCircle(3);
 D.BezierPoints();
 D.Hash(8);
+D.RandomEnum<EnumType>()
 
 ```

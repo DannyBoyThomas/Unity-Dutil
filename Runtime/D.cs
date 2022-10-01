@@ -100,6 +100,11 @@ namespace Dutil
         {
             return new Color(Random.Range(0, 1f), Random.Range(0, 1f), Random.Range(0, 1f));
         }
+        public static T RandomEnum<T>() where T : System.Enum
+        {
+            System.Array values = System.Enum.GetValues(typeof(T));
+            return (T)values.GetValue(UnityEngine.Random.Range(0, values.Length));
+        }
 
         public static List<Vector3> PointsOnCircle(Vector3 centre, Vector3 forward, Vector3 normal, int segments, bool close = false)
         {
