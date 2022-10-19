@@ -122,6 +122,11 @@ namespace Dutil
         {
             t.position = new Vector3(t.position.x, t.position.y, t.position.z + z);
         }
+        public static void MovePos(this Transform t, float x, float y, float z)
+        {
+            t.position = new Vector3(t.position.x + x, t.position.y + y, t.position.z + z);
+        }
+
 
         public static void SetPosX(this Transform t, float x)
         {

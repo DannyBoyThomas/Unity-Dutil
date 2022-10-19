@@ -132,6 +132,18 @@ transform.AutoLerpRotation(new Vector3(0,0,270), 3, true);
 
 ```
 
+## Sequence
+
+Similar to Schedule and Autolerp, except can define multiple consecutive tasks in one go.
+```
+ Sequence.Create(
+                  new SequenceAction(() => { Debug.Log("First"); }, 1),
+                  new SequenceAction(() => { Debug.Log("Second"); }, 1)
+              ).Run();
+```
+First parameter is the task to perform.
+Second parameter is how long to wait before peforming given task.
+
 ## Marking
 
 A new tag system

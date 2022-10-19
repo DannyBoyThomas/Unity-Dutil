@@ -161,10 +161,16 @@ namespace Dutil
         }
         public static List<Object> Track(string key)
         {
+            return Track<Object>(key);
+        }
+        public static List<T> Track<T>(string key)
+        {
             string cleanKey = key.Replace(" ", "").ToLower();
-            List<Object> list = new List<Object>();
-            trackedObjects.TryGetValue(cleanKey, out list);
-            if (list == null) { list = new List<Object>(); }
+            List<Object> allTracked = new List<Object>();
+
+            trackedObjects.TryGetValue(cleanKey, out allTracked);
+            if (allTracked == null) { return new List<T>(); }
+            List<T> list = allTracked.Where(x => x is T).Cast<T>().ToList();
             return list;
         }
         public static Object TrackFirst(string key)
