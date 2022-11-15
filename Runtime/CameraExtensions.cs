@@ -30,7 +30,7 @@ namespace Dutil
         /// <param name="g"></param>
         /// <param name="padding">Extend the frustrum of the camera. (Not real, for frustrum check only)</param>
         /// <returns></returns>
-        public static bool IsObjectPartiallyInView(this Camera cam, GameObject g, float padding = 0)
+        public static bool IsObjectPartiallyInView(this Camera cam, GameObject g, float padding = 0.2f)
         {
             Vector3 right = cam.transform.right;
             Vector3 up = cam.transform.up;
@@ -47,7 +47,7 @@ namespace Dutil
 
                 List<Vector3> points = new List<Vector3>() { rightMost, leftMost, topMost, bottomMost };
                 CameraZone camZone = cam.GetViewAtDistance(depthFromCamera);
-                bool isInView = points.Any(x => camZone.IsInBounds(x));
+                bool isInView = points.Any(x => camZone.IsInBounds(x) && D.LineOfSight(cam.transform.position, x, cols));
                 if (isInView) { return true; }
             }
 
@@ -77,7 +77,7 @@ namespace Dutil
 
                 List<Vector3> points = new List<Vector3>() { rightMost, leftMost, topMost, bottomMost };
                 CameraZone camZone = cam.GetViewAtDistance(depthFromCamera);
-                bool isInView = points.TrueForAll(x => camZone.IsInBounds(x));
+                bool isInView = points.TrueForAll(x => camZone.IsInBounds(x) && D.LineOfSight(cam.transform.position, x, cols));
                 if (!isInView) { return false; }
 
             }

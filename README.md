@@ -241,6 +241,8 @@ Gradual.Lerp(.25f, Vector2.Up, Vector2.Right, Vector2.Left, Vector2.Down) // = R
 
 ```
 cam.GetViewAtDistance(20)
+cam.IsObjectPartiallyInView(gameObject)
+cam.IsObjectFullyInView(gameObject)
 ```
 
 ## Components

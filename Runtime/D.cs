@@ -128,6 +128,22 @@ namespace Dutil
             }
             return true;
         }
+        public static bool LineOfSight(Vector3 pointA, Vector3 pointB, List<Collider> colsToIgnore = null)
+        {
+            if (colsToIgnore == null)
+            {
+                colsToIgnore = new List<Collider>();
+            }
+            Vector3 dir = (pointB - pointA);
+            List<RaycastHit> hits = Physics.RaycastAll(pointA, dir.normalized, dir.magnitude).ToList();
+            hits = hits.Where(x => !colsToIgnore.Contains(x.collider)).ToList();
+            if (hits.Count > 0)
+            {
+                return false;
+            }
+            return true;
+        }
+
         //Static Referencer
         static Dictionary<string, List<Object>> trackedObjects = new Dictionary<string, List<Object>>();
 
