@@ -62,6 +62,11 @@ namespace Dutil
         public Vector3 Top { get { return (TopRight + TopLeft) / 2; } }
         public Vector3 Bottom { get { return (BottomRight + BottomLeft) / 2; } }
 
+        public bool IsInBounds(Vector3 point)
+        {
+            return point.x >= BottomLeft.x && point.x <= TopRight.x && point.y >= BottomLeft.y && point.y <= TopRight.y;
+        }
+
         public void DrawWithGizmos()
         {
             if (BottomLeft == null || TopRight == null)
