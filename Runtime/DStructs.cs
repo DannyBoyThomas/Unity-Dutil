@@ -64,7 +64,12 @@ namespace Dutil
 
         public bool IsInBounds(Vector3 point)
         {
-            return point.x >= BottomLeft.x && point.x <= TopRight.x && point.y >= BottomLeft.y && point.y <= TopRight.y;
+            return IsBetweenTwoValues(point.x, BottomLeft.x, TopRight.x) && IsBetweenTwoValues(point.y, BottomLeft.y, TopRight.y);
+
+        }
+        bool IsBetweenTwoValues(float value, float value1, float value2)
+        {
+            return value >= Mathf.Min(value1, value2) && value <= Mathf.Max(value1, value2);
         }
 
         public void DrawWithGizmos()
