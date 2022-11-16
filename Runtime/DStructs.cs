@@ -32,13 +32,30 @@ namespace Dutil
     public struct CameraZone
     {
         Vector3 BottomLeft, TopRight, TopLeft, BottomRight;
-        public CameraZone(Vector3 bottomLeft, Vector3 topLeft, Vector3 topRight, Vector3 bottomRight)
+        float distance;
+        public CameraZone(Vector3 bottomLeft, Vector3 topLeft, Vector3 topRight, Vector3 bottomRight, float depth = 10)
         {
             this.BottomLeft = bottomLeft;
             this.TopRight = topRight;
             this.TopLeft = topLeft;
             this.BottomRight = bottomRight;
-
+            distance = depth;
+        }
+        public CameraZone WithPadding(int pixels)
+        {
+            Vector3 bottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(pixels, pixels, distance));
+            Vector3 topRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width - pixels, Screen.height - pixels, distance));
+            Vector3 topLeft = Camera.main.ScreenToWorldPoint(new Vector3(pixels, Screen.height - pixels, distance));
+            Vector3 bottomRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width - pixels, pixels, distance));
+            return new CameraZone(bottomLeft, topLeft, topRight, bottomRight);
+        }
+        public CameraZone WithPadding(int pixels, float depth)
+        {
+            Vector3 bottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(pixels, pixels, depth));
+            Vector3 topRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width - pixels, Screen.height - pixels, depth));
+            Vector3 topLeft = Camera.main.ScreenToWorldPoint(new Vector3(pixels, Screen.height - pixels, depth));
+            Vector3 bottomRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width - pixels, pixels, depth));
+            return new CameraZone(bottomLeft, topLeft, topRight, bottomRight);
         }
         public Vector3 Centre
         {
@@ -62,14 +79,19 @@ namespace Dutil
         public Vector3 Top { get { return (TopRight + TopLeft) / 2; } }
         public Vector3 Bottom { get { return (BottomRight + BottomLeft) / 2; } }
 
-        public bool IsInBounds(Vector3 point)
+        public bool IsInBounds(Vector3 point, float padding)
         {
-            return IsBetweenTwoValues(point.x, BottomLeft.x, TopRight.x) && IsBetweenTwoValues(point.y, BottomLeft.y, TopRight.y);
+            return IsBetweenTwoValues(point.x, BottomLeft.x, TopRight.x, padding) && IsBetweenTwoValues(point.y, BottomLeft.y, TopRight.y, padding);
 
         }
-        bool IsBetweenTwoValues(float value, float value1, float value2)
+        bool IsBetweenTwoValues(float value, float value1, float value2, float padding)
         {
-            return value >= Mathf.Min(value1, value2) && value <= Mathf.Max(value1, value2);
+
+            return value >= Mathf.Min(value1, value2) - padding && value <= Mathf.Max(value1, value2) + padding;
+        }
+        float ConvertPixelsToMetersAtDistance(float pixels, float distance)
+        {
+            return pixels * (distance / Camera.main.pixelHeight);
         }
 
         public void DrawWithGizmos()
@@ -85,7 +107,7 @@ namespace Dutil
                 BottomRight
             };
             points.DrawWithGizmos(true);
-            float sphereSize = 1f;
+            float sphereSize = .1f;
             Gizmos.DrawSphere(BottomLeft, sphereSize);
             Gizmos.DrawSphere(TopRight, sphereSize);
             Gizmos.DrawSphere(BottomRight, sphereSize);
