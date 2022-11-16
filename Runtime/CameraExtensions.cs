@@ -40,7 +40,7 @@ namespace Dutil
                 Vector3 closest = col.bounds.ClosestPoint(cam.transform.position);
                 List<Vector3> outerPoints = D.PointsOnSphere(12, 10).Select(x => x + col.transform.position).ToList();
                 List<Vector3> points = outerPoints.Select(x => col.bounds.ClosestPoint(x)).ToList();
-                bool isInView = points.Any(x => cam.IsInBounds(x, padding) && D.LineOfSight(cam.transform.position, x, cols));
+                bool isInView = points.Any(x => cam.IsInBounds(x, padding) && cam.HasLineOfSight(x, cols));
                 if (isInView) { return true; }
             }
 
@@ -53,6 +53,26 @@ namespace Dutil
             if (screenPoint.x < 0 - paddingInPixels || screenPoint.x > Screen.width + paddingInPixels) { return false; }
             if (screenPoint.y < 0 - paddingInPixels || screenPoint.y > Screen.height + paddingInPixels) { return false; }
             return true;
+        }
+        public static bool HasLineOfSight(this Camera cam, Vector3 point, List<Collider> ignoreColliders)
+        {
+            Vector3 topLeftOrigin = cam.ViewportToWorldPoint(new Vector3(0, 1, 0));
+            Vector3 topRightOrigin = cam.ViewportToWorldPoint(new Vector3(1, 1, 0));
+            Vector3 bottomLeftOrigin = cam.ViewportToWorldPoint(new Vector3(0, 0, 0));
+            Vector3 bottomRightOrigin = cam.ViewportToWorldPoint(new Vector3(1, 0, 0));
+            Vector3 centerOrigin = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
+            //create middle origins
+            Vector3 topCenterOrigin = Vector3.Lerp(topLeftOrigin, topRightOrigin, 0.5f);
+            Vector3 bottomCenterOrigin = Vector3.Lerp(bottomLeftOrigin, bottomRightOrigin, 0.5f);
+            Vector3 leftCenterOrigin = Vector3.Lerp(topLeftOrigin, bottomLeftOrigin, 0.5f);
+            Vector3 rightCenterOrigin = Vector3.Lerp(topRightOrigin, bottomRightOrigin, 0.5f);
+            Vector3[] origins = new Vector3[] { topLeftOrigin, topRightOrigin, bottomLeftOrigin, bottomRightOrigin, centerOrigin, topCenterOrigin, bottomCenterOrigin, leftCenterOrigin, rightCenterOrigin };
+            foreach (Vector3 origin in origins)
+            {
+                if (D.LineOfSight(origin, point, ignoreColliders)) { return true; }
+            }
+            return false;
+
         }
         /// <summary>
         /// Looks at all child colliders of the gameobject and checks if they are fully in view of the camera.
@@ -70,7 +90,7 @@ namespace Dutil
             {
                 List<Vector3> outerPoints = D.PointsOnSphere(12, 10).Select(x => x + col.transform.position).ToList();
                 List<Vector3> points = outerPoints.Select(x => col.bounds.ClosestPoint(x)).ToList();
-                bool isInView = points.TrueForAll(x => cam.IsInBounds(x, padding) && D.LineOfSight(cam.transform.position, x, cols));
+                bool isInView = points.TrueForAll(x => cam.IsInBounds(x, padding) && cam.HasLineOfSight(x, cols));
                 if (!isInView) { return false; }
 
             }
