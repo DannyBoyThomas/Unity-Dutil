@@ -32,6 +32,9 @@ namespace Dutil
         /// <returns></returns>
         public static bool IsObjectPartiallyInView(this Camera cam, GameObject g, int padding = 20, List<Collider> colsToIgnore = null)
         {
+            Plane[] planes = GeometryUtility.CalculateFrustumPlanes(cam);
+            if (!GeometryUtility.TestPlanesAABB(planes, g.GetComponentInChildren<Renderer>().bounds)) { return false; }
+
             List<Collider> toIgnore = colsToIgnore == null ? new List<Collider>() : colsToIgnore.Copy();
 
 
@@ -89,7 +92,8 @@ namespace Dutil
         /// <returns></returns>
         public static bool IsObjectFullyInView(this Camera cam, GameObject g, int padding = 0)
         {
-
+            Plane[] planes = GeometryUtility.CalculateFrustumPlanes(cam);
+            if (!GeometryUtility.TestPlanesAABB(planes, g.GetComponentInChildren<Renderer>().bounds)) { return false; }
             List<Collider> cols = g.GetComponentsInChildren<Collider>().ToList();
             if (cols.Count <= 0) { D.Log("No colliders found on object: " + g.name); return false; }
             foreach (Collider col in cols)
