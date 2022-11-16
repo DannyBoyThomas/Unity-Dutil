@@ -106,7 +106,7 @@ namespace Dutil
             return (T)values.GetValue(UnityEngine.Random.Range(0, values.Length));
         }
 
-        public static List<Vector3> PointsOnCircle(Vector3 centre, Vector3 forward, Vector3 normal, int segments, bool close = false)
+        public static List<Vector3> PointsOnCircle(Vector3 centre, Vector3 forward, Vector3 normal, int segments, float radius = 1f, bool close = false)
         {
             List<Vector3> points = new List<Vector3>();
             float incr = 360 / (float)segments;
@@ -114,7 +114,7 @@ namespace Dutil
             for (int i = 0; i < segmentNum; i++)
             {
                 Vector3 point = Quaternion.Euler(normal * i * incr) * forward;
-                points.Add(centre + point);
+                points.Add(centre + point * radius);
             }
             return points;
         }

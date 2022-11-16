@@ -40,8 +40,9 @@ namespace Dutil
             if (cols.Count <= 0) { D.Log("No colliders found on object: " + g.name); return false; }
             foreach (Collider col in cols)
             {
-                Vector3 closest = col.bounds.ClosestPoint(cam.transform.position);
-                List<Vector3> outerPoints = D.PointsOnSphere(12, 10).Select(x => x + col.transform.position).ToList();
+
+                List<Vector3> outerPoints = D.PointsOnSphere(6, 10).Select(x => x + col.transform.position).ToList();
+                outerPoints.ForEach(x => Debug.DrawLine(x, x + Vector3.up, Color.red, 1));
                 List<Vector3> points = outerPoints.Select(x => col.bounds.ClosestPoint(x)).ToList();
                 bool isInView = points.Any(x => cam.IsInBounds(x, padding) && cam.HasLineOfSight(x, toIgnore));
                 if (isInView) { return true; }
@@ -66,16 +67,14 @@ namespace Dutil
             Vector3 bottomRightOrigin = cam.ViewportToWorldPoint(new Vector3(1, 0, distance));
             Vector3 centerOrigin = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, distance));
             //create middle origins
-            Vector3 topCenterOrigin = Vector3.Lerp(topLeftOrigin, topRightOrigin, 0.5f);
-            Vector3 bottomCenterOrigin = Vector3.Lerp(bottomLeftOrigin, bottomRightOrigin, 0.5f);
-            Vector3 leftCenterOrigin = Vector3.Lerp(topLeftOrigin, bottomLeftOrigin, 0.5f);
-            Vector3 rightCenterOrigin = Vector3.Lerp(topRightOrigin, bottomRightOrigin, 0.5f);
-            Vector3[] origins = new Vector3[] { topLeftOrigin, topRightOrigin, bottomLeftOrigin, bottomRightOrigin, centerOrigin, topCenterOrigin, bottomCenterOrigin, leftCenterOrigin, rightCenterOrigin };
+            // Vector3 topCenterOrigin = Vector3.Lerp(topLeftOrigin, topRightOrigin, 0.5f);
+            // Vector3 bottomCenterOrigin = Vector3.Lerp(bottomLeftOrigin, bottomRightOrigin, 0.5f);
+            // Vector3 leftCenterOrigin = Vector3.Lerp(topLeftOrigin, bottomLeftOrigin, 0.5f);
+            // Vector3 rightCenterOrigin = Vector3.Lerp(topRightOrigin, bottomRightOrigin, 0.5f);
+            Vector3[] origins = new Vector3[] { topLeftOrigin, topRightOrigin, bottomLeftOrigin, bottomRightOrigin, centerOrigin };//, topCenterOrigin, bottomCenterOrigin, leftCenterOrigin, rightCenterOrigin };
             foreach (Vector3 origin in origins)
             {
 
-                bool seen = D.LineOfSight(origin, point, ignoreColliders);
-                //Debug.DrawLine(origin, point, seen ? Color.green : Color.red, 1);
                 if (D.LineOfSight(origin, point, ignoreColliders)) { return true; }
             }
             return false;
@@ -95,7 +94,7 @@ namespace Dutil
             if (cols.Count <= 0) { D.Log("No colliders found on object: " + g.name); return false; }
             foreach (Collider col in cols)
             {
-                List<Vector3> outerPoints = D.PointsOnSphere(12, 10).Select(x => x + col.transform.position).ToList();
+                List<Vector3> outerPoints = D.PointsOnSphere(6, 10).Select(x => x + col.transform.position).ToList();
                 List<Vector3> points = outerPoints.Select(x => col.bounds.ClosestPoint(x)).ToList();
                 bool isInView = points.TrueForAll(x => cam.IsInBounds(x, padding) && cam.HasLineOfSight(x, cols));
                 if (!isInView) { return false; }
