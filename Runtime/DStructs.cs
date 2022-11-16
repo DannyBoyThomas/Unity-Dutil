@@ -43,6 +43,7 @@ namespace Dutil
         }
         public CameraZone WithPadding(int pixels)
         {
+            pixels *= -1;
             Vector3 bottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(pixels, pixels, distance));
             Vector3 topRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width - pixels, Screen.height - pixels, distance));
             Vector3 topLeft = Camera.main.ScreenToWorldPoint(new Vector3(pixels, Screen.height - pixels, distance));
@@ -51,6 +52,7 @@ namespace Dutil
         }
         public CameraZone WithPadding(int pixels, float depth)
         {
+            pixels *= -1;
             Vector3 bottomLeft = Camera.main.ScreenToWorldPoint(new Vector3(pixels, pixels, depth));
             Vector3 topRight = Camera.main.ScreenToWorldPoint(new Vector3(Screen.width - pixels, Screen.height - pixels, depth));
             Vector3 topLeft = Camera.main.ScreenToWorldPoint(new Vector3(pixels, Screen.height - pixels, depth));
@@ -79,11 +81,13 @@ namespace Dutil
         public Vector3 Top { get { return (TopRight + TopLeft) / 2; } }
         public Vector3 Bottom { get { return (BottomRight + BottomLeft) / 2; } }
 
-        public bool IsInBounds(Vector3 point)
-        {
-            return IsBetweenTwoValues(point.x, BottomLeft.x, TopRight.x) && IsBetweenTwoValues(point.y, BottomLeft.y, TopRight.y);
+        // public bool IsInBounds(Vector3 point)
+        // {
 
-        }
+        //     //use camera space
+        //     //return IsBetweenTwoValues(point.x, BottomLeft.x, TopRight.x) && IsBetweenTwoValues(point.y, BottomLeft.y, TopRight.y);
+
+        // }
         bool IsBetweenTwoValues(float value, float value1, float value2)
         {
 

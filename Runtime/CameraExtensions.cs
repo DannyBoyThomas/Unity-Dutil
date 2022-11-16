@@ -30,41 +30,29 @@ namespace Dutil
         /// <param name="g"></param>
         /// <param name="padding">Extend the frustrum of the camera. Pixels (Not real, for frustrum check only)</param>
         /// <returns></returns>
-        public static bool IsObjectPartiallyInView(this Camera cam, GameObject g, int padding = -20)
+        public static bool IsObjectPartiallyInView(this Camera cam, GameObject g, int padding = 20)
         {
 
-
-            Vector3 right = cam.transform.right;
-            Vector3 up = cam.transform.up;
-            Vector3 fwd = cam.transform.forward;
             List<Collider> cols = g.GetComponentsInChildren<Collider>().ToList();
             if (cols.Count <= 0) { D.Log("No colliders found on object: " + g.name); return false; }
             foreach (Collider col in cols)
             {
-                float depthFromCamera = Vector3.Dot(cam.transform.forward, g.transform.position - cam.transform.position);
                 Vector3 closest = col.bounds.ClosestPoint(cam.transform.position);
-                depthFromCamera = Vector3.Dot(cam.transform.forward, closest - cam.transform.position);
-                if (depthFromCamera <= 0) { continue; }
                 List<Vector3> outerPoints = D.PointsOnSphere(12, 10).Select(x => x + col.transform.position).ToList();
-                outerPoints.ForEach(x => Debug.DrawLine(x, x + Vector3.up, Color.red));
                 List<Vector3> points = outerPoints.Select(x => col.bounds.ClosestPoint(x)).ToList();
-
-                // Vector3 rightMost = col.bounds.ClosestPoint(cam.transform.position + fwd * depthFromCamera + right * 100) + right * padding;
-                // Vector3 leftMost = col.bounds.ClosestPoint(cam.transform.position + fwd * depthFromCamera - right * 100) - right * padding;
-                // Vector3 topMost = col.bounds.ClosestPoint(cam.transform.position + fwd * depthFromCamera + up * 100) + up * padding;
-                // Vector3 bottomMost = col.bounds.ClosestPoint(cam.transform.position + fwd * depthFromCamera - up * 100) - up * padding;
-                // //draw bounds
-                // Debug.DrawLine(rightMost, rightMost + right, Color.red);
-                // Debug.DrawLine(leftMost, leftMost - right, Color.red);
-                // Debug.DrawLine(topMost, topMost + up, Color.red);
-                // Debug.DrawLine(bottomMost, bottomMost - up, Color.red);
-                // List<Vector3> points = new List<Vector3>() { rightMost, leftMost, topMost, bottomMost };
-                CameraZone camZone = cam.GetViewAtDistance(depthFromCamera).WithPadding(padding);
-                bool isInView = points.Any(x => camZone.IsInBounds(x) && D.LineOfSight(cam.transform.position, x, cols));
+                bool isInView = points.Any(x => cam.IsInBounds(x, padding) && D.LineOfSight(cam.transform.position, x, cols));
                 if (isInView) { return true; }
             }
 
             return false;
+        }
+        public static bool IsInBounds(this Camera cam, Vector3 point, int paddingInPixels = 0)
+        {
+            Vector3 screenPoint = cam.WorldToScreenPoint(point);
+            if (screenPoint.z < 0) { return false; }
+            if (screenPoint.x < 0 - paddingInPixels || screenPoint.x > Screen.width + paddingInPixels) { return false; }
+            if (screenPoint.y < 0 - paddingInPixels || screenPoint.y > Screen.height + paddingInPixels) { return false; }
+            return true;
         }
         /// <summary>
         /// Looks at all child colliders of the gameobject and checks if they are fully in view of the camera.
@@ -75,25 +63,14 @@ namespace Dutil
         /// <returns></returns>
         public static bool IsObjectFullyInView(this Camera cam, GameObject g, int padding = 0)
         {
-            Vector3 right = cam.transform.right;
-            Vector3 up = cam.transform.up;
-            Vector3 fwd = cam.transform.forward;
-            Vector3 fwdRight = (fwd + right).normalized;
-            Vector3 fwdLeft = (fwd - right).normalized;
+
             List<Collider> cols = g.GetComponentsInChildren<Collider>().ToList();
             if (cols.Count <= 0) { D.Log("No colliders found on object: " + g.name); return false; }
             foreach (Collider col in cols)
             {
-                float depthFromCamera = Vector3.Dot(cam.transform.forward, g.transform.position - cam.transform.position);
-                Vector3 closest = col.bounds.ClosestPoint(cam.transform.position);
-                depthFromCamera = Vector3.Dot(cam.transform.forward, closest - cam.transform.position);
-                if (depthFromCamera <= 0) { continue; }
                 List<Vector3> outerPoints = D.PointsOnSphere(12, 10).Select(x => x + col.transform.position).ToList();
-                outerPoints.ForEach(x => Debug.DrawLine(x, x + Vector3.up, Color.red));
                 List<Vector3> points = outerPoints.Select(x => col.bounds.ClosestPoint(x)).ToList();
-
-                CameraZone camZone = cam.GetViewAtDistance(depthFromCamera).WithPadding(padding);
-                bool isInView = points.TrueForAll(x => camZone.IsInBounds(x) && D.LineOfSight(cam.transform.position, x, cols));
+                bool isInView = points.TrueForAll(x => cam.IsInBounds(x, padding) && D.LineOfSight(cam.transform.position, x, cols));
                 if (!isInView) { return false; }
 
             }
