@@ -30,17 +30,20 @@ namespace Dutil
         /// <param name="g"></param>
         /// <param name="padding">Extend the frustrum of the camera. Pixels (Not real, for frustrum check only)</param>
         /// <returns></returns>
-        public static bool IsObjectPartiallyInView(this Camera cam, GameObject g, int padding = 20)
+        public static bool IsObjectPartiallyInView(this Camera cam, GameObject g, int padding = 20, List<Collider> colsToIgnore = null)
         {
+            List<Collider> toIgnore = colsToIgnore == null ? new List<Collider>() : colsToIgnore.Copy();
+
 
             List<Collider> cols = g.GetComponentsInChildren<Collider>().ToList();
+            toIgnore.AddUniqueAll(cols.ToArray());
             if (cols.Count <= 0) { D.Log("No colliders found on object: " + g.name); return false; }
             foreach (Collider col in cols)
             {
                 Vector3 closest = col.bounds.ClosestPoint(cam.transform.position);
                 List<Vector3> outerPoints = D.PointsOnSphere(12, 10).Select(x => x + col.transform.position).ToList();
                 List<Vector3> points = outerPoints.Select(x => col.bounds.ClosestPoint(x)).ToList();
-                bool isInView = points.Any(x => cam.IsInBounds(x, padding) && cam.HasLineOfSight(x, cols));
+                bool isInView = points.Any(x => cam.IsInBounds(x, padding) && cam.HasLineOfSight(x, toIgnore));
                 if (isInView) { return true; }
             }
 
@@ -56,11 +59,12 @@ namespace Dutil
         }
         public static bool HasLineOfSight(this Camera cam, Vector3 point, List<Collider> ignoreColliders)
         {
-            Vector3 topLeftOrigin = cam.ViewportToWorldPoint(new Vector3(0, 1, 0));
-            Vector3 topRightOrigin = cam.ViewportToWorldPoint(new Vector3(1, 1, 0));
-            Vector3 bottomLeftOrigin = cam.ViewportToWorldPoint(new Vector3(0, 0, 0));
-            Vector3 bottomRightOrigin = cam.ViewportToWorldPoint(new Vector3(1, 0, 0));
-            Vector3 centerOrigin = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, 0));
+            float distance = .1f;
+            Vector3 topLeftOrigin = cam.ViewportToWorldPoint(new Vector3(0, 1, distance));
+            Vector3 topRightOrigin = cam.ViewportToWorldPoint(new Vector3(1, 1, distance));
+            Vector3 bottomLeftOrigin = cam.ViewportToWorldPoint(new Vector3(0, 0, distance));
+            Vector3 bottomRightOrigin = cam.ViewportToWorldPoint(new Vector3(1, 0, distance));
+            Vector3 centerOrigin = cam.ViewportToWorldPoint(new Vector3(0.5f, 0.5f, distance));
             //create middle origins
             Vector3 topCenterOrigin = Vector3.Lerp(topLeftOrigin, topRightOrigin, 0.5f);
             Vector3 bottomCenterOrigin = Vector3.Lerp(bottomLeftOrigin, bottomRightOrigin, 0.5f);
@@ -69,6 +73,9 @@ namespace Dutil
             Vector3[] origins = new Vector3[] { topLeftOrigin, topRightOrigin, bottomLeftOrigin, bottomRightOrigin, centerOrigin, topCenterOrigin, bottomCenterOrigin, leftCenterOrigin, rightCenterOrigin };
             foreach (Vector3 origin in origins)
             {
+
+                bool seen = D.LineOfSight(origin, point, ignoreColliders);
+                //Debug.DrawLine(origin, point, seen ? Color.green : Color.red, 1);
                 if (D.LineOfSight(origin, point, ignoreColliders)) { return true; }
             }
             return false;
