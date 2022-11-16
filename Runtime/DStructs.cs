@@ -79,15 +79,15 @@ namespace Dutil
         public Vector3 Top { get { return (TopRight + TopLeft) / 2; } }
         public Vector3 Bottom { get { return (BottomRight + BottomLeft) / 2; } }
 
-        public bool IsInBounds(Vector3 point, float padding)
+        public bool IsInBounds(Vector3 point)
         {
-            return IsBetweenTwoValues(point.x, BottomLeft.x, TopRight.x, padding) && IsBetweenTwoValues(point.y, BottomLeft.y, TopRight.y, padding);
+            return IsBetweenTwoValues(point.x, BottomLeft.x, TopRight.x) && IsBetweenTwoValues(point.y, BottomLeft.y, TopRight.y);
 
         }
-        bool IsBetweenTwoValues(float value, float value1, float value2, float padding)
+        bool IsBetweenTwoValues(float value, float value1, float value2)
         {
 
-            return value >= Mathf.Min(value1, value2) - padding && value <= Mathf.Max(value1, value2) + padding;
+            return value >= Mathf.Min(value1, value2) && value <= Mathf.Max(value1, value2);
         }
         float ConvertPixelsToMetersAtDistance(float pixels, float distance)
         {
