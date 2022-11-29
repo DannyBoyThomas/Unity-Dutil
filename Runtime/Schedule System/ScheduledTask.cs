@@ -37,7 +37,7 @@ namespace Dutil
                 }
                 catch (System.Exception e)
                 {
-                    Debug.LogWarning("[Dutil] Schedule: ".Color(Colours.Orange).B() + "Task removed from Schedule.\n" + e.Message);
+                    Debug.LogWarning("[Dutil] Schedule: ".Color(Colours.Orange).B() + "Task removed from Schedule.\n" + e.Message + "\nStackTrace:\n" + e.StackTrace);
                     return true;
                 }
 
