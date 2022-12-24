@@ -9,30 +9,32 @@ using System.Text.RegularExpressions;
 using UnityEditor;
 
 
-
-public class AutoInsert : UnityEditor.AssetModificationProcessor
+namespace Dutil
 {
-    public static void OnWillCreateAsset(string path)
+    public class AutoInsert : UnityEditor.AssetModificationProcessor
     {
-        if (!DutilTools.AutoInsertDutil) { return; }
-        string assetPath = Regex.Replace(path, @".meta$", string.Empty);
-        if (!assetPath.EndsWith(".cs")) return;
+        public static void OnWillCreateAsset(string path)
+        {
+            if (!DutilTools.AutoInsertDutil) { return; }
+            string assetPath = Regex.Replace(path, @".meta$", string.Empty);
+            if (!assetPath.EndsWith(".cs")) return;
 
-        var code = File.ReadAllLines(assetPath).ToList();
-        if (code.Any(line => line.Contains("using Dutil;"))) return;//already added by IDE
+            var code = File.ReadAllLines(assetPath).ToList();
+            if (code.Any(line => line.Contains("using Dutil;"))) return;//already added by IDE
 
-        //insert Dutil
-        int idx = code.FindIndex(line => line
-            .Contains("public class " + Path.GetFileNameWithoutExtension(assetPath)));
-        code.Insert(idx - 1, "using Dutil;");
+            //insert Dutil
+            int idx = code.FindIndex(line => line
+                .Contains("public class " + Path.GetFileNameWithoutExtension(assetPath)));
+            code.Insert(idx - 1, "using Dutil;");
 
-        //correct indentation
+            //correct indentation
 
-        var finalCode = string.Join("\n", code.ToArray());
-        File.WriteAllText(assetPath, finalCode);
-        AssetDatabase.Refresh();
+            var finalCode = string.Join("\n", code.ToArray());
+            File.WriteAllText(assetPath, finalCode);
+            AssetDatabase.Refresh();
 
 
+        }
     }
 }
 #endif

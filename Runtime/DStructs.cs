@@ -127,4 +127,6 @@ namespace Dutil
 
     }
 
+    public enum SplineControlMode { Free, Aligned, Mirrored }
+
 }

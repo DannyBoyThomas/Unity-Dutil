@@ -2,10 +2,9 @@ Shader "Dutil/Gradient"
 {
     Properties
     {
-        _ColOne ("Start Color", Color) = (1,1,1,1) 
-        _ColTwo ("End Color", Color) = (0,0,0,1) 
-        _Sin ("Sine", Float) = 0
-        _Cos ("Cosine", Float) = 0
+        _ColOne ("Start Color", Color) = (0, .91, .99,1) 
+        _ColTwo ("End Color", Color) = (.13, .44, .95,1) 
+        _Direction ("Direction", Range(0, 360)) = 0
         
     }
     SubShader
@@ -45,14 +44,29 @@ Shader "Dutil/Gradient"
                 return o;
             }
             fixed4 _ColOne, _ColTwo;
-            Float _Sin,_Cos;
+            Float  _Direction;
 
             fixed4 frag (v2f i) : SV_Target
             {              
-                float t = (i.uv.y-.5)*-_Sin + (i.uv.x-.5)*_Cos;
-                fixed4 col = lerp(_ColTwo,_ColOne,t);  
+             //0 = up
+             //x=0, y=1
+
+                i.uv -=.5;
+                //0 =up, 90 right
+                float rad = _Direction * 0.0174532925;
+                float x = cos(rad); //90 -> 0
+                float y = sin(rad); //90 -> 1
+              
+                float2x2 rotationMatrix = float2x2( x, -y, y, x);
+                rotationMatrix *=0.5;
+                rotationMatrix +=0.5;
+                rotationMatrix = rotationMatrix * 2-1;
+                i.uv = mul ( i.uv.xy, rotationMatrix );
+                i.uv +=.5;
                
-                return col; 
+                 fixed4 col = lerp(_ColTwo,_ColOne,i.uv.y);  
+                  
+                return col;
             }
             ENDCG
         }

@@ -43,10 +43,11 @@ namespace Dutil
             quadObj.GetComponent<MeshRenderer>().sharedMaterial.SetColor("_ColOne", startColor);
             quadObj.GetComponent<MeshRenderer>().sharedMaterial.SetColor("_ColTwo", endColor);
 
-            float sinAngle = Mathf.Sin(direction * Mathf.Deg2Rad);//.Map(-1, 1, 0, 1);
-            float cosAngle = Mathf.Cos(direction * Mathf.Deg2Rad);//.Map(-1, 1, 0, 1);
-            quadObj.GetComponent<MeshRenderer>().sharedMaterial.SetFloat("_Sin", sinAngle);
-            quadObj.GetComponent<MeshRenderer>().sharedMaterial.SetFloat("_Cos", cosAngle);
+            // float sinAngle = Mathf.Sin(direction * Mathf.Deg2Rad);//.Map(-1, 1, 0, 1);
+            // float cosAngle = Mathf.Cos(direction * Mathf.Deg2Rad);//.Map(-1, 1, 0, 1);
+            // quadObj.GetComponent<MeshRenderer>().sharedMaterial.SetFloat("_Sin", sinAngle);
+            // quadObj.GetComponent<MeshRenderer>().sharedMaterial.SetFloat("_Cos", cosAngle);
+            quadObj.GetComponent<MeshRenderer>().sharedMaterial.SetFloat("_Direction", direction);
 
         }
         GameObject Quad
