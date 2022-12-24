@@ -56,14 +56,18 @@ namespace Dutil
         {
             Screen.SetResolution(width, height, Screen.fullScreen);
         }
-        public static List<int> GetRefreshRatesFromResolution()
+        public static List<int> GetRefreshRatesFromResolution(string resolution)
         {
+            string[] res = resolution.Split('x');
+            int width = int.Parse(res[0]);
+            int height = int.Parse(res[1]);
+
             List<int> refreshRates = new List<int>();
-            foreach (Resolution res in Screen.resolutions)
+            foreach (Resolution allRes in Screen.resolutions)
             {
-                if (res.width == Screen.width && res.height == Screen.height)
+                if (allRes.width == width && allRes.height == height)
                 {
-                    refreshRates.Add(res.refreshRate);
+                    refreshRates.Add(allRes.refreshRate);
                 }
             }
             return refreshRates;
