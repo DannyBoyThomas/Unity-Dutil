@@ -35,3 +35,9 @@ sysinfo.txt
 # Builds
 *.apk
 *.unitypackage
+Runtime/Editor/SplineEditor.cs
+Runtime/Editor/SplineEditor.cs.meta
+Runtime/Spline/
+Runtime/Spline.meta
+Runtime/Shape.cs.meta
+Runtime/Shape.cs
