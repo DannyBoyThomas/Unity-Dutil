@@ -21,6 +21,17 @@ namespace Dutil
             UpdateText();
         }
 
+        Text ThisText
+        {
+            get
+            {
+                if (text == null)
+                {
+                    text = transform.Find("Selection").GetComponentInChildren<Text>();
+                }
+                return text;
+            }
+        }
         public void SetOptions(List<string> newOptions, int defaultIndex = 0, bool triggerEvent = false)
         {
             options = newOptions;
@@ -47,7 +58,7 @@ namespace Dutil
                 Debug.Log("Selected index out of range");
                 return;
             }
-            text.text = options[selectedIndex];
+            ThisText.text = options[selectedIndex];
         }
         void SelectPrevious()
         {
