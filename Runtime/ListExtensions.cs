@@ -9,6 +9,13 @@ namespace Dutil
     {
 
         public static List<T> Fill<T>(this List<T> list, int count, T item) => Enumerable.Repeat(item, count).ToList();
+        public static void AddVariety<T>(this List<T> list, int count, Func<T, int> item)
+        {
+            for (int i = 0; i < count; i++)
+            {
+                list.Add(item(i));
+            }
+        }
         public static void Print<T>(this List<T> list)
         {
             if (list == null || list.Count <= 0) { Debug.Log("Empty"); return; }
