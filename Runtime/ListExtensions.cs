@@ -9,17 +9,26 @@ namespace Dutil
     {
 
         public static List<T> Fill<T>(this List<T> list, int count, T item) => Enumerable.Repeat(item, count).ToList();
-        public static void AddVariety<T>(this List<T> list, int count, Func<T, int> item)
+        public static void AddVariety<T>(this List<T> list, int count, Func<int, T> Item)
         {
             for (int i = 0; i < count; i++)
             {
-                list.Add(item(i));
+                list.Add(Item(i));
             }
+        }
+        public static void PrintEach<T>(this List<T> list)
+        {
+            if (list == null || list.Count <= 0) { Debug.Log("Empty"); return; }
+            list.ForEach(x => Debug.Log(x));
         }
         public static void Print<T>(this List<T> list)
         {
             if (list == null || list.Count <= 0) { Debug.Log("Empty"); return; }
-            list.ForEach(x => Debug.Log(x));
+            string s = "[ ";
+            list.ForEach(x => s += x + ", ");
+            s = s.Remove(s.Length - 2);
+            s += " ]";
+            Debug.Log(s);
         }
         /// <summary>
         /// It returns a random element from the list.
