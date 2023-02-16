@@ -41,6 +41,10 @@ public class DUI_Canvas : DUI_Rect
             lastSize = size;
         }
     }
+    void OnDestroy()
+    {
+        autoRefreshTask?.Cancel();
+    }
 
     /*   public Vector2 Size()
       {
