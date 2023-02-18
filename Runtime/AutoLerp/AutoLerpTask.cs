@@ -24,6 +24,10 @@ public class AutoLerpTask
     bool useEasing = false;
     DevelopTypes developType = DevelopTypes.None;
 
+    UnityEngine.Object linkedObject;
+    bool hasBeenLinked = false;
+    string linkedObjectInfo;
+
     public AutoLerpTask(float _duration, UnityAction<AutoLerpTask, float> _callback, bool _ease = false)
     {
         targetDuration = _duration;
@@ -76,6 +80,11 @@ public class AutoLerpTask
     {
         if (shouldRemove) { return true; }
         passedTime += useUnscaledDeltaTime ? Time.unscaledDeltaTime : Time.deltaTime;
+        if (hasBeenLinked && linkedObject == null)
+        {
+            Debug.Log("[Dutil] AutoLerp: ".B() + "Task removed from AutoLerp because linked object (" + linkedObjectInfo + ") was destroyed.");
+            return true;
+        }
         try
         {
             CallCallback();
@@ -287,6 +296,24 @@ public class AutoLerpTask
         Color ca = new Color(BitConverter.ToSingle(from, 0), BitConverter.ToSingle(from, sizeof(float)), BitConverter.ToSingle(from, sizeof(float) * 2), BitConverter.ToSingle(from, sizeof(float) * 3));
         Color cb = new Color(BitConverter.ToSingle(to, 0), BitConverter.ToSingle(to, sizeof(float)), BitConverter.ToSingle(to, sizeof(float) * 2), BitConverter.ToSingle(to, sizeof(float) * 3));
         return Color.Lerp(ca, cb, t);
+    }
+
+    /// <summary>
+    /// Link this task to an object (usually the caller). If the object is destroyed, the task will be removed from the schedule.
+    /// </summary>
+    /// <param name="obj"></param>
+    /// <returns></returns>
+    public AutoLerpTask LinkObject(UnityEngine.Object obj)
+    {
+        if (obj == null)
+        {
+            Debug.Log("Dutil: AutoLerp: ".B() + "Cannot link to null object.");
+            return this;
+        }
+        linkedObject = obj;
+        hasBeenLinked = true;
+        linkedObjectInfo = obj.name;
+        return this;
     }
 }
 public enum DevelopTypes { None, Float, Integer, Vector2, Vector3, Color, Quaternion }

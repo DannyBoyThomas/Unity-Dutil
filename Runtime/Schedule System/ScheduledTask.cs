@@ -13,6 +13,9 @@ namespace Dutil
         int numberOfTimesToRepeat = 0;
         int callCount = 0;
         bool shouldRemove = false;
+        Object linkedObject;
+        bool hasBeenLinked = false;
+        string linkedObjectInfo;
         public ScheduledTask(float _delay, UnityAction<ScheduledTask> _callback, float _repeatDelay = 0)
         {
             delay = _delay;
@@ -30,6 +33,11 @@ namespace Dutil
             passedTime += Time.deltaTime;
             if (passedTime >= delay)
             {
+                if (hasBeenLinked && linkedObject == null)
+                {
+                    Debug.Log("[Dutil] Schedule: ".B() + "Task removed from Schedule because linked object (" + linkedObjectInfo + ") was destroyed.");
+                    return true;
+                }
                 if (callback == null) { return true; }
                 try
                 {
@@ -78,6 +86,23 @@ namespace Dutil
         }
         public int CallCount { get { return callCount; } }
 
+        /// <summary>
+        /// Link this task to an object (usually the caller). If the object is destroyed, the task will be removed from the schedule.
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        public ScheduledTask LinkObject(Object obj)
+        {
+            if (obj == null)
+            {
+                Debug.Log("Dutil: Schedule: ".B() + "Cannot link to null object.");
+                return this;
+            }
+            linkedObject = obj;
+            hasBeenLinked = true;
+            linkedObjectInfo = obj.name;
+            return this;
+        }
 
 
     }

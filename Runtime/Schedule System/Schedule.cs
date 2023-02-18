@@ -29,7 +29,7 @@ namespace Dutil
             }
 
         }
-
+        //[System.Obsolete("Use Schedule.Begin() instead")]
         public static ScheduledTask Add(float wait, UnityAction<ScheduledTask> callback, float repeat = 0)
         {
             CreateInstance();
@@ -37,7 +37,22 @@ namespace Dutil
             Instance.tasks.Add(task);
             return task;
         }
+        //[System.Obsolete("Use Schedule.Begin() instead")]
         public static ScheduledTask Add(ScheduledTask task)
+        {
+            CreateInstance();
+            Instance.tasks.Add(task);
+            return task;
+        }
+        public static ScheduledTask Begin(float wait, UnityAction<ScheduledTask> callback, float repeat = 0)
+        {
+            CreateInstance();
+            ScheduledTask task = new ScheduledTask(wait, callback, repeat);
+            Instance.tasks.Add(task);
+            return task;
+        }
+
+        public static ScheduledTask Begin(ScheduledTask task)
         {
             CreateInstance();
             Instance.tasks.Add(task);
