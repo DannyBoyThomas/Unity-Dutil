@@ -16,6 +16,7 @@ namespace Dutil
         Object linkedObject;
         bool hasBeenLinked = false;
         string linkedObjectInfo;
+        bool useUnscaledDeltaTime = false;
         public ScheduledTask(float _delay, UnityAction<ScheduledTask> _callback, float _repeatDelay = 0)
         {
             delay = _delay;
@@ -30,7 +31,7 @@ namespace Dutil
         public virtual bool Tick()
         {
             if (shouldRemove) { return true; }
-            passedTime += Time.deltaTime;
+            passedTime += useUnscaledDeltaTime ? Time.unscaledDeltaTime : Time.deltaTime;
             if (passedTime >= delay)
             {
                 if (hasBeenLinked && linkedObject == null)
@@ -101,6 +102,12 @@ namespace Dutil
             linkedObject = obj;
             hasBeenLinked = true;
             linkedObjectInfo = obj.name;
+            return this;
+        }
+
+        public ScheduledTask UseUnscaledDeltaTime(bool use = true)
+        {
+            useUnscaledDeltaTime = use;
             return this;
         }
 
