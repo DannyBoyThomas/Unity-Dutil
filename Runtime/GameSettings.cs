@@ -18,6 +18,13 @@ namespace Dutil
             get { if (!_isInitialised) { Initialise(); } return _masterVolume; }
             set { _masterVolume = value.Clamp(); PlayerPrefs.SetFloat("MasterVolume", value.Clamp()); }
         }
+        /// <summary>
+        /// Returns volume pre-adjusted by master volume
+        /// </summary>
+        public static float GetVolume(string varName, float defaultValue = 1)
+        {
+            return PlayerPrefs.GetFloat(varName, defaultValue) * MasterVolume;
+        }
         public static void SetFloat(string varName, float value)
         {
             PlayerPrefs.SetFloat(varName, value.Clamp());
