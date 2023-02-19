@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using UnityEngine.Events;
 namespace Dutil
 {
 
     public class GameSettings : MonoBehaviour
     {
+        public static UnityEvent<float> OnMasterVolumeChanged = new UnityEvent<float>();
+        public static UnityEvent<string, float> OnValueChanged = new UnityEvent<string, float>();
         static float _masterVolume = 1f;
         static bool _isInitialised = false;
         public static void Initialise()
@@ -16,7 +18,7 @@ namespace Dutil
         public static float MasterVolume
         {
             get { if (!_isInitialised) { Initialise(); } return _masterVolume; }
-            set { _masterVolume = value.Clamp(); PlayerPrefs.SetFloat("MasterVolume", value.Clamp()); }
+            set { _masterVolume = value.Clamp(); PlayerPrefs.SetFloat("MasterVolume", value.Clamp()); OnMasterVolumeChanged.Invoke(value); }
         }
         /// <summary>
         /// Returns volume pre-adjusted by master volume
@@ -28,6 +30,7 @@ namespace Dutil
         public static void SetFloat(string varName, float value)
         {
             PlayerPrefs.SetFloat(varName, value.Clamp());
+            OnValueChanged.Invoke(varName, value);
         }
         public static float GetFloat(string varName, float defaultValue)
         {
