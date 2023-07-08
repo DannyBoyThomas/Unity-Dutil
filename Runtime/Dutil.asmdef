@@ -1,3 +1,31 @@
 {
-	"name": "Dutil"
+    "name": "Dutil",
+    "rootNamespace": "",
+    "references": [
+        "GUID:13a6fdc14ca9df84eb8019bc66fa9e5d",
+        "GUID:234839f5b92104d4fb68841aefec625b",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [
+        ""
+    ],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [
+        {
+            "name": "com.acegikmo.shapes",
+            "expression": "4.2",
+            "define": "SHAPES_INSTALLED"
+        },
+        {
+            "name": "com.unity.textmeshpro",
+            "expression": "1",
+            "define": "TMPRO_INSTALLED"
+        }
+    ],
+    "noEngineReferences": false
 }

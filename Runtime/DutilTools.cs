@@ -11,7 +11,7 @@ using UnityEngine.UI;
 
 namespace Dutil
 {
-    public class DutilTools
+    public partial class DutilTools
     {
         public static bool AutoInsertDutil
         {
