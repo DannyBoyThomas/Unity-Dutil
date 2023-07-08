@@ -142,6 +142,7 @@ namespace Dutil
             get => backgroundColor; set
             {
                 backgroundColor = value;
+                Background.Color = value;
                 BackgroundShadow.Color = DarkerBG.Darken();
             }
         }
