@@ -141,8 +141,8 @@ namespace Dutil
         {
             get => backgroundColor; set
             {
-                backgroundColor = value; Background.Color = value;
-                BackgroundShadow.Color = DarkerBG;
+                backgroundColor = value;
+                BackgroundShadow.Color = DarkerBG.Darken();
             }
         }
         public float BackgroundShadowOffset
@@ -247,7 +247,7 @@ namespace Dutil
             BackgroundColor = backgroundColor;
             rect.FillColorStart = StartGrad;
             rect.FillColorEnd = EndGrad;
-            BackgroundShadow.Color = DarkerBG.Darken();
+            //BackgroundShadow.Color = flat ? BackgroundColor.Darken() : DarkerBG.Darken();
             rect.UpdateMesh();
             //repaint scene
             UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
