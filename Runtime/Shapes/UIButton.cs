@@ -412,7 +412,7 @@ namespace Dutil
             }
         }
         AutoLerpTask disableTask;
-        [Sirenix.OdinInspector.Button]
+
         public void Disable(bool dis)
         {
             disabled = dis;
