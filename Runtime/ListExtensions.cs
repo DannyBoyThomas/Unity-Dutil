@@ -178,6 +178,19 @@ namespace Dutil
             return groups;
         }
 
+        public static void Swap<T>(this List<T> list, int indexA, int indexB)
+        {
+            T temp = list[indexA];
+            list[indexA] = list[indexB];
+            list[indexB] = temp;
+        }
+        public static void Swap<T>(this List<T> list, T itemA, T itemB)
+        {
+            int indexA = list.IndexOf(itemA);
+            int indexB = list.IndexOf(itemB);
+            if (indexA != -1 && indexB != -1)
+                list.Swap(indexA, indexB);
+        }
 
 
 
@@ -602,8 +615,37 @@ namespace Dutil
             }
             return list;
         }
+        public static int IndexOf(this Array array, object item)
+        {
+            for (int i = 0; i < array.Length; i++)
+            {
+                if (array.GetValue(i).GetHashCode() == item.GetHashCode()) { return i; }
+            }
+            return -1;
+        }
 
+        public static void Swap<T>(this T[,] array, Vector2Int indexA, Vector2Int indexB)
+        {
+            T temp = array[indexA.x, indexA.y];
+            array[indexA.x, indexA.y] = array[indexB.x, indexB.y];
+            array[indexB.x, indexB.y] = temp;
+        }
+        //swap single dimension
+        public static void Swap<T>(this T[] array, int indexA, int indexB)
+        {
+            T temp = array[indexA];
+            array[indexA] = array[indexB];
+            array[indexB] = temp;
+        }
+        public static void Swap<T>(this T[] array, T itemA, T itemB)
+        {
+            int indexA = array.IndexOf(itemA);
+            int indexB = array.IndexOf(itemB);
+            if (indexA != -1 && indexB != -1)
+                array.Swap(indexA, indexB);
+        }
 
+        //Lerps
         public static float GradualLerp(this List<float> list, float t) => Gradual.Lerp(t, list.ToArray());
         public static float GradualLerp(this List<int> list, float t) => Gradual.Lerp(t, list.ToArray());
         public static Vector2 GradualLerp(this List<Vector2> list, float t) => Gradual.Lerp(t, list.ToArray());

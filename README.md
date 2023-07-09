@@ -31,6 +31,7 @@ points.ClosestPointOnPath(otherPoint);
 points.Average();
 points.Smooth();
 points.Cluster(3); // Separate points into 3 groups based on distance. Uses K-means algorithm
+points.Swap(3,7);
 
 ```
 
@@ -236,6 +237,26 @@ A more sophisticated lerp that can take multiple values.
 Gradual.Lerp(.5f, Color.blue, Color.green, Color.yellow); // = Green
 Gradual.Lerp(.25f, Vector2.Up, Vector2.Right, Vector2.Left, Vector2.Down) // = Right
 ```
+
+## Saving & Loading
+An easy way to use and retrieve data as you need it.
+Use **Drive** class in **Dutil.Data** namespace.
+
+#### Save
+A bool parameter can be added to print location of saved data.
+```
+Drive.Save(highScores, "player_scores" );
+Drive.Save(highScores, "player_scores", true) ;
+```
+Can also call *Save* from an object directly
+```
+highScores.Save("player_scores");
+```
+
+#### Load
+```
+highScores = Drive.Load<>("player_scores");
+``````
 
 ## Camera Extensions
 
