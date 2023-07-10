@@ -7,7 +7,7 @@ using Shapes;
 [ExecuteInEditMode]
 public class ShapeConformsToRectTransform : MonoBehaviour
 {
-
+    public Vector2 padding = Vector2.zero;
     void Update()
     {
         if (RT?.hasChanged ?? false)
@@ -29,8 +29,8 @@ public class ShapeConformsToRectTransform : MonoBehaviour
     }
     void Run()
     {
-        Rectangle.Width = RT.rect.width;
-        Rectangle.Height = RT.rect.height;
+        Rectangle.Width = RT.rect.width - padding.x * 2;
+        Rectangle.Height = RT.rect.height - padding.y * 2;
         Rectangle.transform.position = RT.position;
     }
 }
