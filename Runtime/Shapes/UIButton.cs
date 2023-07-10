@@ -77,6 +77,7 @@ namespace Dutil
                     res.enableAutoSizing = true;
                     res.fontSizeMax = 32;
                     res.raycastTarget = false;
+
                     RectTransform rt = g.GetOrAddComponent<RectTransform>();
                     SetRectTransformToFillAtCentre(rt);
                     rt.offsetMin = new Vector2(padding.x, padding.y);
@@ -107,6 +108,7 @@ namespace Dutil
                     res.FillColorEnd = EndGrad;
                     res.FillLinearStart = new Vector2(0, size.y / 2f);
                     res.FillLinearEnd = new Vector2(0, -size.y / 2f);
+                    res.BlendMode = ShapesBlendMode.Opaque;
                     SetRectTransformToFillAtCentre(g.GetOrAddComponent<RectTransform>());
                 }
                 background = res;
@@ -129,6 +131,7 @@ namespace Dutil
                     res.transform.localPosition = Vector3.zero;
                     res.Width = size.x;
                     res.Height = size.y;
+                    res.BlendMode = ShapesBlendMode.Opaque;
                     SetRectTransformToFillAtCentre(g.GetOrAddComponent<RectTransform>());
                 }
                 backgroundShadow = res;

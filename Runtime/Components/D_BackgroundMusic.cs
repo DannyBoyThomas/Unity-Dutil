@@ -10,6 +10,11 @@ namespace Dutil
     public class D_BackgroundMusic : MonoBehaviour
     {
         public bool playOnStart = true;
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.ShowIf("playOnStart")]
+#endif
+        public float playOnStartDelay = 1;
+        public float crossFadeDuration = 8f;
         //float storedVolume;
         public List<D_BackgroundMusicData> music = new List<D_BackgroundMusicData>();
         public static UnityEvent<D_BackgroundMusicData> OnTrackChangedEvent = new UnityEvent<D_BackgroundMusicData>();
@@ -21,7 +26,8 @@ namespace Dutil
 
         float trackTimeRemaining = -1;
         public static D_BackgroundMusic Instance { get; private set; }
-        static float masterVolume = 0;
+        static float masterVolume = 0.5f;
+        static bool paused = false;
         public static float MasterVolume
         {
             get { return masterVolume; }
@@ -61,21 +67,22 @@ namespace Dutil
             }
             DontDestroyOnLoad(gameObject);
             Instance = this;
+
+            SetLocalVolume(0);
             if (playOnStart)
             {
-                PlayTrack();
+                Schedule.Add(playOnStartDelay, (t) => PlayTrack(0));
             }
         }
 
         // Update is called once per frame
         void Update()
         {
-            if (trackTimeRemaining > 0 && source.isPlaying)
+            if (trackTimeRemaining > 0 && !paused)
             {
                 trackTimeRemaining -= Time.deltaTime;
                 if (trackTimeRemaining <= 0)
                 {
-
                     PlayTrack(CurrentIndex + 1);
                     OnTrackChangedEvent.Invoke(currentlyPlaying);
                 }
@@ -84,27 +91,45 @@ namespace Dutil
         int CurrentIndex { get { return music.IndexOf(currentlyPlaying); } }
         public static void PlayTrack(int index = 0)
         {
+            if (!paused && Instance.currentlyPlaying == Instance.music[index % Instance.music.Count])
+            {
+                return;
+            }
+            paused = false;
             int i = index % Instance.music.Count;
             Instance.source.clip = Instance.music[i].clip;
-            SetLocalVolume(Instance.music[i].volume);
+            float crossFadeD = Instance.crossFadeDuration / 2f;
+            AutoLerp.Begin(crossFadeD, Instance.source.volume, Instance.music[i].volume, (t, v) => SetLocalVolume(v));
             Instance.source.Play();
             Instance.currentlyPlaying = Instance.music[i];
             Instance.trackTimeRemaining = Instance.music[i].clip.length;
             Debug.Log("Now playing: " + Instance.source.clip.name);
             Debug.Log("Track will play for " + Instance.trackTimeRemaining + " seconds");
+
+            Schedule.Add(Instance.trackTimeRemaining - crossFadeD, (t) =>
+            {
+                AutoLerp.Begin(crossFadeD, Instance.source.volume, 0, (t, v) => SetLocalVolume(v));
+            });
         }
         public static void PauseTrack()
         {
-            AutoLerp.Begin(.4f, Instance.source.volume, 0, (t, v) => SetLocalVolume(v)).OnComplete((t) => Instance.source.Pause());
+
+            AutoLerp.Begin(.4f, Instance.source.volume, 0, (t, v) => SetLocalVolume(v)).OnComplete((t) =>
+            {
+                Instance.source.Pause(); paused = true;
+            });
+
         }
         public static void UnPauseTrack()
         {
             Instance.source.UnPause();
+            paused = false;
             AutoLerp.Begin(.4f, 0, Instance.currentlyPlaying?.volume ?? 1, (t, v) => SetLocalVolume(v));
         }
         public static void StopTrack()
         {
-            AutoLerp.Begin(.4f, Instance.source.volume, 0, (t, v) => SetLocalVolume(v)).OnComplete((t) => Instance.source.Stop());
+
+            AutoLerp.Begin(.4f, Instance.source.volume, 0, (t, v) => SetLocalVolume(v)).OnComplete((t) => { Instance.source.Stop(); paused = true; });
         }
         public static float TrackProgress()
         {
