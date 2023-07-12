@@ -254,7 +254,9 @@ namespace Dutil
             //BackgroundShadow.Color = flat ? BackgroundColor.Darken() : DarkerBG.Darken();
             rect.UpdateMesh();
             //repaint scene
+#if UNITY_EDITOR
             UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
+#endif
         }
         void SetRectTransformToFillAtCentre(RectTransform rt)
         {
