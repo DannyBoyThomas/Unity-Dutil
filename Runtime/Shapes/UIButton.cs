@@ -556,14 +556,24 @@ namespace Dutil
             set
             {
                 holdProgress = value;
-                ProgressObj.Width = size.x * holdProgress;
-                float right = size.x * (1 - holdProgress);
+                //ProgressObj.Width = size.x * holdProgress;
+                float newWidth = size.x * holdProgress;
                 float height = 7;
                 float half = height / 2f;
-                ProgressObj.GetComponent<RectTransform>().offsetMax = new Vector2(-right, -half);
-                ProgressObj.GetComponent<RectTransform>().offsetMin = new Vector2(0, -half);
-                //set height and width
-                ProgressObj.GetComponent<RectTransform>().sizeDelta = new Vector2(size.x * holdProgress, 7);
+                RectTransform rt = ProgressObj.GetComponent<RectTransform>();
+                //anchor to top 
+                rt.anchorMin = new Vector2(0.5f, 1);
+                rt.anchorMax = new Vector2(0.5f, 1);
+                rt.pivot = new Vector2(.5f, 1);
+
+                float leftX = -size.x / 2f;
+                float centreX = leftX + newWidth / 2f;
+                //move y down by half od sizedelta posy = -half
+                //rt.localPosition = new Vector3(centreX, -size.y, -.1f);
+                rt.offsetMin = new Vector2(-newWidth / 2f, -half);
+                rt.offsetMax = new Vector2(newWidth / 2f, -half);
+                rt.sizeDelta = new Vector2(newWidth, height);
+                rt.localPosition = new Vector3(centreX, (size.y / 2f) - (height / 2f), -.1f);
 
 
             }
