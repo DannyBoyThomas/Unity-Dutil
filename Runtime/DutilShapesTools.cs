@@ -26,12 +26,13 @@ namespace Dutil
             {
                 g.transform.SetParent(Selection.activeGameObject.transform);
             }
-            g.AddComponent<UIButton>().Reset();
+
             g.transform.localPosition = Vector3.zero;
             g.GetComponent<RectTransform>().localPosition = Vector3.zero;
             Image img = g.AddComponent<Image>();
             img.sprite = null;
             img.color = Color.clear;
+            g.AddComponent<UIButton>().Reset();
             Selection.objects = new Object[] { g };
 
 

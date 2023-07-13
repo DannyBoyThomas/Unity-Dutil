@@ -21,6 +21,7 @@ namespace Dutil
         void Start()
         {
             GameObject c = Quad;
+            Refresh();
         }
 
         // Update is called once per frame

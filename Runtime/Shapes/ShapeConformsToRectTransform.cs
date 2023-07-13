@@ -32,6 +32,7 @@ public class ShapeConformsToRectTransform : MonoBehaviour
         Rectangle.Width = RT.rect.width - padding.x * 2;
         Rectangle.Height = RT.rect.height - padding.y * 2;
         Rectangle.transform.position = RT.position;
+
     }
 }
 #endif

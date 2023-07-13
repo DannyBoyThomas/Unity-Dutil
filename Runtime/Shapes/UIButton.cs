@@ -11,6 +11,7 @@ using UnityEngine.Events;
 namespace Dutil
 {
     public enum UiHoverType { Tint, Curve, Scale }
+    public enum UIButtonIconPosition { None, Left, Right }
     [ExecuteInEditMode]
     public class UIButton : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler, IPointerDownHandler, IPointerUpHandler
     {
@@ -23,11 +24,30 @@ namespace Dutil
         [Range(0, 1)]
         public float gradientWeight = 0;
         [Min(0)]
-        public float backgroundShadowOffset = 4;
-        public float backgroundCornerRadius = 6;
+        public float backgroundShadowOffset = 7;
+        public float backgroundCornerRadius = 7;
         public UiHoverType hoverType = UiHoverType.Tint;
-        Rectangle background, backgroundShadow;
-        TextMeshProUGUI textObj;
+        public bool holdToAccept = false;
+
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.ShowIfGroup("holdToAccept")]
+#endif
+        public float holdDuration = 1;
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.ShowIfGroup("holdToAccept")]
+#endif
+        public string holdKey;
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.ShowIfGroup("holdToAccept")]
+#endif
+#if ODIN_INSPECTOR
+        [Sirenix.OdinInspector.ShowIfGroup("holdToAccept")]
+#endif
+        public bool showKey = false;
+
+
+        Rectangle background, backgroundShadow, progressObj;
+        TextMeshProUGUI textObj, keyTextObj;
         Button button;
         public UnityEvent onClick = new UnityEvent();
         Vector2 lastPadding = new Vector2(20, 0);
@@ -35,6 +55,10 @@ namespace Dutil
         float lastGradientWeight;
         Color disableColor;
         bool disabled = false;
+        float holdProgress = 0;
+        float holdDir = -1;
+        float holdCollapseSpeed = 3;
+        bool canCompleteHoldClick = true;
 #if ODIN_INSPECTOR
         [Sirenix.OdinInspector.Button]
 #endif
@@ -42,20 +66,124 @@ namespace Dutil
         {
             transform.localScale = Vector3.one;
             RectTransform.localScale = Vector3.one;
-            Text = "Hello World";
+            Text = "Click Me";
             TextColor = Color.white;
             BackgroundColor = Colours.Green;
             size = new Vector2(180, 60);
             padding = lastPadding = new Vector2(20, 0);
-            BackgroundShadowOffset = 4;
-            BackgroundCornerRadius = 6;
+            BackgroundShadowOffset = 7;
+            BackgroundCornerRadius = 7;
             RectTransform.sizeDelta = size;
             gradientWeight = lastGradientWeight = 0;
             disableColor = Colours.Hex("595959");
             SetColors();
             Refresh();
         }
+        public TextMeshProUGUI KeyTextObj
+        {
+            get
+            {
+                TextMeshProUGUI res = keyTextObj ??= Background.transform.Find("KeyText")?.GetComponent<TextMeshProUGUI>();
+                if (res == null)
+                {
+                    GameObject g = new GameObject("KeyText");
+                    g.transform.SetParent(Background.transform);
+                    g.transform.localScale = Vector3.one;
+                    g.transform.localPosition = Vector3.zero;
+                    res = g.AddComponent<TextMeshProUGUI>();
+                    res.text = holdKey;
+                    res.alignment = TextAlignmentOptions.Center;
+                    res.fontSize = 20;
 
+                    RectTransform rt = g.GetOrAddComponent<RectTransform>();
+                    rt.localPosition = (new Vector3(0, 0, -.1f));
+
+                    //anchor to left and offset by (-80,0)
+                    rt.anchorMin = new Vector2(0, 0.5f);
+                    rt.anchorMax = new Vector2(0, .5f);
+                    rt.pivot = new Vector2(0, .5f);
+                    float offset = -60;
+                    rt.offsetMin = new Vector2(offset, 0);
+                    rt.offsetMax = new Vector2(offset, 0);
+                    rt.sizeDelta = Vector2.one * 40;
+
+                    //Add Rectangle as child
+                    GameObject g2 = new GameObject("KeyTextBackground");
+                    g2.transform.SetParent(g.transform);
+                    Rectangle bgRect = g2.AddComponent<Rectangle>();
+                    bgRect.Color = Colours.Hex("3C3C3C");
+                    bgRect.CornerRadius = 4;
+                    bgRect.Type = Rectangle.RectangleType.RoundedSolid;
+                    RectTransform rt2 = g2.GetOrAddComponent<RectTransform>();
+                    rt2.localScale = Vector3.one;
+                    rt2.localPosition = Vector3.zero.WithZ(.1f);
+                    SetRectTransformToFillAtCentre(rt2);
+                    ShapeConformsToRectTransform conform = g2.AddComponent<ShapeConformsToRectTransform>();
+
+
+                }
+                keyTextObj = res;
+                return res;
+            }
+        }
+
+        public Rectangle ProgressObj
+        {
+            get
+            {
+
+                Rectangle res = progressObj ??= transform.Find("Progress")?.GetComponent<Rectangle>();
+                if (res == null)
+                {
+                    GameObject g = new GameObject("Progress");
+                    res = g.AddComponent<Rectangle>();
+                    res.transform.SetParent(transform);
+                    res.transform.localScale = Vector3.one;
+                    res.transform.localRotation = Quaternion.identity;
+                    res.transform.localPosition = new Vector3(0, 0, -.01f);
+                    res.Width = size.x;
+                    res.Height = 8.5f;
+                    res.BlendMode = ShapesBlendMode.Opaque;
+                    //anchor to bottom
+                    res.Type = Rectangle.RectangleType.RoundedSolid;
+                    res.CornerRadius = 4;
+                    res.Color = BackgroundColor.Lighten();
+                    RectTransform rt = g.GetOrAddComponent<RectTransform>();
+                    //SetRectTransformToFillAtCentre(g.GetOrAddComponent<RectTransform>());
+                    //pos =-9
+                    // anchor to bototm
+                    // rt.anchorMin = new Vector2(0, 0);
+                    // rt.anchorMax = new Vector2(1, 0);
+                    // rt.pivot = new Vector2(.5f, 0);
+                    // rt.offsetMin = new Vector2(0, -9);
+                    // rt.offsetMax = new Vector2(0, -9);
+                    rt.sizeDelta = new Vector2(0, 7f);
+                    g.AddComponent<ShapeConformsToRectTransform>();
+                    g.SetActive(holdToAccept);
+                    //NEW
+
+                    //stretch across the top
+                    //anchor to top
+                    rt.anchorMin = new Vector2(0, 1);
+                    rt.anchorMax = new Vector2(1, 1);
+                    rt.pivot = new Vector2(.5f, 1);
+                    //move y down by half od sizedelta
+                    float y = 7;
+                    rt.localPosition = new Vector3(0, 0, -.1f);
+                    rt.offsetMin = new Vector2(0, -y / 2f);
+                    rt.offsetMax = new Vector2(0, -y / 2f);
+                    rt.sizeDelta = new Vector2(0, y);
+                    res.BlendMode = ShapesBlendMode.Transparent;
+                    res.Color = Color.white.WithAlpha(.5f);
+                    float rad = 7;
+                    res.CornerRadiusMode = Rectangle.RectangleCornerRadiusMode.PerCorner;
+                    res.CornerRadii = new Vector4(0, rad, rad, 0);
+
+                }
+                progressObj = res;
+                return res;
+            }
+        }
 
 
         public TextMeshProUGUI TextObj
@@ -146,6 +274,7 @@ namespace Dutil
             {
                 backgroundColor = value;
                 Background.Color = value;
+                ProgressObj.GetComponent<Rectangle>().Color = value.Lighten();
                 BackgroundShadow.Color = DarkerBG.Darken();
             }
         }
@@ -242,6 +371,17 @@ namespace Dutil
                 lastGradientWeight = gradientWeight;
             }
 
+            ProgressObj?.gameObject.SetActive(holdToAccept);
+            if (KeyTextObj != null && KeyTextObj.enabled)
+            {
+                KeyTextObj?.gameObject.SetActive(holdToAccept && showKey && holdKey.Length > 0);
+                KeyTextObj?.SetText(holdKey?.ToUpper());
+
+                //offset x -40
+                KeyTextObj.GetComponent<RectTransform>().offsetMin = new Vector2(-60, 0);
+                KeyTextObj.GetComponent<RectTransform>().offsetMax = new Vector2(-60, 0);
+                KeyTextObj.GetComponent<RectTransform>().sizeDelta = Vector2.one * 40;
+            }
         }
         void SetColors()
         {
@@ -253,6 +393,9 @@ namespace Dutil
             rect.FillColorEnd = EndGrad;
             //BackgroundShadow.Color = flat ? BackgroundColor.Darken() : DarkerBG.Darken();
             rect.UpdateMesh();
+            //update shapes
+            rect.meshOutOfDate = true;
+            rect.OnValidate();
             //repaint scene
 #if UNITY_EDITOR
             UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
@@ -305,6 +448,14 @@ namespace Dutil
             //right =val
             rt.offsetMax = new Vector2(val, rt.offsetMax.y);
         }
+        void AnchorToBottomOfParent(RectTransform rt)
+        {
+            rt.anchorMin = new Vector2(0, 0);
+            rt.anchorMax = new Vector2(1, 0);
+            rt.pivot = new Vector2(.5f, 0);
+            rt.offsetMin = new Vector2(0, 0);
+            rt.offsetMax = new Vector2(0, 0);
+        }
         //Interaction
         Color beforeHoverColor;
         float beforeHoverScale;
@@ -341,9 +492,43 @@ namespace Dutil
         }
         void Update()
         {
-            if (!allowHovering) { return; }
             if (!Application.isPlaying) { return; }
             if (disabled) { return; }
+            if (holdToAccept)
+            {
+                if (canCompleteHoldClick)
+                {
+                    if (holdProgress >= 1)
+                    {
+                        OnClicked();
+                        canCompleteHoldClick = false;
+                    }
+
+                }
+                Progress += Time.deltaTime * holdDir / holdDuration;
+                Progress = Mathf.Clamp01(holdProgress);
+                if (Input.GetMouseButtonUp(0))
+                {
+                    holdDir = -holdCollapseSpeed;
+                    canCompleteHoldClick = true;
+                }
+                //is keycode string down
+                if (holdKey.Length > 0)
+                {
+                    if (Input.GetKeyDown(holdKey))
+                    {
+                        holdDir = 1;
+                    }
+                    if (Input.GetKeyUp(holdKey))
+                    {
+                        holdDir = -holdCollapseSpeed;
+                        Progress -= .0001f;
+                        canCompleteHoldClick = true;
+                    }
+                }
+            }
+            if (!allowHovering) { return; }
+
             int dir = isHovering ? 1 : -1;
             float multi = hoverType == UiHoverType.Curve ? 2 : 1;
             hoverCompletion += Time.deltaTime * dir / (hoverDuration * multi);
@@ -360,8 +545,29 @@ namespace Dutil
             {
                 BackgroundCornerRadius = Mathf.Lerp(beforeHoverCurve, hoverCurve, hoverCompletion);
             }
+
+
+
         }
 
+        float Progress
+        {
+            get => holdProgress;
+            set
+            {
+                holdProgress = value;
+                ProgressObj.Width = size.x * holdProgress;
+                float right = size.x * (1 - holdProgress);
+                float height = 7;
+                float half = height / 2f;
+                ProgressObj.GetComponent<RectTransform>().offsetMax = new Vector2(-right, -half);
+                ProgressObj.GetComponent<RectTransform>().offsetMin = new Vector2(0, -half);
+                //set height and width
+                ProgressObj.GetComponent<RectTransform>().sizeDelta = new Vector2(size.x * holdProgress, 7);
+
+
+            }
+        }
 
 
         public void OnPointerEnter(PointerEventData eventData)
@@ -379,7 +585,7 @@ namespace Dutil
 
         public void OnPointerClick(PointerEventData eventData)
         {
-            if (disabled) { return; }
+            if (disabled || holdToAccept) { return; }
             OnClicked();
         }
 
@@ -387,6 +593,7 @@ namespace Dutil
         public void OnPointerDown(PointerEventData eventData)
         {
             if (disabled) { return; }
+            holdDir = 1;
             if (hoverType == UiHoverType.Tint)
             {
                 allowHovering = false;
@@ -397,17 +604,21 @@ namespace Dutil
 
         public void OnPointerUp(PointerEventData eventData)
         {
+            canCompleteHoldClick = true;
             if (disabled) { return; }
+            holdDir = -holdCollapseSpeed;
             BackgroundColor = beforeHoverColor;
             if (hoverType == UiHoverType.Tint)
             {
                 allowHovering = true;
             }
+
         }
         void OnClicked()
         {
             if (disabled) { return; }
             onClick.Invoke();
+            // Debug.Log("Clicked");
         }
         void LateUpdate()
         {
