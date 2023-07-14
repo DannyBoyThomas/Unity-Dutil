@@ -661,6 +661,11 @@ namespace Dutil
             SetColors();
             TextColor = Color.Lerp(disableColor.Lighten(.5f), beforeTextColor, v);
             OnDisableChangeEvent.Invoke(dis);
+            if (dis)
+            {
+                //reset progress
+                Progress = 0;
+            }
         }
     }
 }
