@@ -477,6 +477,7 @@ namespace Dutil
         void Prepare()
         {
             if (isPreppedFromStart) { return; }
+            isPreppedFromStart = true;
             beforeHoverColor = BackgroundColor;
             beforeHoverScale = transform.localScale.x;
             beforeHoverCurve = BackgroundCornerRadius;
@@ -497,7 +498,7 @@ namespace Dutil
 
             SetColors();
             Refresh();
-            isPreppedFromStart = true;
+
         }
         void Update()
         {
