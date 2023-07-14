@@ -45,7 +45,7 @@ namespace Dutil
 #endif
         public bool showKey = false;
         public bool disabled = false;
-
+        public UnityEvent<bool> OnDisableChangeEvent = new UnityEvent<bool>();
         Rectangle background, backgroundShadow, progressObj;
         TextMeshProUGUI textObj, keyTextObj;
         Button button;
@@ -649,6 +649,7 @@ namespace Dutil
             BackgroundColor = Color.Lerp(disableColor, beforeHoverColor, v);
             SetColors();
             TextColor = Color.Lerp(disableColor.Lighten(.5f), beforeTextColor, v);
+            OnDisableChangeEvent.Invoke(dis);
         }
     }
 }
