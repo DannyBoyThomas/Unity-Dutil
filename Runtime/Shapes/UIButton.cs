@@ -625,6 +625,7 @@ namespace Dutil
 
         public void OnPointerUp(PointerEventData eventData)
         {
+
             canCompleteHoldClick = true;
             if (disabled) { return; }
             holdDir = -holdCollapseSpeed;
@@ -639,7 +640,7 @@ namespace Dutil
         {
             if (disabled) { return; }
             onClick.Invoke();
-            // Debug.Log("Clicked");
+
         }
         void LateUpdate()
         {
@@ -660,12 +661,16 @@ namespace Dutil
             BackgroundColor = Color.Lerp(disableColor, beforeHoverColor, v);
             SetColors();
             TextColor = Color.Lerp(disableColor.Lighten(.5f), beforeTextColor, v);
-            OnDisableChangeEvent.Invoke(dis);
+
             if (dis)
             {
                 //reset progress
                 Progress = 0;
+                canCompleteHoldClick = true;
+                holdDir = -holdCollapseSpeed;
+
             }
+            OnDisableChangeEvent.Invoke(dis);
         }
     }
 }
