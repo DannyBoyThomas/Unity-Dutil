@@ -45,11 +45,12 @@ namespace Dutil
 #endif
         public bool showKey = false;
         public bool disabled = false;
-        public UnityEvent<bool> OnDisableChangeEvent = new UnityEvent<bool>();
+
         Rectangle background, backgroundShadow, progressObj;
         TextMeshProUGUI textObj, keyTextObj;
         Button button;
         public UnityEvent onClick = new UnityEvent();
+        public UnityEvent<bool> OnDisableChangeEvent = new UnityEvent<bool>();
         Vector2 lastPadding = new Vector2(20, 0);
         bool shouldRefresh = false;
         float lastGradientWeight;
@@ -468,9 +469,14 @@ namespace Dutil
         float hoverDuration = .1f;
         float hoverCompletion = 0;
         bool isHovering = false;
+        bool isPreppedFromStart = false;
         void Start()
         {
-
+            Prepare();
+        }
+        void Prepare()
+        {
+            if (isPreppedFromStart) { return; }
             beforeHoverColor = BackgroundColor;
             beforeHoverScale = transform.localScale.x;
             beforeHoverCurve = BackgroundCornerRadius;
@@ -491,11 +497,13 @@ namespace Dutil
 
             SetColors();
             Refresh();
+            isPreppedFromStart = true;
         }
         void Update()
         {
             if (!Application.isPlaying) { return; }
             if (disabled) { return; }
+            Prepare();
             if (holdToAccept)
             {
                 if (canCompleteHoldClick)
@@ -644,6 +652,7 @@ namespace Dutil
 
         public void Disable(bool dis)
         {
+            Prepare();
             disabled = dis;
             int v = dis ? 0 : 1;
             BackgroundColor = Color.Lerp(disableColor, beforeHoverColor, v);
