@@ -169,19 +169,19 @@ namespace Dutil
         //gameobject
         public static AutoLerpTask AutoLerpPosition(this GameObject g, Vector3 position, float duration, bool ease = false, bool useUnscaled = false)
         {
-            return AutoLerpPosition(g.transform, position, duration, ease, useUnscaled);
+            return AutoLerpPosition(g.transform, position, duration, ease, useUnscaled).LinkObject(g);
         }
         public static AutoLerpTask AutoLerpRotation(this GameObject g, Quaternion rotation, float duration, bool ease = false, bool useUnscaled = false)
         {
-            return AutoLerpRotation(g.transform, rotation, duration, ease, useUnscaled);
+            return AutoLerpRotation(g.transform, rotation, duration, ease, useUnscaled).LinkObject(g);
         }
         public static AutoLerpTask AutoLerpRotation(this GameObject g, Vector3 rotation, float duration, bool ease = false, bool useUnscaled = false)
         {
-            return AutoLerpRotation(g.transform, rotation, duration, ease, useUnscaled);
+            return AutoLerpRotation(g.transform, rotation, duration, ease, useUnscaled).LinkObject(g);
         }
         public static AutoLerpTask AutoLerpScale(this GameObject g, Vector3 scale, float duration, bool ease = false, bool useUnscaled = false)
         {
-            return AutoLerpScale(g.transform, scale, duration, ease, useUnscaled);
+            return AutoLerpScale(g.transform, scale, duration, ease, useUnscaled).LinkObject(g);
         }
 
         //Transforms
