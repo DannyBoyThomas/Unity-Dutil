@@ -653,6 +653,7 @@ namespace Dutil
 
         public void Disable(bool dis)
         {
+            if (!Application.isPlaying) { return; }
             Prepare();
             disabled = dis;
             int v = dis ? 0 : 1;
