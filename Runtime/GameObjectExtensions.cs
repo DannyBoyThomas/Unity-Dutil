@@ -87,6 +87,20 @@ namespace Dutil
                 GameObject.Destroy(child.gameObject);
             }
         }
+        public static Transform FindChildWithName(this Transform t, string name)
+        {
+            GetChildrenNested(t.gameObject);
+            int count = t.childCount;
+            for (int i = 0; i < count; i++)
+            {
+                Transform child = t.GetChild(i);
+                if (child.name == name)
+                {
+                    return child;
+                }
+            }
+            return null;
+        }
         public static bool IsInLayer(this GameObject g, LayerMask layer)
         {
             return ((layer.value & (1 << g.layer)) > 0);
