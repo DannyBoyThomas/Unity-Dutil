@@ -87,13 +87,17 @@ namespace Dutil
                 GameObject.Destroy(child.gameObject);
             }
         }
+        /// <summary>
+        /// Searches through all nested children to find a child with the given name.
+        /// </summary>
+        /// <param name="t"></param>
+        /// <param name="name"></param>
+        /// <returns></returns>
         public static Transform FindChildWithName(this Transform t, string name)
         {
-            GetChildrenNested(t.gameObject);
-            int count = t.childCount;
-            for (int i = 0; i < count; i++)
+            List<Transform> list = GetChildrenNested(t.gameObject);
+            foreach (Transform child in list)
             {
-                Transform child = t.GetChild(i);
                 if (child.name == name)
                 {
                     return child;
