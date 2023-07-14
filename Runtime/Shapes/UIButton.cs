@@ -44,7 +44,7 @@ namespace Dutil
         [Sirenix.OdinInspector.ShowIfGroup("holdToAccept")]
 #endif
         public bool showKey = false;
-
+        public bool disabled = false;
 
         Rectangle background, backgroundShadow, progressObj;
         TextMeshProUGUI textObj, keyTextObj;
@@ -54,7 +54,6 @@ namespace Dutil
         bool shouldRefresh = false;
         float lastGradientWeight;
         Color disableColor;
-        bool disabled = false;
         float holdProgress = 0;
         float holdDir = -1;
         float holdCollapseSpeed = 3;
@@ -484,7 +483,10 @@ namespace Dutil
 
             hoverColor = BackgroundColor.Darken(.1f);
             disableColor = Colours.Hex("595959");
-
+            if (disabled)
+            {
+                Disable(true);
+            }
 
 
             SetColors();
