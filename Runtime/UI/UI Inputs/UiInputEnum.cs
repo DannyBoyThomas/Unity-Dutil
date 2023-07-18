@@ -30,8 +30,9 @@ namespace Dutil
         public List<string> enumOptions = new List<string>();
 #if ODIN_INSPECTOR
         [Sirenix.OdinInspector.ReadOnly]
-        public string labelValue;
+    
 #endif
+        public string labelValue;
         Slider slider;
         TextMeshProUGUI label;
         int index;
