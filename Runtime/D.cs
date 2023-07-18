@@ -340,6 +340,16 @@ namespace Dutil
             return new Vector2(Mathf.Cos((-angle + 90) * Mathf.Deg2Rad), Mathf.Sin((-angle + 90) * Mathf.Deg2Rad)).normalized;
         }
 
+        public static void DrawSquareXY(Vector3 centre, float size, Color? col = null, float time = 1)
+        {
+            Color color = col ?? Colours.Pink;
+            Vector3 halfSize = Vector3.one * size / 2f;
+            Vector3 p1 = centre + new Vector3(-halfSize.x, -halfSize.y, 0);
+            Vector3 p2 = centre + new Vector3(halfSize.x, -halfSize.y, 0);
+            Vector3 p3 = centre + new Vector3(halfSize.x, halfSize.y, 0);
+            Vector3 p4 = centre + new Vector3(-halfSize.x, halfSize.y, 0);
+            Debug.DrawLine(p1, p2, color, time);
+        }
 
     }
 

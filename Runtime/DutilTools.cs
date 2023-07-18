@@ -214,6 +214,37 @@ namespace Dutil
             rt.anchoredPosition = Vector2.zero;
             return panel;
         }
+        [MenuItem("Dutil/Create/Page Manager")]
+        static void CreatePageManager()
+        {
+            Canvas canvas = Selection.objects.ToList().Find(x => x is Canvas) as Canvas;
+            canvas = canvas ?? GameObject.FindObjectOfType<Canvas>();
+            if (canvas == null)
+            {
+                canvas = new GameObject("Canvas").AddComponent<Canvas>();
+                canvas.renderMode = RenderMode.ScreenSpaceOverlay;
+                canvas.gameObject.AddComponent<CanvasScaler>();
+                canvas.gameObject.AddComponent<GraphicRaycaster>();
+            }
+            GameObject pageManager = new GameObject("Page Manager");
+            pageManager.transform.SetParent(canvas.transform);
+            pageManager.transform.localScale = Vector3.one;
+            RectTransform rt = pageManager.AddComponent<RectTransform>();
+            //centre and fill
+            rt.anchorMin = Vector2.zero;
+            rt.anchorMax = Vector2.one;
+            rt.offsetMin = Vector2.zero;
+            rt.offsetMax = Vector2.zero;
+            rt.localPosition = Vector3.zero;
+            rt.localScale = Vector3.one;
+            pageManager.AddComponent<CanvasRenderer>();
+            Image img = pageManager.AddComponent<Image>();
+            img.color = Colours.Blue.WithAlpha(.5f);
+            UiPageManager uiPageManager = pageManager.AddComponent<UiPageManager>();
+            uiPageManager.AddPage();
+            Undo.RegisterCreatedObjectUndo(pageManager, "Create Page Manager");
+
+        }
 
     }
 }

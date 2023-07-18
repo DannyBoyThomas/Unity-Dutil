@@ -395,7 +395,7 @@ namespace Dutil
             rect.UpdateMesh();
             //update shapes
             rect.meshOutOfDate = true;
-            rect.OnValidate();
+         
             //repaint scene
 #if UNITY_EDITOR
             UnityEditorInternal.InternalEditorUtility.RepaintAllViews();
@@ -512,6 +512,7 @@ namespace Dutil
                     if (holdProgress >= 1)
                     {
                         OnClicked();
+                        holdProgress = .99f;
                         canCompleteHoldClick = false;
                     }
 
@@ -599,13 +600,15 @@ namespace Dutil
 
         public void OnPointerExit(PointerEventData eventData)
         {
-            if (disabled) { return; }
+
             isHovering = false;
+            // if (disabled) { return; }
             OnPointerUp(eventData);
         }
 
         public void OnPointerClick(PointerEventData eventData)
         {
+            if (eventData.button != PointerEventData.InputButton.Left) { return; }
             if (disabled || holdToAccept) { return; }
             OnClicked();
         }
@@ -613,6 +616,7 @@ namespace Dutil
         bool allowHovering = true;
         public void OnPointerDown(PointerEventData eventData)
         {
+            if (eventData.button != PointerEventData.InputButton.Left) { return; }
             if (disabled) { return; }
             holdDir = 1;
             if (hoverType == UiHoverType.Tint)
@@ -625,11 +629,14 @@ namespace Dutil
 
         public void OnPointerUp(PointerEventData eventData)
         {
+            if (eventData.button != PointerEventData.InputButton.Left) { return; }
 
             canCompleteHoldClick = true;
-            if (disabled) { return; }
+
             holdDir = -holdCollapseSpeed;
+            Progress -= .0001f;
             BackgroundColor = beforeHoverColor;
+            if (disabled) { return; }
             if (hoverType == UiHoverType.Tint)
             {
                 allowHovering = true;
@@ -640,6 +647,7 @@ namespace Dutil
         {
             if (disabled) { return; }
             onClick.Invoke();
+
 
         }
         void LateUpdate()

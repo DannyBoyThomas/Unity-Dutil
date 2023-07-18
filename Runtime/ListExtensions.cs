@@ -149,6 +149,16 @@ namespace Dutil
             }
             return default(T);
         }
+        public static T PopLast<T>(this List<T> list)
+        {
+            if (list.Count > 0)
+            {
+                T element = list[list.Count - 1];
+                list.RemoveAt(list.Count - 1);
+                return element;
+            }
+            return default(T);
+        }
         public static T FirstD<T>(this List<T> list)
         {
             if (list.Count > 0)
@@ -156,6 +166,14 @@ namespace Dutil
                 return list[0];
             }
             return default(T);
+        }
+        public static T FirstOrElse<T>(this List<T> list, T defaultValue = default(T))
+        {
+            if (list.Count > 0)
+            {
+                return list[0];
+            }
+            return defaultValue;
         }
         /// <summary>
         /// It takes a list and splits it into a list of lists, each of which contains a maximum of
@@ -191,6 +209,7 @@ namespace Dutil
             if (indexA != -1 && indexB != -1)
                 list.Swap(indexA, indexB);
         }
+
 
 
 

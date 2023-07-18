@@ -7,6 +7,7 @@ using UnityEditor;
 #endif
 public static class Colours
 {
+    public static Color TEst = new Color(0, 0, 0, 0);
     public static Color Red { get { return new Color(.95f, .26f, .21f); } }
     public static Color Pink { get { return new Color(.91f, .11f, .39f); } }
     public static Color Purple { get { return new Color(.61f, .15f, .69f); } }
@@ -64,6 +65,10 @@ public static class Colours
     public static Color Random()
     {
         return new Color(UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f), UnityEngine.Random.Range(0, 1f));
+    }
+    public static Color Hue(float hue)
+    {
+        return Color.HSVToRGB(hue, 1, 1);
     }
 
 
