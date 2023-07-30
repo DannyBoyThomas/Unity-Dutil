@@ -245,7 +245,16 @@ namespace Dutil
             Undo.RegisterCreatedObjectUndo(pageManager, "Create Page Manager");
 
         }
-
+        [MenuItem("Dutil/Show Productivity")]
+        static void ShowProductivity()
+        {
+            // int minutes = Productivity.GetMinutes();
+            // int hours = minutes / 60;
+            // minutes = minutes % 60;
+            // EditorUtility.DisplayDialog("Productivity", "You have been productive for " + hours + " hours and " + minutes + " minutes.", "OK");
+            Productivity.SetTimestamp();
+            Productivity.Display();
+        }
     }
 }
 #endif

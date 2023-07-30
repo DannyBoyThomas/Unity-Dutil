@@ -128,5 +128,24 @@ namespace Dutil
     }
 
     public enum SplineControlMode { Free, Aligned, Mirrored }
-
+    [System.Serializable]
+    public class PermaCheckList
+    {
+        public List<string> list;
+        public PermaCheckList()
+        {
+            list = new List<string>();
+        }
+        public PermaCheckList(List<string> list)
+        {
+            this.list = list;
+        }
+        public void Add(string item)
+        {
+            if (!list.Contains(item))
+            {
+                list.Add(item);
+            }
+        }
+    }
 }

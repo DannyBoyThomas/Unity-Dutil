@@ -258,6 +258,13 @@ highScores.Save("player_scores");
 highScores = Drive.Load<>("player_scores");
 ``````
 
+## Productivity
+Automatically counts how long you have had the project open.
+
+To view;
+
+Dutil > Show Productivity, or add GameObject with Productivity component.
+
 ## Camera Extensions
 
 ```
@@ -285,6 +292,7 @@ gameObject.KillChildren();
 enum.Next();
 enum.Previous();
 D.Chance(.5f);
+D.PermaBool("completed_tutorial")
 D.RandomColour();
 D.PointsOnCircle(3);
 D.BezierPoints();

@@ -4,6 +4,7 @@ using UnityEngine;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine.Events;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -349,6 +350,43 @@ namespace Dutil
             Vector3 p3 = centre + new Vector3(halfSize.x, halfSize.y, 0);
             Vector3 p4 = centre + new Vector3(-halfSize.x, halfSize.y, 0);
             Debug.DrawLine(p1, p2, color, time);
+        }
+        static string PermaBoolFileName = "dutil/perma_bools";
+        /// <summary>
+        /// A bool that returns true once, then returns false forever.
+        /// </summary>
+        /// <param name="key"></param>
+        /// <param name="autoLock"> Reading the bool, sets it to false</param>
+        /// <returns></returns>
+        public static bool PermaBool(string key, bool autoLock = true)
+        {
+            //return true if not stored in list
+            PermaCheckList checkList = Drive.Load<PermaCheckList>(PermaBoolFileName, new PermaCheckList());
+            if (!checkList.list.Contains(key))
+            {
+                if (autoLock)
+                {
+                    checkList.list.Add(key);
+                    Drive.Save(checkList, PermaBoolFileName, Drive.DriveType.JSON);
+                }
+                return true;
+            }
+            return false;
+        }
+        public static void ResetPermaBool(string key)
+        {
+            PermaCheckList checkList = Drive.Load<PermaCheckList>(PermaBoolFileName, new PermaCheckList());
+            checkList.list.Remove(key);
+            Drive.Save(checkList, PermaBoolFileName, Drive.DriveType.JSON);
+        }
+        public static void ResetAllPermaBools()
+        {
+            Drive.Remove(PermaBoolFileName);
+        }
+        public static List<string> GetPermaBools()
+        {
+            PermaCheckList checkList = Drive.Load<PermaCheckList>(PermaBoolFileName, new PermaCheckList());
+            return checkList.list;
         }
 
     }
