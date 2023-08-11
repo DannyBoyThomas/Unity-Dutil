@@ -81,6 +81,7 @@ namespace Dutil
             //slide left
             AutoLerp.Begin(.15f, offScreenX, onScreenX, (t, v) =>
             {
+                  if (rt != null)
                 rt.anchoredPosition = new Vector2(v, rt.anchoredPosition.y);
             });
         }
