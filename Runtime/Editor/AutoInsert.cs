@@ -18,7 +18,8 @@ namespace Dutil
             if (!DutilTools.AutoInsertDutil) { return; }
             string assetPath = Regex.Replace(path, @".meta$", string.Empty);
             if (!assetPath.EndsWith(".cs")) return;
-
+            bool exists = File.Exists(assetPath);
+            if(!exists) return;
             var code = File.ReadAllLines(assetPath).ToList();
             if (code.Any(line => line.Contains("using Dutil;"))) return;//already added by IDE
 

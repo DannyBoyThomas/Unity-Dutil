@@ -6,7 +6,7 @@ namespace Dutil
 {
     public class Audio : MonoBehaviour
     {
-        public static void PlayAmbisonic(AudioClip clip, float volume)
+        public static AudioSource PlayAmbisonic(AudioClip clip, float volume)
         {
             GameObject audio = new GameObject("Ambisonic Audio");
             audio.transform.position = Vector3.zero;
@@ -18,6 +18,7 @@ namespace Dutil
             source.spatialBlend = 0;
             source.Play();
             Destroy(audio, clip.length + .1f);
+            return source;
         }
     }
 }

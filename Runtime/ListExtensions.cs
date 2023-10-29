@@ -386,6 +386,20 @@ namespace Dutil
                 Gizmos.DrawLine(points.First(), points.Last());
             }
         }
+        public static void DrawWithGizmos(this List<Vector3> points, Color colA, Color colB, bool close = false)
+        {
+            for (int i = 1; i < points.Count; i++)
+            {
+                Vector3 p0 = points[i - 1];
+                Vector3 p1 = points[i];
+                Gizmos.color = Color.Lerp(colA, colB, (i - 1) / (float)points.Count);
+                Gizmos.DrawLine(p0, p1);
+            }
+            if (close && points.Count > 2)
+            {
+                Gizmos.DrawLine(points.First(), points.Last());
+            }
+        }
         public static DLine Renderer(this List<Vector3> points)
         {
             GameObject lineParent = D.TrackFirst("d_line_renderers") as GameObject;
