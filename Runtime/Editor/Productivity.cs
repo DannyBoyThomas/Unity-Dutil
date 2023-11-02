@@ -2,11 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Dutil;
-using UnityEditor;
+
 using System.Threading.Tasks;
+#if UNITY_EDITOR
+using UnityEditor;
+
+
 
 [InitializeOnLoad]
 [ExecuteAlways]
+#endif
 public class Productivity : MonoBehaviour
 {
 #if UNITY_EDITOR
