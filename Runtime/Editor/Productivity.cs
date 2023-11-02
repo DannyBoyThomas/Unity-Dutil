@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 [ExecuteAlways]
 public class Productivity : MonoBehaviour
 {
+#if UNITY_EDITOR
     public static string Prod_Timestammp = "dutil/productivity_timestamp";
     public static string Prod_Seconds = "dutil/productivity_seconds";
     public int days, hours, minutes, seconds;
@@ -131,5 +132,5 @@ public class Productivity : MonoBehaviour
 
     }
 
-
+#endif
 }
