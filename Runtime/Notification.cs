@@ -13,7 +13,7 @@ namespace Dutil
         System.Action callback;
         static bool IsCurrentlyShowing = false;
         static Queue<NotifcationData> queue = new Queue<NotifcationData>();
-        static Notification current;
+        static NotifcationData current;
         void Start()
         {
 
@@ -49,7 +49,7 @@ namespace Dutil
         {
             if (current != null)
             {
-                current.OnAccept();
+                current.Instance?.OnAccept();
             }
         }
         public void Initialise(string title, string message, System.Action OnAccept)
@@ -89,7 +89,9 @@ namespace Dutil
             rt.anchorMax = new Vector2(1, .5f);
             rt.pivot = new Vector2(1, .5f);
             rt.anchoredPosition = new Vector2(offScreenX, 200);
-            go.GetComponent<Notification>().Initialise(data.title, data.message, data.onAccept);
+            Notification note =  go.GetComponent<Notification>();
+           note.Initialise(data.title, data.message, data.onAccept);
+           data.Instance = note;
             rt.transform.localScale = Vector3.one;
             rt.transform.localPosition = rt.localPosition.WithZ(-0.1f);
             //slide left
@@ -106,12 +108,15 @@ namespace Dutil
             queue.Enqueue(data);
             OnNotificationAdded();
         }
-        struct NotifcationData
+       
+    }
+     class NotifcationData
         {
             public string title;
             public string message;
             public System.Action onAccept;
             public Transform parent;
+            Notification instance;
             public NotifcationData(string title, string message, System.Action onAccept, Transform parent)
             {
                 this.title = title;
@@ -119,7 +124,7 @@ namespace Dutil
                 this.onAccept = onAccept;
                 this.parent = parent;
             }
+            public Notification Instance { get => instance; set => instance = value; }
         }
-    }
 #endif
 }
