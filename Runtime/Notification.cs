@@ -51,6 +51,7 @@ namespace Dutil
             {
                 current.Instance?.OnAccept();
             }
+            current =null;
         }
         public void Initialise(string title, string message, System.Action OnAccept)
         {
