@@ -13,7 +13,7 @@ namespace Dutil
         System.Action callback;
         static bool IsCurrentlyShowing = false;
         static Queue<NotifcationData> queue = new Queue<NotifcationData>();
-
+        static Notification current;
         void Start()
         {
 
@@ -29,18 +29,27 @@ namespace Dutil
             if (!IsCurrentlyShowing)
             {
                 IsCurrentlyShowing = true;
-                Show(queue.Dequeue());
+                current = queue.Dequeue();
+                Show(current);
             }
         }
         static void OnNotificationClosed()
         {
             if (queue.Count > 0)
             {
-                Show(queue.Dequeue());
+                 current = queue.Dequeue();
+                Show(current);
             }
             else
             {
                 IsCurrentlyShowing = false;
+            }
+        }
+        public static void ForceCloseCurrent()
+        {
+            if (current != null)
+            {
+                current.OnAccept();
             }
         }
         public void Initialise(string title, string message, System.Action OnAccept)
@@ -68,6 +77,11 @@ namespace Dutil
         {
             GameObject go = Instantiate(Resources.Load<GameObject>("Notification"));
             Transform t = data.parent ?? GameObject.Find("Canvas").transform;
+            if(t==null)
+            {
+                Debug.LogError("No Canvas found");
+                return;
+            }
             go.transform.SetParent(t);
             RectTransform rt = go.GetOrAddComponent<RectTransform>();
             //anchor to middle right of canvas
