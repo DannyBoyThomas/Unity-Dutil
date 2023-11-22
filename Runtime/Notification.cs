@@ -47,11 +47,13 @@ namespace Dutil
         }
         public static void ForceCloseCurrent()
         {
-            if (current != null)
+              IsCurrentlyShowing = false;
+            if (current != null && current.Instance != null)
             {
                 current.Instance?.OnAccept();
             }
             current =null;
+          
         }
         public void Initialise(string title, string message, System.Action OnAccept)
         {
@@ -63,6 +65,7 @@ namespace Dutil
         {
             //slide right
             callback?.Invoke();
+
             RectTransform rt = GetComponent<RectTransform>();
             float startingX = rt.anchoredPosition.x;
             AutoLerp.Begin(.15f, startingX, offScreenX, (t, v) =>
