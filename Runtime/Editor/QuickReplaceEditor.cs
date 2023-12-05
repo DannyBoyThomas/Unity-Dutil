@@ -120,7 +120,7 @@ namespace Dutil
                 converted.Clear();
             }
             GUILayout.EndHorizontal();
-            GUI.backgroundColor = Colours.Blue.Shade(2);
+            //GUI.backgroundColor = Colours.Blue.Shade(2);
             EditorGUILayout.PropertyField(convertedList, true);
             serialObj.ApplyModifiedProperties();
             GUI.backgroundColor = oldBG;

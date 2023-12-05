@@ -255,6 +255,58 @@ namespace Dutil
             Productivity.SetTimestamp();
             Productivity.Display();
         }
+        [MenuItem("Dutil/Clean Hierarchy")]
+        public static void CleanHierarchy()
+        {
+            //find all gameobjects without a parent
+            List<GameObject> rootObjects = GameObject.FindObjectsOfType<GameObject>().Where(x => x.transform.parent == null).ToList();
+            Dictionary<string, List<GameObject>> dict = new Dictionary<string, List<GameObject>>();
+            foreach (var item in rootObjects)
+            {
+                string name = item.name;
+                //remove (clone)
+                name = name.Replace("(Clone)", "");
+                name = name.Replace("(clone)", "");
+                name = name.Replace("(", "").Replace(")", "").Replace("[", "").Replace("]", "").Replace("{", "").Replace("}", "");
+                string numRegex = @"\d+";
+                name = System.Text.RegularExpressions.Regex.Replace(name, numRegex, "");
+                name = name.Trim();
+                //if last letter is an "s", remove it
+                if (name.Last().ToString() == "s")
+                {
+                    name = name.Substring(0, name.Length - 1);
+                }
+                //titled name
+                name = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name);
+                if (dict.ContainsKey(name))
+                {
+                    dict[name].Add(item);
+                }
+                else
+                {
+                    dict.Add(name, new List<GameObject>() { item });
+                }
+            }
+            Undo.IncrementCurrentGroup();
+            foreach (var item in dict)
+            {
+                if (item.Value.Count > 1)
+                {
+                    string suffix = item.Key.Last().ToString() == "s" ? "es" : "s";
+                    GameObject parent = new GameObject(item.Key + suffix);
+                    Undo.RegisterCreatedObjectUndo(parent, "Creating parent");
+                    for (int i = 0; i < item.Value.Count; i++)
+                    {
+                        Undo.RecordObject(item.Value[i], "Changing Name");
+                        item.Value[i].name = item.Key + " (" + (i + 1) + ")";
+                        Undo.SetTransformParent(item.Value[i].transform, parent.transform, "Setting new parent");
+                    }
+                }
+            }
+            Undo.SetCurrentGroupName("Clean up hierarchy");
+        }
+
     }
 }
+
 #endif
