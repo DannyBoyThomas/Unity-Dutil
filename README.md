@@ -17,6 +17,15 @@ List<Color> shades = Colours.Green.Shades();
 Color grey = Colours.Hex("333");
 Color purple = Colours.Red.WithBlue(1);
 ```
+## Editors
+
+### Quick Replace
+
+Easy way to replace multiple objects in a scene whilst maintaining transform properties.
+
+### Rename Tool
+
+Complex but handy tool to mass rename objects
 
 ## List Extensions
 
@@ -282,6 +291,8 @@ TrackMe - Easy way to find objects in a scene without searching all objects.
 D_BackgroundMusic - Easy sound manager
 
 ToolTip - Hover for info
+
+HierarchyItem
 
 ## Plus more
 

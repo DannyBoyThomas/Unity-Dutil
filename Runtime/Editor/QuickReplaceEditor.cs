@@ -14,7 +14,7 @@ namespace Dutil
         public List<GameObject> toReplace = new List<GameObject>();
         public List<GameObject> converted = new List<GameObject>();
 
-        [MenuItem("Dutil/Quick Replace %&r")]
+        [MenuItem("Dutil/Editors/Quick Replace %&r")]
         static void Init()
         {
             // Get existing open window or if none, make a new one:
@@ -23,6 +23,7 @@ namespace Dutil
         }
         void OnGUI()
         {
+
             Color oldBG = GUI.backgroundColor;
             EditorGUILayout.BeginHorizontal();
             GUI.backgroundColor = Colours.Orange.Shade(2);
@@ -103,13 +104,11 @@ namespace Dutil
             SerializedProperty prefabList = serialObj.FindProperty("newPrefabs");
 
             //SerializedProperty newItem = serialObj.FindProperty("newPrefab");
-
             GUI.backgroundColor = Colours.Blue.Shade(1);
             EditorGUILayout.PropertyField(prefabList, true);
 
             GUI.backgroundColor = Colours.Orange.Shade(2);
             EditorGUILayout.PropertyField(list, !performed);
-
             GUI.backgroundColor = oldBG;
 
             GUILayout.BeginHorizontal();

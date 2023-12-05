@@ -26,7 +26,7 @@ namespace Dutil
         }
         static AddRequest addRequest;
 
-        [MenuItem("Dutil/Group %&g")]
+        [MenuItem("Dutil/Actions/Group %&g")]
         public static void Group()
         {
             Transform originalParent = Selection.activeTransform.parent;
@@ -39,7 +39,7 @@ namespace Dutil
             Selection.objects = new Object[] { g };
 
         }
-        [MenuItem("Dutil/Auto Insert")]
+        [MenuItem("Dutil/Options/Auto Insert")]
         public static void ToggleInsertDutil()
         {
 
@@ -47,7 +47,7 @@ namespace Dutil
             Menu.SetChecked("Dutil/Auto Insert", AutoInsertDutil);
             EditorPrefs.SetBool("d_auto_insert", AutoInsertDutil);
         }
-        [MenuItem("Dutil/Logging")]
+        [MenuItem("Dutil/Options/Logging")]
         public static void ToggleLogging()
         {
             D.AllowLogging = !D.AllowLogging;
@@ -85,25 +85,25 @@ namespace Dutil
             }
         }
 
-        [MenuItem("Dutil/Beautify %&B")]
-        public static void Beautify()
-        {
-            if (Selection.activeGameObject == null)
-            {
-                Debug.Log("No gameobject selected");
-                return;
-            }
-            Undo.RecordObjects(Selection.gameObjects.ToList().ToArray(), "Beautify");
-            foreach (var item in Selection.gameObjects)
-            {
-                Material mat = item.GetComponent<Renderer>().sharedMaterial;
-                Color col = mat.color;
-                mat.shader = Shader.Find("Dutil/Half Lambert");
-                mat.color = col;
-                mat.SetFloat("_WrapAmount", .55f);
-            }
+        // [MenuItem("Dutil/Actions/Beautify %&B")]
+        // public static void Beautify()
+        // {
+        //     if (Selection.activeGameObject == null)
+        //     {
+        //         Debug.Log("No gameobject selected");
+        //         return;
+        //     }
+        //     Undo.RecordObjects(Selection.gameObjects.ToList().ToArray(), "Beautify");
+        //     foreach (var item in Selection.gameObjects)
+        //     {
+        //         Material mat = item.GetComponent<Renderer>().sharedMaterial;
+        //         Color col = mat.color;
+        //         mat.shader = Shader.Find("Dutil/Half Lambert");
+        //         mat.color = col;
+        //         mat.SetFloat("_WrapAmount", .55f);
+        //     }
 
-        }
+        // }
 
         [MenuItem("Dutil/Create/Centered HUD")]
         public static void CreateCentredHUD()
@@ -245,7 +245,7 @@ namespace Dutil
             Undo.RegisterCreatedObjectUndo(pageManager, "Create Page Manager");
 
         }
-        [MenuItem("Dutil/Show Productivity")]
+        [MenuItem("Dutil/Actions/Show Productivity")]
         static void ShowProductivity()
         {
             // int minutes = Productivity.GetMinutes();
@@ -255,7 +255,7 @@ namespace Dutil
             Productivity.SetTimestamp();
             Productivity.Display();
         }
-        [MenuItem("Dutil/Clean Hierarchy")]
+        [MenuItem("Dutil/Actions/Clean Hierarchy")]
         public static void CleanHierarchy()
         {
             //find all gameobjects without a parent
@@ -271,11 +271,7 @@ namespace Dutil
                 string numRegex = @"\d+";
                 name = System.Text.RegularExpressions.Regex.Replace(name, numRegex, "");
                 name = name.Trim();
-                //if last letter is an "s", remove it
-                if (name.Last().ToString() == "s")
-                {
-                    name = name.Substring(0, name.Length - 1);
-                }
+
                 //titled name
                 name = System.Globalization.CultureInfo.CurrentCulture.TextInfo.ToTitleCase(name);
                 if (dict.ContainsKey(name))
@@ -288,11 +284,14 @@ namespace Dutil
                 }
             }
             Undo.IncrementCurrentGroup();
+            List<GameObject> newParents = new List<GameObject>();
             foreach (var item in dict)
             {
                 if (item.Value.Count > 1)
                 {
-                    string suffix = item.Key.Last().ToString() == "s" ? "es" : "s";
+                    string last = item.Key.Length >= 1 ? item.Key.Substring(item.Key.Length - 1) : "x";
+                    string last2 = item.Key.Length >= 2 ? item.Key.Substring(item.Key.Length - 2) : "xx";
+                    string suffix = last == "s" ? "" : "s";
                     GameObject parent = new GameObject(item.Key + suffix);
                     Undo.RegisterCreatedObjectUndo(parent, "Creating parent");
                     for (int i = 0; i < item.Value.Count; i++)
@@ -301,9 +300,43 @@ namespace Dutil
                         item.Value[i].name = item.Key + " (" + (i + 1) + ")";
                         Undo.SetTransformParent(item.Value[i].transform, parent.transform, "Setting new parent");
                     }
+                    newParents.Add(parent);
                 }
             }
+            //select parents
+            Selection.objects = newParents.ToArray();
             Undo.SetCurrentGroupName("Clean up hierarchy");
+        }
+        //tilde key shortcut
+        [MenuItem("Dutil/Actions/Snap To Floor %`")]
+        public static void SnapToFloor()
+        {
+            List<GameObject> gos = Selection.gameObjects.ToList();
+            Undo.RecordObjects(gos.ToArray(), "Snap to floor");
+            foreach (var item in gos)
+            {
+                Collider col = item.GetComponentInChildren<Collider>();
+                Vector3 offset = Vector3.zero;
+                Vector3 origin = item.transform.position;
+                if (col != null)
+                {
+                    Vector3 lowestPointOnCollider = item.GetComponent<Collider>().bounds.min;
+                    offset = item.transform.position - lowestPointOnCollider;
+                    origin = lowestPointOnCollider;
+                }
+                else if (item.GetComponent<Renderer>() != null)
+                {
+                    Vector3 lowestPointOnRenderer = item.GetComponent<Renderer>().bounds.min;
+                    offset = item.transform.position - lowestPointOnRenderer;
+                    origin = lowestPointOnRenderer;
+                }
+                //raycast
+                RaycastHit hit;
+                if (Physics.Raycast(origin, Vector3.down, out hit))
+                {
+                    item.transform.position = hit.point + offset;
+                }
+            }
         }
 
     }

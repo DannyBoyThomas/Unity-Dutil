@@ -35,11 +35,11 @@ namespace Dutil
         string searchAnd = "";
         List<string> allNewNames = new List<string>();
         Dictionary<string, int> timesNameUsed = new Dictionary<string, int>();
-        [MenuItem("Dutil/Rename Tool %&n")]
+        [MenuItem("Dutil/Editors/Rename Tool %&n")]
         static void Init()
         {
             // Get existing open window or if none, make a new one:
-            RenameToolEditor window = (RenameToolEditor)EditorWindow.GetWindow(typeof(RenameToolEditor), false, "Dutil Rename Tool");
+            RenameToolEditor window = (RenameToolEditor)EditorWindow.GetWindow(typeof(RenameToolEditor), false, "Rename Tool");
             //set size
             window.minSize = new Vector2(400, 400);
             window.Show();
@@ -136,7 +136,7 @@ namespace Dutil
             //set color
 
             GUI.backgroundColor = Colours.Blue.Shade(2);
-
+            EditorGUILayout.BeginHorizontal();
             if (GUILayout.Button("Rename", new GUILayoutOption[] { GUILayout.Height(24) }))
             {
                 List<FoundObject> list = Found;
@@ -146,10 +146,25 @@ namespace Dutil
                     fo.go.name = GetRename(fo);
                 }
             }
+            GUI.backgroundColor = Color.white;
+            if (GUILayout.Button("Group", new GUILayoutOption[] { GUILayout.Height(24) }))
+            {
+                List<FoundObject> list = Found;
+                //ignore those with parent
+                list = list.Where(x => x.go.transform.parent == null).ToList();
+                GameObject group = new GameObject("Group");
+                Undo.RegisterCreatedObjectUndo(group, "Group");
+                foreach (FoundObject fo in list)
+                {
+                    Undo.SetTransformParent(fo.go.transform, group.transform, "Group");
+                }
+                Selection.objects = new GameObject[] { group };
+            }
+            EditorGUILayout.EndHorizontal();
             EditorGUILayout.EndVertical();
             EditorGUILayout.Space();
             //reset color
-            GUI.backgroundColor = Color.white;
+
 
 
 
@@ -408,8 +423,11 @@ namespace Dutil
                 List<FoundObject> objs = foundObjects.Where(x => !hiddenObjects.Contains(x.go)).ToList();
 
                 //sort by name
-                objs.Sort((x, y) => x.go.name.CompareTo(y.go.name));
-                objs.Sort((x, y) => x.go.transform.GetSiblingIndex().CompareTo(y.go.transform.GetSiblingIndex()));
+                if (objs.Count > 1)
+                {
+                    objs.Sort((x, y) => x.go.name.CompareTo(y.go.name));
+                    objs.Sort((x, y) => x.go.transform.GetSiblingIndex().CompareTo(y.go.transform.GetSiblingIndex()));
+                }
                 return objs;
             }
         }
