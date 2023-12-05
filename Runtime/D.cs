@@ -60,6 +60,31 @@ namespace Dutil
             Vector3 pb = p1 + b * v;
             return pb;
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="point"></param>
+        /// <param name="list"> All options</param>
+        /// <param name="GetPosition"> (item)=>item.position</param>
+        /// <returns></returns>
+        public static T GetClosest<T>(Vector3 point, List<T> list, System.Func<T, Vector3> GetPosition)
+        {
+            T closest = default(T);
+            float closestDist = Mathf.Infinity;
+            for (int i = 0; i < list.Count; i++)
+            {
+                T item = list[i];
+                Vector3 pos = GetPosition(item);
+                float dist = Vector3.Distance(point, pos);
+                if (dist < closestDist)
+                {
+                    closestDist = dist;
+                    closest = item;
+                }
+            }
+            return closest;
+        }
         public static string Hash(int length = 8)
         {
             string available = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890";

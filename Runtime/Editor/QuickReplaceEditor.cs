@@ -67,7 +67,19 @@ namespace Dutil
                         GameObject toPlace = newPrefabs.Any();
                         if (toPlace != null)
                         {
-                            GameObject spawned = GameObject.Instantiate(toPlace, old.transform.position, old.transform.rotation);
+                            bool isprefab = PrefabUtility.GetPrefabAssetType(toPlace) != PrefabAssetType.NotAPrefab;
+
+                            GameObject spawned = null;
+                            if (isprefab)
+                            {
+                                spawned = PrefabUtility.InstantiatePrefab(toPlace) as GameObject;
+                            }
+                            else
+                            {
+                                spawned = GameObject.Instantiate(toPlace);
+                            }
+                            spawned.transform.position = old.transform.position;
+                            spawned.transform.rotation = old.transform.rotation;
                             spawned.transform.localScale = old.transform.localScale;
                             spawned.name = old.name;
                             converted.Add(spawned);
