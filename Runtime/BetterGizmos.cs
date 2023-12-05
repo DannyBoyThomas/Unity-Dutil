@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Dutil;
+using System;
 
 namespace Dutil
 {
@@ -27,19 +28,35 @@ namespace Dutil
                 Gizmos.DrawLine(points[i], points[i + 1]);
             }
         }
-        public static void DrawCircle(this Vector3 center, Vector3 normal, float radius)
+        public static void DrawCircle(this Vector3 center, Vector3 normal, float radius, float thickness = .1f, float progress = 1)
         {
             List<Vector3> points = new List<Vector3>();
             int numOfPoints = (int)radius.Map(0, 10, 360, 360 * 3);
-            for (int i = 0; i < numOfPoints; i++)
+            progress = Mathf.Clamp01(progress);
+            int pointsToDraw = (int)(numOfPoints * progress);
+            for (int i = 0; i <= pointsToDraw; i++)
             {
-                points.Add(center + Quaternion.AngleAxis(i, normal) * Vector3.up * radius);
+                float incr = 1 / (float)numOfPoints * 360;
+                float angle = i * incr;
+                points.Add(center + Quaternion.AngleAxis(angle, normal) * Vector3.up * radius);
             }
-            DrawLine(points, Colours.Orange, .2f);
+            if (progress == 1)
+            {
+                float incr = 1 / (float)numOfPoints * 360;
+                float angle = 1 * incr;
+                points.Add(center + Quaternion.AngleAxis(0, normal) * Vector3.up * radius);
+            }
+
+            DrawLine(points, Colours.Orange, thickness, progress == 1);
         }
 
-        public static void DrawLine(this List<Vector3> points, Color fromColor, float thickness)
+
+        public static void DrawLine(this List<Vector3> points, Color fromColor, float thickness, bool closeLoop)
         {
+            if (points.Count < 2)
+            {
+                return;
+            }
             //increase resolution
             List<Vector3> newPoints = new List<Vector3>();
             for (int i = 0; i < points.Count;)
@@ -56,6 +73,19 @@ namespace Dutil
                     }
                 }
                 i++;
+            }
+            // //last point
+            // Vector3 dir2 = points[points.Count - 1] - points[points.Count - 2];
+            // float dist2 = dir2.magnitude;
+            // int count2 = Mathf.CeilToInt(dist2 / thickness);
+            // for (int j = 1; j < count2; j++)
+            // {
+            //     newPoints.Add(points[points.Count - 1] + dir2.normalized * j * thickness);
+            // }
+
+            if (closeLoop)
+            {
+                newPoints.Add(points[0]);
             }
             points = newPoints;
             List<Vector3> outerPoints = new List<Vector3>();
