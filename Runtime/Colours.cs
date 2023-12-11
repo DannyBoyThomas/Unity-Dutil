@@ -23,6 +23,7 @@ public static class Colours
     public static Color BlueGrey { get { return new Color(.38f, .49f, .55f); } }
     public static Color Brown { get { return new Color(.47f, .33f, .28f); } }
     public static List<Color> All = new List<Color>() { Red, Pink, Purple, DeepPurple, Indigo, Blue, Cyan, Teal, Green, Yellow, Orange, Grey, BlueGrey, Brown };
+    public static List<string> AllNames = new List<string>() { "Red", "Pink", "Purple", "DeepPurple", "Indigo", "Blue", "Cyan", "Teal", "Green", "Yellow", "Orange", "Grey", "BlueGrey", "Brown" };
     /*   public static Dictionary<Color, List<Color>> Shades = new Dictionary<Color, List<Color>>() {
           {Red, new List<Color>(){Hex("#ffebee"),Hex("ffcdd2"),Hex("ef9a9a"),Hex("e57373"),Hex("ef5350"),Hex("e53935"),Hex("d32f2f"),Hex("c62828"),Hex("b71c1c")}},
           {Pink, new List<Color>(){Hex("fce4ec"),Hex("f8bbd0"),Hex("f48fb1"),Hex("f06292"), Hex("ec407a"),Hex("d81b60"),Hex("c2185b"),Hex("ad1457"),Hex("880e4f")}},

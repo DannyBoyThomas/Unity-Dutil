@@ -6,15 +6,16 @@ using UnityEditor;
 
 namespace Dutil
 {
-    public class ContextOptions : EditorWindow
+    [InitializeOnLoad]
+    public static class ContextOptions
     {
 
-        [InitializeOnLoadMethod]
-        static void Start()
+        static ContextOptions()
         {
-
+            EditorApplication.contextualPropertyMenu -= OnPropertyContextMenu;
             EditorApplication.contextualPropertyMenu += OnPropertyContextMenu;
         }
+
 
         static void OnPropertyContextMenu(GenericMenu menu, SerializedProperty property)
         {
@@ -32,6 +33,18 @@ namespace Dutil
                    property.serializedObject.ApplyModifiedProperties();
                    property.serializedObject.Update();
                });
+                int amount = Colours.All.Count;
+                for (int i = 0; i < amount; i++)
+                {
+                    Color c = Colours.All[i];
+                    menu.AddItem(new GUIContent(Colours.AllNames[i]), false, () =>
+                    {
+                        property.colorValue = c;
+                        property.serializedObject.ApplyModifiedProperties();
+                        property.serializedObject.Update();
+                    });
+                }
+
 
             }
 

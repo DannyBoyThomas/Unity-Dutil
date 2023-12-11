@@ -294,6 +294,8 @@ ToolTip - Hover for info
 
 HierarchyItem
 
+LiveValue - Sync many values to one master value.
+
 ## Plus more
 
 ```
