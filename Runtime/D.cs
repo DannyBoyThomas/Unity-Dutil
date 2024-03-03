@@ -16,7 +16,7 @@ using UnityEditor;
 #endif
 namespace Dutil
 {
-    public class D
+    public static class D
     {
         //d_auto_insert
         public static bool AllowLogging
@@ -36,6 +36,9 @@ namespace Dutil
 #endif
             }
         }
+
+
+
         /// <summary>
         /// Chance(0.7) has a 70% chance to return true
         /// </summary>
@@ -379,6 +382,10 @@ namespace Dutil
             Color textCol = color == default(Color) ? Color.white : color;
             UnityEngine.Debug.LogError(CreateAnchor(message, Colours.Red, textCol, callerName, callerPath, callerLine));
         }
+
+
+
+
 
         /// <summary>
         /// Returns a skewed value between 0 and 1, based on bias.

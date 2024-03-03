@@ -27,7 +27,14 @@ namespace Dutil
             }
         }
         static AddRequest addRequest;
-
+        //on loaded
+        [UnityEditor.Callbacks.DidReloadScripts]
+        [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+        public static void OnLoaded()
+        {
+            Menu.SetChecked("Dutil/Options/Logging", D.AllowLogging);
+            Menu.SetChecked("Dutil/Options/Auto Insert", AutoInsertDutil);
+        }
         [MenuItem("Dutil/Actions/Group %&g")]
         public static void Group()
         {
