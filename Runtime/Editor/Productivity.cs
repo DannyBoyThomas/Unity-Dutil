@@ -96,7 +96,8 @@ public class Productivity : MonoBehaviour
         int minutes = (totalSeconds % 3600) / 60;
         int seconds = totalSeconds % 60;
         bool showDays = days > 0;
-        string time = showDays ? $"{days} days, {hours} hours, {minutes} minutes, {seconds} seconds" : $"{hours} hours, {minutes} minutes, {seconds} seconds";
+        int allHours = (days * 24) + hours;
+        string time = showDays ? $"{days} days, {hours} hours, {minutes} minutes, {seconds} seconds" : $"{hours} hours, {minutes} minutes, {seconds} seconds. [{allHours} Hours]";
         Debug.Log("Productivity: " + time);
     }
     static void Calculate()

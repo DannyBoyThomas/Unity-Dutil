@@ -4,6 +4,12 @@ using UnityEngine;
 using System.Linq;
 using System.Text.RegularExpressions;
 using UnityEngine.Events;
+using System.Runtime.CompilerServices;
+using System.Diagnostics;
+using Codice.Client.Common;
+
+
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -12,12 +18,13 @@ namespace Dutil
 {
     public class D
     {
+        //d_auto_insert
         public static bool AllowLogging
         {
             get
             {
 #if UNITY_EDITOR
-                return EditorPrefs.GetBool("d_auto_insert", true);
+                return EditorPrefs.GetBool("d_allow_logging", true);
 #else
                 return false;
 #endif
@@ -25,7 +32,7 @@ namespace Dutil
             set
             {
 #if UNITY_EDITOR
-                EditorPrefs.GetBool("d_auto_insert", value);
+                EditorPrefs.SetBool("d_allow_logging", value);
 #endif
             }
         }
@@ -340,10 +347,37 @@ namespace Dutil
             float val = (relativeSpacing - (totalLength / 2f));
             return val;
         }
-        public static void Log(object message)
+        static string CreateAnchor(object message, Color col, Color messageCol, [CallerMemberName] string callerName = "", [CallerFilePath] string callerPath = "", [CallerLineNumber] int callerLine = 0)
+        {
+            try
+            {
+                string className = new StackTrace().GetFrame(1).GetMethod().DeclaringType.Name;
+                string info = $"[{className}.{callerName}:{callerLine}]: ".Color(col).B();
+                string anchor = $"<a href=\"{callerPath}\" line=\"{callerLine}\">" + info + "</a>";
+                return anchor + message.ToString().Color(messageCol);
+            }
+            catch
+            {
+                return message.ToString();
+            }
+        }
+        public static void Log(object message, Color color = default(Color), [CallerMemberName] string callerName = "", [CallerFilePath] string callerPath = "", [CallerLineNumber] int callerLine = 0)
         {
             if (!AllowLogging) { return; }
-            Debug.Log(message);
+            Color textCol = color == default(Color) ? Color.white : color;
+            UnityEngine.Debug.Log(CreateAnchor(message, Colours.Blue, textCol, callerName, callerPath, callerLine));
+        }
+        public static void LogWarning(object message, Color color = default(Color), [CallerMemberName] string callerName = "", [CallerFilePath] string callerPath = "", [CallerLineNumber] int callerLine = 0)
+        {
+            if (!AllowLogging) { return; }
+            Color textCol = color == default(Color) ? Color.white : color;
+            UnityEngine.Debug.LogWarning(CreateAnchor(message, Colours.Orange, textCol, callerName, callerPath, callerLine));
+        }
+        public static void LogError(object message, Color color = default(Color), [CallerMemberName] string callerName = "", [CallerFilePath] string callerPath = "", [CallerLineNumber] int callerLine = 0)
+        {
+            if (!AllowLogging) { return; }
+            Color textCol = color == default(Color) ? Color.white : color;
+            UnityEngine.Debug.LogError(CreateAnchor(message, Colours.Red, textCol, callerName, callerPath, callerLine));
         }
 
         /// <summary>
@@ -374,7 +408,7 @@ namespace Dutil
             Vector3 p2 = centre + new Vector3(halfSize.x, -halfSize.y, 0);
             Vector3 p3 = centre + new Vector3(halfSize.x, halfSize.y, 0);
             Vector3 p4 = centre + new Vector3(-halfSize.x, halfSize.y, 0);
-            Debug.DrawLine(p1, p2, color, time);
+            UnityEngine.Debug.DrawLine(p1, p2, color, time);
         }
         static string PermaBoolFileName = "dutil/perma_bools";
         /// <summary>

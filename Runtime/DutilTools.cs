@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Codice.Client.Common;
+
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.PackageManager.Requests;
@@ -42,16 +44,17 @@ namespace Dutil
         [MenuItem("Dutil/Options/Auto Insert")]
         public static void ToggleInsertDutil()
         {
-
             AutoInsertDutil = !AutoInsertDutil;
-            Menu.SetChecked("Dutil/Auto Insert", AutoInsertDutil);
+            Menu.SetChecked("Dutil/Options/Auto Insert", AutoInsertDutil);
             EditorPrefs.SetBool("d_auto_insert", AutoInsertDutil);
+            Debug.Log("Auto insert Dutil is now " + (AutoInsertDutil ? "enabled" : "disabled"));
         }
         [MenuItem("Dutil/Options/Logging")]
         public static void ToggleLogging()
         {
             D.AllowLogging = !D.AllowLogging;
-            Menu.SetChecked("Dutil/Logging", D.AllowLogging);
+            Menu.SetChecked("Dutil/Options/Logging", D.AllowLogging);
+            Debug.Log("Logging is now " + (D.AllowLogging ? "enabled" : "disabled"));
         }
         [MenuItem("Dutil/Update %&u")]
         public static void UpdateDutil()
