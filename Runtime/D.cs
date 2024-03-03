@@ -354,8 +354,8 @@ namespace Dutil
         {
             try
             {
-                string className = new StackTrace().GetFrame(1).GetMethod().DeclaringType.Name;
-                string info = $"[{className}.{callerName}:{callerLine}]: ".Color(col).B();
+                string callerClassName = new StackTrace().GetFrame(2).GetMethod().ReflectedType.Name;
+                string info = $"[{callerClassName}.{callerName}:{callerLine}]: ".Color(col).B();
                 string anchor = $"<a href=\"{callerPath}\" line=\"{callerLine}\">" + info + "</a>";
                 return anchor + message.ToString().Color(messageCol);
             }
