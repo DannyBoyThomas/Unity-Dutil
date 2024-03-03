@@ -364,21 +364,25 @@ namespace Dutil
                 return message.ToString();
             }
         }
-        public static void Log(object message, Color color = default(Color), [CallerMemberName] string callerName = "", [CallerFilePath] string callerPath = "", [CallerLineNumber] int callerLine = 0)
+
+        public static void Log(object message, bool conditional = true, Color color = default(Color), [CallerMemberName] string callerName = "", [CallerFilePath] string callerPath = "", [CallerLineNumber] int callerLine = 0)
         {
-            if (!AllowLogging) { return; }
+            if (!AllowLogging || !conditional) { return; }
             Color textCol = color == default(Color) ? Color.white : color;
             UnityEngine.Debug.Log(CreateAnchor(message, Colours.Blue, textCol, callerName, callerPath, callerLine));
         }
-        public static void LogWarning(object message, Color color = default(Color), [CallerMemberName] string callerName = "", [CallerFilePath] string callerPath = "", [CallerLineNumber] int callerLine = 0)
+
+
+        public static void LogWarning(object message, bool conditional = true, Color color = default(Color), [CallerMemberName] string callerName = "", [CallerFilePath] string callerPath = "", [CallerLineNumber] int callerLine = 0)
         {
-            if (!AllowLogging) { return; }
+            if (!AllowLogging || !conditional) { return; }
             Color textCol = color == default(Color) ? Color.white : color;
             UnityEngine.Debug.LogWarning(CreateAnchor(message, Colours.Orange, textCol, callerName, callerPath, callerLine));
         }
-        public static void LogError(object message, Color color = default(Color), [CallerMemberName] string callerName = "", [CallerFilePath] string callerPath = "", [CallerLineNumber] int callerLine = 0)
+
+        public static void LogError(object message, bool conditional = true, Color color = default(Color), [CallerMemberName] string callerName = "", [CallerFilePath] string callerPath = "", [CallerLineNumber] int callerLine = 0)
         {
-            if (!AllowLogging) { return; }
+            if (!AllowLogging || !conditional) { return; }
             Color textCol = color == default(Color) ? Color.white : color;
             UnityEngine.Debug.LogError(CreateAnchor(message, Colours.Red, textCol, callerName, callerPath, callerLine));
         }
