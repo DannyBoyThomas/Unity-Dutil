@@ -350,11 +350,11 @@ namespace Dutil
             float val = (relativeSpacing - (totalLength / 2f));
             return val;
         }
-        static string CreateAnchor(object message, Color col, Color messageCol, [CallerMemberName] string callerName = "", [CallerFilePath] string callerPath = "", [CallerLineNumber] int callerLine = 0)
+        static string CreateAnchor(object message, Color col, Color messageCol, int steps = 0, [CallerMemberName] string callerName = "", [CallerFilePath] string callerPath = "", [CallerLineNumber] int callerLine = 0)
         {
             try
             {
-                string callerClassName = new StackTrace().GetFrame(2).GetMethod().ReflectedType.Name;
+                string callerClassName = new StackTrace().GetFrame(2 + steps).GetMethod().ReflectedType.Name;
                 string info = $"[{callerClassName}.{callerName}:{callerLine}]: ".Color(col).B();
                 string anchor = $"<a href=\"{callerPath}\" line=\"{callerLine}\">" + info + "</a>";
                 return anchor + message.ToString().Color(messageCol);
@@ -369,7 +369,16 @@ namespace Dutil
         {
             if (!AllowLogging || !conditional) { return; }
             Color textCol = color == default(Color) ? Color.white : color;
-            UnityEngine.Debug.Log(CreateAnchor(message, Colours.Blue, textCol, callerName, callerPath, callerLine));
+            // if (skipFrames == -1)
+            // {
+            UnityEngine.Debug.Log(CreateAnchor(message, Colours.Blue, textCol, 0, callerName, callerPath, callerLine));
+            // }
+            // else
+            // {
+            //     StackTrace stackTrace = new StackTrace();
+            //     StackFrame frame = stackTrace.GetFrame(skipFrames);
+            //     UnityEngine.Debug.Log(CreateAnchor(message, Colours.Blue, textCol, skipFrames, frame.GetMethod().Name, frame.GetFileName(), frame.GetFileLineNumber()));
+            // }
         }
 
 
@@ -377,14 +386,14 @@ namespace Dutil
         {
             if (!AllowLogging || !conditional) { return; }
             Color textCol = color == default(Color) ? Color.white : color;
-            UnityEngine.Debug.LogWarning(CreateAnchor(message, Colours.Orange, textCol, callerName, callerPath, callerLine));
+            UnityEngine.Debug.LogWarning(CreateAnchor(message, Colours.Orange, textCol, 0, callerName, callerPath, callerLine));
         }
 
         public static void LogError(object message, bool conditional = true, Color color = default(Color), [CallerMemberName] string callerName = "", [CallerFilePath] string callerPath = "", [CallerLineNumber] int callerLine = 0)
         {
             if (!AllowLogging || !conditional) { return; }
             Color textCol = color == default(Color) ? Color.white : color;
-            UnityEngine.Debug.LogError(CreateAnchor(message, Colours.Red, textCol, callerName, callerPath, callerLine));
+            UnityEngine.Debug.LogError(CreateAnchor(message, Colours.Red, textCol, 0, callerName, callerPath, callerLine));
         }
 
 

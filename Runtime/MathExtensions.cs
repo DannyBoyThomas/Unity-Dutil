@@ -46,6 +46,19 @@ namespace Dutil
         public static Vector3 YZ(this int f) => new Vector3(0, f, f);
         public static Vector3 XYZ(this int f) => new Vector3(f, f, f);
 
-
+        /// <summary>
+        /// Checks if the application is running as a standalone build or in the editor. If it is a standalone build, will return false
+        /// </summary>
+        /// <param name="b"></param>
+        /// <returns></returns>
+        public static bool AssertBuild(this bool b)
+        {
+#if UNITY_EDITOR
+            return b;
+#else
+            D.LogWarning("You are using a debug value in a standalone build. This is not recommended.");
+            return false;
+#endif
+        }
     }
 }

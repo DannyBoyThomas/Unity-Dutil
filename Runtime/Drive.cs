@@ -4,6 +4,7 @@ using UnityEngine;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Linq;
+
 namespace Dutil
 {
     public static class Drive
@@ -11,6 +12,7 @@ namespace Dutil
         static int hashLength = 6;
         static string Prefix { get => D.Hash(hashLength); }
         static string Suffix { get => D.Hash(hashLength); }
+
         static string BasePath
         {
             get
